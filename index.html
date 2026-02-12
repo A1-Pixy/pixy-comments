@@ -1,0 +1,648 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pixy Dust Seasoning. Luxury</title>
+
+  <link rel="stylesheet" href="assets/css/site.css" />
+
+  <style>
+    :root{
+      --bg:#050607;
+      --panel:rgba(10,10,10,.55);
+      --panel2:rgba(10,10,10,.28);
+      --gold:#d8b35a;
+      --gold2:#b69034;
+      --text:#f3f3f3;
+      --muted:rgba(243,243,243,.72);
+      --line:rgba(255,255,255,.10);
+      --shadow:0 20px 60px rgba(0,0,0,.55);
+      --serif: ui-serif, Georgia, "Times New Roman", Times, serif;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family:var(--sans);
+      overflow-x:hidden;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+
+    /* NAV overlays hero */
+    .topbar{
+      position:fixed;
+      inset:0 0 auto 0;
+      z-index:50;
+      height:84px;
+      display:flex;
+      align-items:center;
+      background:linear-gradient(to bottom, rgba(0,0,0,.70), rgba(0,0,0,.18));
+      border-bottom:1px solid rgba(255,255,255,.06);
+      backdrop-filter: blur(10px);
+    }
+    .wrap{
+      width:min(1260px, calc(100% - 64px));
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:28px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:220px;
+    }
+    /* logo */
+    .brand img{
+      height:56px;
+      width:auto;
+      display:block;
+      filter: drop-shadow(0 10px 18px rgba(0,0,0,.55));
+    }
+
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:18px;
+      flex:1;
+      font-size:13px;
+      letter-spacing:.08em;
+      text-transform:none;
+      color:rgba(243,243,243,.78);
+    }
+    .nav a{
+      padding:10px 10px;
+      border-radius:999px;
+      transition: background .2s ease, color .2s ease;
+    }
+    .nav a:hover{
+      background:rgba(255,255,255,.06);
+      color:rgba(243,243,243,.95);
+    }
+    .nav a[data-active="true"]{
+      color:var(--gold);
+    }
+
+    /* cart button */
+    .cart-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border:1px solid rgba(216,179,90,.45);
+      background:rgba(0,0,0,.20);
+      color:rgba(243,243,243,.92);
+      border-radius:999px;
+      padding:10px 16px;
+      font-size:13px;
+      letter-spacing:.02em;
+      cursor:pointer;
+      transition: transform .15s ease, border-color .2s ease, background .2s ease;
+      min-width:86px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    .cart-btn:hover{
+      transform: translateY(-1px);
+      border-color: rgba(216,179,90,.80);
+      background:rgba(0,0,0,.32);
+    }
+
+    /* HERO */
+    .hero{
+      position:relative;
+      min-height: 92vh;
+      padding-top: 84px;
+      display:flex;
+      align-items:stretch;
+      isolation:isolate;
+      background:#000;
+      overflow:hidden;
+    }
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(1200px 520px at 65% 55%, rgba(216,179,90,.20), rgba(0,0,0,0) 60%),
+        radial-gradient(900px 420px at 40% 55%, rgba(255,255,255,.06), rgba(0,0,0,0) 55%),
+        linear-gradient(to bottom, rgba(0,0,0,.55), rgba(0,0,0,.72)),
+        url("assets/images/hero-bg-clean.jpg");
+      background-size: cover;
+      background-position: center;
+      filter: saturate(1.08) contrast(1.05);
+      transform: scale(1.02);
+      z-index:-2;
+    }
+    .hero::after{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      background:
+        radial-gradient(1100px 520px at 70% 55%, rgba(216,179,90,.10), rgba(0,0,0,0) 62%),
+        radial-gradient(900px 520px at 50% 95%, rgba(0,0,0,.85), rgba(0,0,0,0) 55%);
+      z-index:-1;
+      pointer-events:none;
+    }
+
+    .hero-inner{
+      width:min(1260px, calc(100% - 64px));
+      margin:0 auto;
+      padding: 48px 0 64px;
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 48px;
+      align-items:center;
+    }
+
+    .kicker{
+      font-size:12px;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      color:rgba(216,179,90,.78);
+      margin:0 0 14px;
+      font-family:var(--sans);
+    }
+    h1{
+      margin:0 0 18px;
+      font-family: var(--serif);
+      font-weight:700;
+      line-height:.98;
+      font-size: clamp(46px, 5.2vw, 74px);
+      letter-spacing:-.02em;
+      text-shadow: 0 18px 50px rgba(0,0,0,.55);
+    }
+    .subcopy{
+      margin:0 0 22px;
+      max-width: 520px;
+      color: rgba(243,243,243,.72);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .cta-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      align-items:center;
+      margin: 16px 0 18px;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:999px;
+      padding: 12px 18px;
+      font-size: 12px;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.22);
+      color: rgba(243,243,243,.86);
+      cursor:pointer;
+      transition: transform .15s ease, background .2s ease, border-color .2s ease;
+      user-select:none;
+      min-height:56px;
+    }
+    .btn:hover{ transform: translateY(-1px); }
+
+    .btn-primary{
+      background: linear-gradient(180deg, rgba(216,179,90,.95), rgba(182,144,52,.95));
+      border-color: rgba(216,179,90,.55);
+      color: rgba(10,10,10,.92);
+      box-shadow: 0 18px 50px rgba(0,0,0,.45);
+    }
+    .btn-secondary{
+      background: rgba(0,0,0,.18);
+      border-color: rgba(216,179,90,.28);
+      color: rgba(243,243,243,.86);
+    }
+
+    /* Stage */
+    .stage{
+      position:relative;
+      height: 580px;
+      border-radius: 22px;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      perspective: 1200px;
+      transform-style: preserve-3d;
+    }
+    .stage::before{
+      content:"";
+      position:absolute;
+      inset:-40px;
+      background: none;
+      pointer-events:none;
+    }
+
+    .glow{
+      position:absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 999px;
+      background: radial-gradient(circle at center, rgba(216,179,90,.24), rgba(216,179,90,0) 65%);
+      filter: blur(6px);
+      z-index:1;
+      pointer-events:none;
+      opacity:.75;
+      animation: glowPulse 2.6s ease-in-out infinite;
+    }
+    @keyframes glowPulse{
+      0%{ transform: scale(.98); opacity:.55; filter: blur(7px); }
+      50%{ transform: scale(1.03); opacity:.88; filter: blur(5px); }
+      100%{ transform: scale(.98); opacity:.55; filter: blur(7px); }
+    }
+
+    .dust-canvas{
+      position:absolute;
+      inset:0;
+      z-index:2;
+      pointer-events:none;
+      opacity:.72;
+      mix-blend-mode: screen;
+    }
+
+    .pouch-stack{
+      position:absolute;
+      inset:0;
+      z-index:4;
+      pointer-events:none;
+      transform-style: preserve-3d;
+    }
+
+    /* ====== Revolver positions (5 visible) ====== */
+    .pouch-stack img{
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:min(440px,82%);
+      height:auto;
+      opacity:0;
+      transform: translate(-50%,-50%) translateZ(-320px) scale(.72);
+      filter: drop-shadow(0 18px 44px rgba(0,0,0,.55));
+      transition:
+        transform 820ms cubic-bezier(.2,.9,.2,1),
+        opacity 520ms ease,
+        filter 820ms ease;
+      will-change: transform, opacity, filter;
+    }
+
+    .pouch-stack img.pos-active{
+      opacity:1;
+      transform: translate(-50%,-50%) translateZ(0px) rotateY(0deg) scale(1);
+      filter: drop-shadow(0 34px 80px rgba(0,0,0,.72));
+      z-index:6;
+    }
+
+
+    .pouch-stack img.pos-active{
+      pointer-events:auto;
+      cursor:pointer;
+    }
+
+    .pouch-stack img.pos-active:active{
+      transform: translate(-50%,-50%) translateZ(10px) rotateY(0deg) scale(1.03);
+    }
+
+    .pouch-stack img.pos-prev{
+      opacity:.42;
+      transform: translate(-50%,-50%) translateX(-260px) translateZ(-170px) rotateY(42deg) scale(.88);
+      z-index:4;
+    }
+    .pouch-stack img.pos-next{
+      opacity:.42;
+      transform: translate(-50%,-50%) translateX(260px) translateZ(-170px) rotateY(-42deg) scale(.88);
+      z-index:4;
+    }
+
+    .pouch-stack img.pos-prev2{
+      opacity:.20;
+      transform: translate(-50%,-50%) translateX(-420px) translateZ(-270px) rotateY(56deg) scale(.78);
+      z-index:3;
+      filter: drop-shadow(0 10px 26px rgba(0,0,0,.45));
+    }
+    .pouch-stack img.pos-next2{
+      opacity:.20;
+      transform: translate(-50%,-50%) translateX(420px) translateZ(-270px) rotateY(-56deg) scale(.78);
+      z-index:3;
+      filter: drop-shadow(0 10px 26px rgba(0,0,0,.45));
+    }
+
+    .pouch-stack img.pos-hidden{
+      opacity:0;
+      transform: translate(-50%,-50%) translateZ(-420px) scale(.68);
+      z-index:1;
+    }
+
+    .arrow{
+      position:absolute;
+      top:50%;
+      transform: translateY(-50%);
+      width:44px;
+      height:56px;
+      border-radius:999px;
+      border:1px solid rgba(216,179,90,.22);
+      background: rgba(0,0,0,.18);
+      color: rgba(243,243,243,.78);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      user-select:none;
+      z-index:6;
+      cursor:pointer;
+      pointer-events:auto;
+      transition: transform .15s ease, border-color .2s ease, background .2s ease;
+    }
+    .arrow:hover{
+      transform: translateY(-50%) scale(1.03);
+      border-color: rgba(216,179,90,.55);
+      background: rgba(0,0,0,.28);
+    }
+    .arrow.left{ left: 18px; }
+    .arrow.right{ right: 18px; }
+
+    .stage-meta{
+      position:absolute;
+      left: 22px;
+      right: 22px;
+      bottom: 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      z-index:7;
+    }
+    .blend .label{
+      font-size:11px;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      color: rgba(243,243,243,.55);
+      margin-bottom:6px;
+    }
+    .blend .name{
+      font-family: var(--serif);
+      font-size: 18px;
+      color: rgba(243,243,243,.90);
+      letter-spacing:.01em;
+    }
+
+    .mini{
+      border-radius:999px;
+      padding:10px 14px;
+      font-size:12px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.22);
+      color: rgba(243,243,243,.88);
+      cursor:pointer;
+      transition: transform .15s ease, border-color .2s ease, background .2s ease;
+      white-space:nowrap;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .mini:hover{ transform: translateY(-1px); }
+    .mini.gold{
+      background: linear-gradient(180deg, rgba(216,179,90,.95), rgba(182,144,52,.95));
+      border-color: rgba(216,179,90,.55);
+      color: rgba(10,10,10,.92);
+      text-decoration:none;
+    }
+
+    .trust{
+      position:relative;
+      padding: 54px 0 80px;
+      background: linear-gradient(to bottom, rgba(0,0,0,.55), rgba(0,0,0,.92));
+      border-top: 1px solid rgba(255,255,255,.06);
+    }
+    .trust .inner{
+      width:min(1260px, calc(100% - 64px));
+      margin:0 auto;
+      text-align:center;
+    }
+    .trust h2{
+      margin:0 0 10px;
+      font-family: var(--serif);
+      font-size: clamp(26px, 3vw, 40px);
+      letter-spacing:-.01em;
+      color: rgba(243,243,243,.92);
+    }
+    .trust p{
+      margin:0;
+      color: rgba(243,243,243,.60);
+      font-size: 14px;
+    }
+    .divider-dot{
+      width:6px; height:6px;
+      border-radius:999px;
+      background: rgba(216,179,90,.85);
+      margin: 18px auto 0;
+      box-shadow: 0 0 0 6px rgba(216,179,90,.10);
+    }
+
+    @media (max-width: 980px){
+      .hero-inner{ grid-template-columns: 1fr; }
+      .stage{ height: 500px; }
+      .brand{ min-width:auto; }
+      .nav{ display:none; }
+      .topbar{ height:76px; }
+      .hero{ padding-top:76px; }
+    }
+  </style>
+
+  <!-- Ecwid cart + checkout only (no storefront browsing UI) -->
+  <script>
+    window.ec = window.ec || {};
+    window.ec.storefront = window.ec.storefront || {};
+    window.ec.storefront.enable_catalog = false;
+  </script>
+  <script src="https://app.ecwid.com/script.js?62406545&data_platform=code&data_date=2026-01-01" async charset="utf-8"></script>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="index.html" aria-label="Pixy Dust Home">
+        <img src="assets/images/logo-pixy-gold.png" alt="Pixy Dust Seasoning" />
+      </a>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="index.html" data-active="true">Home</a>
+        <a href="shop.html?view=Pouches">Shop</a>
+        <a href="kitchen-table.html">Kitchen Table</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="juniors.html">Juniors</a>
+        <a href="gifting.html">Gifting</a>
+        <a href="wholesale.html">Wholesale</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+
+      <button class="cart-btn" id="openCartBtn" type="button" aria-label="Open cart">Cart</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-label="Hero">
+      <div class="hero-inner">
+        <div>
+          <p class="kicker">Luxury gourmet seasoning</p>
+          <h1>Signature Blends<br/>by Pixy Dust</h1>
+
+          <p class="subcopy">
+            A couture collection of globally inspired seasonings.
+            Designed for cooks who demand depth, finish, and presence.
+          </p>
+
+          <div class="cta-row">
+            <a class="btn btn-primary" href="shop.html?view=Pouches">Explore blends</a>
+            <a class="btn btn-secondary" href="about.html">Discover our story</a>
+          </div>
+        </div>
+
+        <div class="stage" id="heroStage" aria-label="Featured pouch stage">
+          <div class="glow" id="heroGlow" aria-hidden="true"></div>
+          <canvas class="dust-canvas" id="heroDust" aria-hidden="true"></canvas>
+
+          <div class="pouch-stack" id="heroStack" aria-hidden="false"></div>
+
+          <button class="arrow left" id="heroPrev" type="button" aria-label="Previous blend">&#x2039;</button>
+          <button class="arrow right" id="heroNext" type="button" aria-label="Next blend">&#x203A;</button>
+
+          <div class="stage-meta">
+            <div class="blend">
+              <div class="label">Featured blend</div>
+              <div class="name" id="heroName">Loading…</div>
+            </div>
+
+            <div class="stage-actions">
+              <a class="mini gold" id="heroCta" href="shop.html?view=Pouches">Shop this blend</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" data-cms-section="partners">
+      <div class="container">
+        <div class="section-head">
+          <h2 class="section-title" data-cms-text>Trusted by Retailers and Culinary Partners</h2>
+          <p class="section-sub" data-cms-text>Built for shelves, menus, and elevated hospitality.</p>
+        </div>
+
+        <div class="grid two">
+          <div class="card">
+            <h3 class="card-title" data-cms-text>Retailers</h3>
+            <ul class="list">
+              <li>Fresh Thyme Market</li>
+              <li>Meijer</li>
+              <li>Schnucks</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title" data-cms-text>Culinary Partners</h3>
+            <ul class="list">
+              <li>Mac’s Bar</li>
+              <li>Erbe Farms</li>
+              <li>Old House on Hog Hollow</li>
+              <li>State Street Market</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Lion Premium Grills badge removed -->
+      </div>
+    </section>
+
+    <section class="section" data-cms-section="email">
+      <div class="container">
+        <div class="callout">
+          <div class="callout-copy">
+            <h2 class="section-title" data-cms-text>Join the VIP List</h2>
+            <p class="section-sub" data-cms-text>New drops, flash sales, and early access. Stored locally for now.</p>
+          </div>
+
+          <form class="form-inline" data-subscribe-form>
+            <label class="sr-only" for="emailHome">Email</label>
+            <input id="emailHome" name="email" type="email" inputmode="email" autocomplete="email" placeholder="Enter your email" required />
+            <button class="btn btn-primary" type="submit">Subscribe</button>
+          </form>
+
+          <div class="form-note" id="subscribe-note" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <button class="chat-fab" type="button" aria-label="Open Pixy Assistant" data-chat-open>
+    <span class="chat-fab-glow" aria-hidden="true"></span>
+    <span class="chat-fab-icon" aria-hidden="true">✦</span>
+  </button>
+
+  <section class="chat" role="dialog" aria-label="Pixy Assistant" aria-modal="true" hidden data-chat>
+    <header class="chat-head">
+      <div class="chat-brand">
+        <span class="chat-spark" aria-hidden="true"></span>
+        <div>
+          <div class="chat-title">Pixy Assistant</div>
+          <div class="chat-sub">Food-focused answers. Non-medical.</div>
+        </div>
+      </div>
+      <button class="chat-close" type="button" aria-label="Close chat" data-chat-close>×</button>
+    </header>
+
+    <div class="chat-body" data-chat-body aria-live="polite"></div>
+
+    <form class="chat-input" data-chat-form>
+      <label class="sr-only" for="chatText">Message</label>
+      <input id="chatText" name="message" type="text" placeholder="Ask about flavors, ingredients, pairings" autocomplete="off" required />
+      <button class="btn btn-primary" type="submit">Send</button>
+    </form>
+  </section>
+
+  <div class="toast" role="status" aria-live="polite" hidden data-toast></div>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-left">
+        <div class="footer-line">© <span id="year"></span> Pixy Dust Seasoning. All rights reserved.</div>
+        <div class="footer-tag">Luxury gourmet blends. Let’s sprinkle a little magic.</div>
+      </div>
+
+      <div class="footer-mid">
+        <a href="about.html">About Pixy Dust</a>
+        <a href="recipes.html">Recipes</a>
+        <a href="#">Policies</a>
+      </div>
+
+      <div class="footer-right">
+        <a href="https://www.facebook.com/PixyDustSeasoning" target="_blank" rel="noreferrer">Facebook</a>
+        <a href="https://www.instagram.com/pixydustseasoning" target="_blank" rel="noreferrer">Instagram</a>
+        <a href="https://www.youtube.com/@PixyDustcookoff" target="_blank" rel="noreferrer">YouTube</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/products.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/chatbot.js"></script>
+
+
+</body>
+</html>
+<a href="mailto:support@pixydustseasoning.com?subject=Subscription Inquiry">
+  Email Subscription Support
+</a>

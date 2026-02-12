@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gifting. Pixy Dust</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="assets/css/site.css" />
+  <script src="assets/js/flash-sales.js" defer></script>
+  <script src="assets/js/cms.js" defer></script>
+  <script src="assets/js/chatbot.js" defer></script>
+  <script src="assets/js/main.js" defer></script>
+
+  <style>
+    .gift-set-shot{
+      width:100%;
+      height:170px;
+      border-radius:18px;
+      border:1px solid rgba(217,185,108,.22);
+      background-repeat:no-repeat;
+      background-position:center;
+      background-size:contain;
+      box-shadow: 0 18px 60px rgba(217,185,108,.10);
+    }
+/* =============================== */
+/* SUBSCRIPTIONS – IMAGE SIZE LOCK */
+/* =============================== */
+
+#subscriptions .pouch-placeholder{
+  height: 170px;
+  max-height: 170px;
+  width: 100%;
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+    /* FIX: media query was missing @media */
+    @media (max-width: 720px){
+      .gift-set-shot{height:150px;}
+    }
+
+    /* Carousels: match Shop behavior, 3-up on desktop */
+    .carousel-wrap{ position: relative; margin-top: 12px; }
+
+    .carousel-controls{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin: 10px 0 12px;
+    }
+
+    .carousel-controls .left,
+    .carousel-controls .right{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .carousel-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:42px;
+      height:42px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      color: rgba(255,255,255,.88);
+      cursor:pointer;
+      user-select:none;
+    }
+
+    .carousel-btn:disabled{ opacity:.45; cursor:default; }
+
+    .viewall-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      color: rgba(255,255,255,.88);
+      padding: 10px 14px;
+      cursor:pointer;
+      user-select:none;
+      font-size: 13px;
+    }
+
+    .carousel-track{
+      display:flex;
+      gap: 16px;
+      overflow-x:auto;
+      padding-bottom: 6px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .carousel-track::-webkit-scrollbar{ height: 10px; }
+    .carousel-track::-webkit-scrollbar-thumb{ background: rgba(255,255,255,.14); border-radius: 999px; }
+
+    .carousel-track > .card{ flex: 0 0 calc((100% - 32px)/3); scroll-snap-align: start; }
+
+    @media (max-width: 879px){
+      .carousel-track > .card{ flex-basis: calc((100% - 16px)/2); }
+    }
+
+    @media (max-width: 639px){
+      .carousel-track > .card{ flex-basis: 86vw; scroll-snap-align: center; }
+    }
+
+    .carousel-wrap.view-all .carousel-track{
+      display:grid;
+      gap: 18px;
+      overflow: visible;
+      scroll-snap-type: none;
+      padding-bottom: 0;
+    }
+
+    .carousel-wrap.view-all .carousel-track.products{
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    .product-link{ display:block; }
+
+    .product-actions{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      flex-wrap:wrap;
+      margin-top: 10px;
+    }
+
+    .btn.btn-secondary{
+      background: transparent;
+      border: 1px solid rgba(255,255,255,.18);
+      color: rgba(255,255,255,.90);
+    }
+
+    .pouch-placeholder{
+      background-position:center;
+      background-size: contain;
+      background-repeat:no-repeat;
+    }
+
+    .pouch-placeholder.fallback{
+      background-image: radial-gradient(circle at 30% 30%, rgba(216,179,90,.25), rgba(0,0,0,0) 55%),
+                        radial-gradient(circle at 70% 70%, rgba(216,179,90,.18), rgba(0,0,0,0) 58%);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .pouch-placeholder.fallback img{
+      width: 78px;
+      height: auto;
+      opacity: .55;
+      filter: drop-shadow(0 10px 16px rgba(0,0,0,.55));
+    }
+
+    .btn[disabled]{ opacity: .55; cursor: not-allowed; }
+  </style>
+
+  <!-- Ecwid cart-only -->
+  <script>
+    window.ec = window.ec || {};
+    window.ec.storefront = window.ec.storefront || {};
+    window.ec.storefront.enable_catalog = false;
+  </script>
+  <script src="https://app.ecwid.com/script.js?62406545&data_platform=code&data_date=2026-01-01" charset="utf-8"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div id="flash-sale-bar" class="flash-sale" role="region" aria-label="Flash sale" hidden></div>
+
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="Pixy Dust Seasoning home">
+        <div class="brand-mark" aria-hidden="true">
+          <img src="assets/images/logo-circle.png" alt="" class="brand-logo" loading="eager" />
+        </div>
+        <div class="brand-type">
+          <div class="brand-name">Pixy Dust</div>
+          <div class="brand-sub">Seasoning</div>
+        </div>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-label="Open menu" aria-controls="mainNav" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav id="mainNav" class="main-nav" aria-label="Primary">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link" href="shop.html">Shop</a>
+        <a class="nav-link" href="juniors.html">Juniors</a>
+        <a class="nav-link active" href="gifting.html">Gifting</a>
+        <a class="nav-link" href="about.html">About</a>
+        <a class="nav-link" href="recipes.html">Recipes</a>
+        <a class="nav-link" href="wholesale.html">Wholesale</a>
+        <a class="nav-link" href="contact.html">Contact</a>
+      </nav>
+    </div>
+    <div id="admin-badge" class="admin-badge" hidden>Admin Mode</div>
+  </header>
+
+  <main id="main" class="page">
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <h1 class="page-title">Gifting</h1>
+          <p class="section-sub">Adult luxury gift experiences built on signature pouches.</p>
+        </div>
+
+        <!-- Designed imagery (kept). Buttons scroll to matching sections below. -->
+        <div class="grid three" data-cms-section="gifting-cards">
+          <article class="card" data-cms-card data-product-key="gift-3">
+            <div class="gift-media">
+              <div class="gift-set-shot" style="background-image:url('assets/images/gifts/giftset-3.png')" aria-hidden="true"></div>
+            </div>
+            <h3 class="card-title" data-cms-text>3-Blend Signature Gift Box</h3>
+            <p class="muted" data-cms-text>Three signature pouches in a premium presentation.</p>
+            <div class="cta-row">
+              <a class="btn btn-primary" data-cta href="#">View Details</a>
+              <button class="btn btn-secondary" type="button" data-add-to-cart>+ Cart</button>
+            </div>
+          </article>
+
+          <article class="card" data-cms-card data-product-key="gift-6">
+            <div class="gift-media">
+              <div class="gift-set-shot" style="background-image:url('assets/images/gifts/giftset-6.png')" aria-hidden="true"></div>
+            </div>
+            <h3 class="card-title" data-cms-text>6-Blend Signature Collection</h3>
+            <p class="muted" data-cms-text>Curated coverage for elevated cooking across cuisines.</p>
+            <div class="cta-row">
+              <a class="btn btn-primary" data-cta href="#">View Details</a>
+              <button class="btn btn-secondary" type="button" data-add-to-cart>+ Cart</button>
+            </div>
+          </article>
+
+          <article class="card" data-cms-card data-product-key="gift-9">
+            <div class="gift-media">
+              <div class="gift-set-shot" style="background-image:url('assets/images/gifts/giftset-9.png')" aria-hidden="true"></div>
+            </div>
+            <h3 class="card-title" data-cms-text>Full Signature Collection</h3>
+            <p class="muted" data-cms-text>All signature pouches in a complete luxury set.</p>
+            <div class="cta-row">
+              <a class="btn btn-primary" data-cta href="#">View Details</a>
+              <button class="btn btn-secondary" type="button" data-add-to-cart>+ Cart</button>
+            </div>
+          </article>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="divider"></div>
+
+<!-- Subscriptions carousel (from products.js category: Subscriptions) -->
+        <section class="section collection" id="subscriptions" data-view-section="Subscriptions">
+          <div class="card">
+            <h2 class="section-title">Subscriptions</h2>
+            <p class="muted">Luxury delivery on your schedule. Tap for full details.</p>
+
+            <div class="carousel-wrap" data-carousel="subs" data-category="Subscriptions">
+              <div class="carousel-controls">
+                <div class="left">
+                  <button class="carousel-btn" type="button" aria-label="Previous" data-carousel-prev>‹</button>
+                  <button class="carousel-btn" type="button" aria-label="Next" data-carousel-next>›</button>
+                </div>
+                <div class="right">
+                  <button class="viewall-btn" type="button" data-carousel-viewall>View all</button>
+                </div>
+              </div>
+
+              <div class="carousel-track products" data-carousel-track aria-label="Subscriptions carousel"></div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </section>
+  </main>
+
+  <button class="chat-fab" type="button" aria-label="Open Pixy Assistant" data-chat-open>
+    <span class="chat-fab-glow" aria-hidden="true"></span>
+    <span class="chat-fab-icon" aria-hidden="true">✦</span>
+  </button>
+  <section class="chat" role="dialog" aria-label="Pixy Assistant" aria-modal="true" hidden data-chat>
+    <header class="chat-head">
+      <div class="chat-brand">
+        <span class="chat-spark" aria-hidden="true"></span>
+        <div>
+          <div class="chat-title">Pixy Assistant</div>
+          <div class="chat-sub">Food-focused answers. Non-medical.</div>
+        </div>
+      </div>
+      <button class="chat-close" type="button" aria-label="Close chat" data-chat-close>×</button>
+    </header>
+    <div class="chat-body" data-chat-body aria-live="polite"></div>
+    <form class="chat-input" data-chat-form>
+      <label class="sr-only" for="chatTextGift">Message</label>
+      <input id="chatTextGift" name="message" type="text" placeholder="Ask about flavors, ingredients, pairings" autocomplete="off" required />
+      <button class="btn btn-primary" type="submit">Send</button>
+    </form>
+  </section>
+
+  <div class="toast" role="status" aria-live="polite" hidden data-toast></div>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-left">
+        <div class="footer-line">© <span id="year"></span> Pixy Dust Seasoning. All rights reserved.</div>
+        <div class="footer-tag">Luxury gourmet blends. Let’s sprinkle a little magic.</div>
+      </div>
+      <div class="footer-mid">
+        <a href="about.html">About Pixy Dust</a>
+        <a href="recipes.html">Recipes</a>
+        <a href="#">Policies</a>
+      </div>
+      <div class="footer-right">
+        <a href="https://www.facebook.com/PixyDustSeasoning" target="_blank" rel="noreferrer">Facebook</a>
+        <a href="https://www.instagram.com/pixydustseasoning" target="_blank" rel="noreferrer">Instagram</a>
+        <a href="https://www.youtube.com/@PixyDustcookoff" target="_blank" rel="noreferrer">YouTube</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/products.js" defer></script>
+
+  <script>
+    (function(){
+      "use strict";
+
+      function smoothScrollTo(id){
+        var el = document.getElementById(id);
+        if (!el) return;
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      document.addEventListener("click", function(e){
+        var a = e.target && e.target.closest ? e.target.closest("[data-scroll-to]") : null;
+        if (!a) return;
+        var id = a.getAttribute("data-scroll-to");
+        if (!id) return;
+        e.preventDefault();
+        smoothScrollTo(id);
+      });
+
+      function getProducts(){
+        return (window.PIXY_PRODUCTS && Array.isArray(window.PIXY_PRODUCTS)) ? window.PIXY_PRODUCTS : [];
+      }
+
+      function encodeKey(key){
+        return encodeURIComponent(String(key || ""));
+      }
+
+      function ensureEcwidReady(timeoutMs){
+        timeoutMs = typeof timeoutMs === "number" ? timeoutMs : 12000;
+        var STORE_ID = 62406545;
+
+        return new Promise(function(resolve, reject){
+          var start = Date.now();
+
+          function ready(){
+            return (window.Ecwid && window.Ecwid.Cart && typeof window.Ecwid.Cart.addProduct === "function");
+          }
+
+          if (ready()) { resolve(); return; }
+
+          try {
+            var existing = document.querySelector("script[src*='app.ecwid.com/script.js?" + STORE_ID + "']");
+            if (!existing) {
+              window.ec = window.ec || {};
+              window.ec.storefront = window.ec.storefront || {};
+              window.ec.storefront.enable_catalog = false;
+              window.ec.storefront.enable_product_browser = false;
+              window.ec.storefront.enable_search = false;
+              window.ec.storefront.enable_minicart = true;
+
+              var s = document.createElement("script");
+              s.charset = "utf-8";
+              s.src = "https://app.ecwid.com/script.js?" + STORE_ID + "&data_platform=code&data_date=2026-01-01";
+              s.onload = function(){ try { window.Ecwid && window.Ecwid.init && window.Ecwid.init(); } catch (e) {} };
+              document.head.appendChild(s);
+            }
+          } catch (e) {}
+
+          if (window.Ecwid && window.Ecwid.OnAPILoaded) {
+            window.Ecwid.OnAPILoaded.add(function(){ if (ready()) resolve(); });
+          }
+
+          var t = setInterval(function(){
+            if (ready()) { clearInterval(t); resolve(); return; }
+            if (Date.now() - start > timeoutMs) { clearInterval(t); reject(new Error("Ecwid not ready")); }
+          }, 120);
+        });
+      }
+
+      function addToCart(id){
+        var pid = Number(id);
+        if (!pid || !isFinite(pid)) return;
+        ensureEcwidReady().then(function(){
+          window.Ecwid.Cart.addProduct({ id: pid, quantity: 1 });
+          window.Ecwid.openPage("cart");
+        }).catch(function(){
+          alert("Cart is still loading. Try again in a second.");
+        });
+      }
+
+      function buildCard(product){
+        var art = document.createElement("article");
+        art.className = "card product";
+        art.id = product.key || "";
+        art.setAttribute("data-product-key", product.key || "");
+        if (product.ecwidProductId) art.setAttribute("data-ecwid-id", String(product.ecwidProductId));
+
+        var href = "product.html?key=" + encodeKey(product.key);
+
+        var a = document.createElement("a");
+        a.className = "product-link";
+        a.href = href;
+
+        var media = document.createElement("div");
+        var cls = "pouch-placeholder";
+        media.className = cls + (product.image ? "" : " fallback");
+
+        if (product.image) {
+          media.style.backgroundImage = 'url(' + JSON.stringify(product.image) + ')';
+        } else {
+          var img = document.createElement("img");
+          img.src = "assets/images/logo-circle.png";
+          img.alt = "";
+          img.loading = "lazy";
+          media.appendChild(img);
+        }
+
+        var h3 = document.createElement("h3");
+        h3.className = "card-title";
+        h3.textContent = product.title || "";
+
+        a.appendChild(media);
+        a.appendChild(h3);
+
+        var p = document.createElement("p");
+        p.className = "muted";
+        p.textContent = product.blurb || "";
+
+        var actions = document.createElement("div");
+        actions.className = "product-actions";
+
+        var details = document.createElement("a");
+        details.className = "btn btn-secondary";
+        details.href = href;
+        details.textContent = "View Details";
+
+        var buy = document.createElement("button");
+        buy.className = "btn btn-primary";
+        buy.type = "button";
+
+        if (product.ecwidProductId) {
+          buy.textContent = "View & Order";
+          buy.addEventListener("click", function(e){ e.preventDefault(); addToCart(product.ecwidProductId); });
+        } else {
+          buy.textContent = "Coming soon";
+          buy.disabled = true;
+          buy.setAttribute("aria-disabled", "true");
+        }
+
+        actions.appendChild(details);
+        actions.appendChild(buy);
+
+        art.appendChild(a);
+        art.appendChild(p);
+        art.appendChild(actions);
+
+        return art;
+      }
+
+      function wireCarousel(wrap){
+        var track = wrap.querySelector("[data-carousel-track]");
+        var prev = wrap.querySelector("[data-carousel-prev]");
+        var next = wrap.querySelector("[data-carousel-next]");
+        var viewAll = wrap.querySelector("[data-carousel-viewall]");
+
+        if (!track) return;
+
+        function updateBtns(){
+          if (!prev || !next) return;
+          prev.disabled = track.scrollLeft <= 2;
+          next.disabled = (track.scrollLeft + track.clientWidth) >= (track.scrollWidth - 2);
+        }
+
+        function step(dir){
+          var card = track.querySelector(".card");
+          var gap = 16;
+          var amount = card ? (card.offsetWidth + gap) : Math.max(240, Math.floor((track.clientWidth || 0) * 0.85));
+          track.scrollBy({ left: dir * amount, behavior: "smooth" });
+          window.setTimeout(updateBtns, 260);
+        }
+
+        if (prev) prev.addEventListener("click", function(){ step(-1); });
+        if (next) next.addEventListener("click", function(){ step(1); });
+
+        if (viewAll){
+          viewAll.addEventListener("click", function(){
+            wrap.classList.toggle("view-all");
+            viewAll.textContent = wrap.classList.contains("view-all") ? "Collapse" : "View all";
+          });
+        }
+
+        var startX = 0, startY = 0, tracking = false, moved = false;
+
+        function threshold(){
+          return Math.max(45, Math.floor((track.clientWidth || 0) * 0.10));
+        }
+
+        function ignore(t){ return !!(t && t.closest && t.closest("a,button,input,textarea,select,label")); }
+
+        track.addEventListener("touchstart", function(e){
+          if (ignore(e.target)) return;
+          if (!e.touches || e.touches.length !== 1) return;
+          tracking = true;
+          moved = false;
+          startX = e.touches[0].clientX;
+          startY = e.touches[0].clientY;
+        }, { passive: true });
+
+        track.addEventListener("touchmove", function(e){
+          if (!tracking) return;
+          var t = e.touches && e.touches[0];
+          if (!t) return;
+          var dx = t.clientX - startX;
+          var dy = t.clientY - startY;
+          if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) moved = true;
+        }, { passive: true });
+
+        track.addEventListener("touchend", function(e){
+          if (!tracking) return;
+          tracking = false;
+          if (!moved) return;
+
+          var t = e.changedTouches && e.changedTouches[0];
+          if (!t) return;
+          var dx = t.clientX - startX;
+          var dy = t.clientY - startY;
+          if (Math.abs(dy) > 90) return;
+          if (Math.abs(dx) < threshold()) return;
+
+          if (dx < 0) step(1);
+          else step(-1);
+        }, { passive: true });
+
+        track.addEventListener("scroll", updateBtns, { passive: true });
+        window.addEventListener("resize", updateBtns);
+        updateBtns();
+      }
+
+      function render(){
+        var wraps = document.querySelectorAll("[data-carousel][data-category]");
+        var all = getProducts();
+
+        for (var i = 0; i < wraps.length; i++){
+          var w = wraps[i];
+          var cat = w.getAttribute("data-category") || "";
+          var track = w.querySelector("[data-carousel-track]");
+          if (!track) continue;
+
+          var list = all.filter(function(p){ return p && p.category === cat; });
+          track.innerHTML = "";
+
+          for (var j = 0; j < list.length; j++){
+            track.appendChild(buildCard(list[j]));
+          }
+
+          wireCarousel(w);
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", function(){
+        render();
+      });
+    })();
+  </script>
+</body>
+</html>

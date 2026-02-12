@@ -1,0 +1,967 @@
+:root{
+  --bg0:#07070a;
+  --bg1:#0b0b10;
+  --bg2:#12121a;
+  --text:#f3f1ea;
+  --muted:#b8b4a9;
+  --muted2:#8f8a7d;
+
+  --gold0:#f2e6bf;
+  --gold1:#d9b96c;
+  --gold2:#b98a38;
+
+  --card: rgba(14,14,20,.72);
+  --stroke: rgba(217,185,108,.22);
+  --stroke2: rgba(217,185,108,.35);
+
+  --shadow: 0 18px 55px rgba(0,0,0,.55);
+  --shadow2: 0 10px 28px rgba(0,0,0,.45);
+
+  --r: 18px;
+  --r2: 26px;
+
+  --ease: cubic-bezier(0.19,1,0.22,1);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  color:var(--text);
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background:
+    radial-gradient(1200px 800px at 20% 20%, rgba(217,185,108,.08), transparent 55%),
+    radial-gradient(900px 600px at 80% 35%, rgba(217,185,108,.06), transparent 60%),
+    linear-gradient(180deg, var(--bg0), var(--bg1) 35%, var(--bg2));
+  letter-spacing: .02em;
+}
+
+a{color:inherit; text-decoration:none}
+a:hover{color:var(--gold0)}
+img{max-width:100%; height:auto; display:block}
+
+.skip-link{
+  position:absolute; left:-9999px; top:auto;
+  width:1px; height:1px; overflow:hidden;
+}
+.skip-link:focus{
+  left:16px; top:16px; width:auto; height:auto;
+  background:rgba(0,0,0,.8);
+  border:1px solid var(--stroke2);
+  padding:10px 12px; border-radius:12px;
+  z-index:9999;
+}
+
+.container{
+  width:min(1140px, calc(100% - 40px));
+  margin:0 auto;
+}
+
+.sr-only{
+  position:absolute !important;
+  width:1px;height:1px;
+  padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0,0,0,0);
+  white-space:nowrap;border:0;
+}
+
+/* Header */
+.site-header{
+  position:sticky; top:0; z-index:60;
+  background: rgba(8,8,12,.55);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(217,185,108,.28);
+}
+.header-inner{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:16px;
+  padding:14px 0;
+}
+.brand{display:flex; align-items:center; gap:12px}
+.brand-mark{
+  width:56px;
+  height:56px;border-radius:999px;
+  border:1px solid var(--stroke2);
+  background: radial-gradient(circle at 35% 30%, rgba(217,185,108,.28), rgba(0,0,0,.75));
+  box-shadow: 0 0 0 6px rgba(217,185,108,.05);
+  position:relative;
+}
+.brand-mark img.brand-logo{width:100%;height:100%;object-fit:cover;border-radius:999px;display:block;}
+
+.brand-spark{
+  position:absolute; inset:0;
+  background:
+    radial-gradient(12px 12px at 58% 42%, rgba(242,230,191,.9), transparent 60%),
+    radial-gradient(22px 22px at 48% 60%, rgba(217,185,108,.35), transparent 60%);
+  filter: blur(.2px);
+}
+.brand-name{
+  font-family: "Playfair Display", serif;
+  font-weight:700;
+  letter-spacing: .14em;
+  text-transform:uppercase;
+  line-height:1.05;
+}
+.brand-sub{
+  color: var(--muted2);
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  font-size:12px;
+  margin-top:2px;
+}
+
+.main-nav{
+  display:flex; align-items:center; gap:18px;
+}
+.nav-link{
+  position:relative;
+  color: rgba(243,241,234,.88);
+  font-size:13px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  padding:10px 2px;
+  transition: color .35s var(--ease);
+}
+.nav-link::after{
+  content:"";
+  position:absolute; left:0; right:0; bottom:6px;
+  height:1px;
+  background: linear-gradient(90deg, transparent, rgba(217,185,108,.7), transparent);
+  opacity:0;
+  transform: scaleX(.6);
+  transition: opacity .35s var(--ease), transform .35s var(--ease);
+}
+.nav-link:hover{
+  color: var(--gold0);
+  text-shadow: 0 0 18px rgba(217,185,108,.25);
+}
+.nav-link:hover::after{opacity:1; transform: scaleX(1)}
+.nav-link.active{
+  color: var(--gold1);
+}
+.nav-link.active::after{opacity:1; transform: scaleX(1)}
+
+.nav-toggle{
+  display:none;
+  width:46px; height:44px;
+  border-radius:14px;
+  border:1px solid var(--stroke2);
+  background: rgba(0,0,0,.25);
+  box-shadow: var(--shadow2);
+}
+.nav-toggle span{
+  display:block;
+  width:20px; height:2px;
+  background: rgba(243,241,234,.85);
+  margin:5px auto;
+  border-radius:2px;
+}
+.admin-badge{
+  position:fixed;
+  right:14px; top:78px;
+  background: rgba(0,0,0,.75);
+  border:1px solid var(--stroke2);
+  padding:8px 10px;
+  border-radius:999px;
+  color: var(--gold0);
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  font-size:11px;
+  box-shadow: var(--shadow2);
+  z-index:80;
+}
+
+/* Sections */
+.section{padding: 84px 0}
+.section-head{margin-bottom:22px}
+.section-title{
+  font-family:"Playfair Display", serif;
+  font-size:34px;
+  letter-spacing:.08em;
+  margin:0 0 10px;
+}
+.section-sub{
+  margin:0;
+  color: var(--muted);
+  line-height:1.7;
+  max-width:72ch;
+}
+
+/* Page */
+.page{padding-top:22px}
+.page-title{
+  font-family:"Playfair Display", serif;
+  font-size:44px;
+  margin:0 0 10px;
+  letter-spacing:.06em;
+}
+
+/* Hero */
+.hero{padding: 74px 0 54px; position:relative}
+.hero-bg{
+  position:absolute; inset:0; z-index:-1;
+  background:
+    radial-gradient(900px 700px at 30% 25%, rgba(217,185,108,.14), transparent 60%),
+    radial-gradient(1200px 900px at 70% 45%, rgba(217,185,108,.10), transparent 64%),
+    linear-gradient(180deg, rgba(0,0,0,.0), rgba(0,0,0,.35));
+  opacity:.95;
+}
+.hero-grid{
+  display:grid;
+  grid-template-columns: 1.05fr .95fr;
+  gap:28px;
+  align-items:stretch;
+}
+.hero-copy{
+  border-radius: var(--r2);
+  border:none;
+  background: transparent; /* made fully transparent per request */
+  box-shadow: none;
+  padding: 34px;
+  position:relative;
+  overflow:hidden;
+}
+.hero-copy::before{
+  content:"";
+  position:absolute; inset:-60px;
+  background:
+    radial-gradient(400px 250px at 20% 10%, rgba(217,185,108,.12), transparent 60%),
+    radial-gradient(260px 200px at 85% 30%, rgba(217,185,108,.08), transparent 60%);
+  pointer-events:none;
+}
+.eyebrow{
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color: var(--gold1);
+  font-size:12px;
+  margin-bottom:12px;
+  position:relative;
+}
+.hero-title{
+  font-family:"Playfair Display", serif;
+  font-size:56px;
+  line-height:1.05;
+  margin:0 0 14px;
+  letter-spacing:.05em;
+  position:relative;
+}
+.hero-lead{
+  margin:0 0 18px;
+  color: var(--muted);
+  line-height:1.8;
+  position:relative;
+  max-width:56ch;
+}
+.hero-cta{display:flex; gap:12px; flex-wrap:wrap; position:relative}
+.hero-meta{display:flex; gap:10px; flex-wrap:wrap; margin-top:18px; position:relative}
+.meta-pill{
+  padding:10px 12px;
+  border-radius:999px;
+  border:none;
+  background: rgba(0,0,0,.25);
+  color: rgba(243,241,234,.86);
+  font-size:12px;
+  letter-spacing:.08em;
+}
+
+/* Buttons */
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding: 12px 16px;
+  border-radius: 999px;
+  border:1px solid transparent;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  font-size:12px;
+  transition: transform .35s var(--ease), box-shadow .35s var(--ease), filter .35s var(--ease), background .35s var(--ease);
+}
+.btn:focus-visible{outline: 2px solid rgba(242,230,191,.7); outline-offset:3px}
+.btn-primary{
+  color:#141414;
+  background: linear-gradient(135deg, var(--gold0), var(--gold1), var(--gold2));
+  box-shadow: 0 14px 40px rgba(217,185,108,.18);
+}
+.btn-primary:hover{
+  transform: translateY(-2px);
+  filter: brightness(1.03);
+  box-shadow: 0 18px 60px rgba(217,185,108,.22);
+}
+.btn-ghost{
+  border-color: rgba(217,185,108,.45);
+  background: rgba(0,0,0,.15);
+  color: var(--gold0);
+}
+.btn-ghost:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 14px 50px rgba(217,185,108,.14);
+}
+
+/* Carousel Stage */
+.hero-stage .stage-frame{
+  border-radius: var(--r2);
+  border:none;
+  background: transparent; /* made fully transparent per request */
+  box-shadow: none;
+  padding: 22px;
+  position:relative;
+  overflow:hidden;
+  min-height: 430px;
+}
+.stage-glow{
+  position:absolute; inset:-80px;
+  background:
+    radial-gradient(420px 300px at 50% 30%, rgba(217,185,108,.10), transparent 60%),
+    radial-gradient(260px 220px at 80% 65%, rgba(217,185,108,.06), transparent 60%);
+  pointer-events:none;
+}
+.carousel{display:grid; grid-template-columns: 54px 1fr 54px; gap:10px; align-items:center; position:relative}
+.carousel-btn{
+  width:54px; height:54px;
+  border-radius:999px;
+  border:1px solid rgba(217,185,108,.45);
+  background: rgba(0,0,0,.25);
+  color: var(--gold0);
+  display:grid; place-items:center;
+  box-shadow: 0 12px 30px rgba(0,0,0,.35);
+  transition: transform .35s var(--ease), box-shadow .35s var(--ease);
+}
+.carousel-btn:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 18px 50px rgba(217,185,108,.18);
+}
+.carousel-btn span{font-size:28px; line-height:1}
+.carousel-rail{
+  position:relative;
+  height: 360px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.carousel-item{
+  position:absolute;
+  width:100%;
+  max-width: 520px;
+  opacity:0;
+  transform: translateY(18px) scale(.98);
+  transition: opacity .7s var(--ease), transform .7s var(--ease);
+  pointer-events:none;
+  display:grid;
+  grid-template-columns: 180px 1fr;
+  gap:18px;
+  align-items:center;
+}
+.carousel-item.is-active{
+  opacity:1;
+  transform: translateY(0) scale(1);
+  pointer-events:auto;
+}
+.pouch{
+  width:180px; height:240px;
+  border-radius:22px;
+  border:1px solid rgba(217,185,108,.28);
+  background: linear-gradient(180deg, rgba(0,0,0,.65), rgba(12,12,18,.75));
+  box-shadow: 0 24px 70px rgba(0,0,0,.55);
+  position:relative;
+}
+.pouch::after{
+  content:"";
+  position:absolute; inset:-14px;
+  border-radius:28px;
+  background: radial-gradient(220px 180px at 50% 35%, rgba(217,185,108,.16), transparent 65%);
+  opacity:.85;
+  filter: blur(.2px);
+  pointer-events:none;
+}
+.carousel-text{padding-right:10px}
+.blend-name{
+  font-family:"Playfair Display", serif;
+  letter-spacing:.10em;
+  margin:0 0 10px;
+  font-size:26px;
+}
+.blend-story{
+  margin:0 0 14px;
+  color: var(--muted);
+  line-height:1.8;
+}
+.micro-cta{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  color: var(--gold0);
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  font-size:12px;
+  border-bottom:1px solid rgba(217,185,108,.35);
+  padding-bottom:6px;
+  transition: color .35s var(--ease), border-color .35s var(--ease);
+}
+.micro-cta:hover{
+  color: var(--gold1);
+  border-color: rgba(217,185,108,.65);
+}
+.carousel-dots{
+  margin-top: 14px;
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  position:relative;
+}
+.dot{
+  width:10px;height:10px;border-radius:999px;
+  border:1px solid rgba(217,185,108,.45);
+  background: rgba(0,0,0,.25);
+  cursor:pointer;
+  transition: transform .35s var(--ease), background .35s var(--ease);
+}
+.dot[aria-selected="true"]{
+  background: linear-gradient(135deg, var(--gold0), var(--gold1));
+  transform: scale(1.15);
+}
+
+/* Cards and grids */
+.grid{display:grid; gap:18px}
+.grid.two{grid-template-columns: repeat(2, minmax(0,1fr))}
+.grid.three{grid-template-columns: repeat(3, minmax(0,1fr))}
+.grid.products{grid-template-columns: repeat(3, minmax(0,1fr))}
+.card{
+  border-radius: var(--r);
+  border:none;
+  background: var(--card);
+  box-shadow: var(--shadow2);
+  padding: 22px;
+  position:relative;
+  overflow:hidden;
+}
+.card::before{
+  content:"";
+  position:absolute; inset:-70px;
+  background: radial-gradient(420px 260px at 20% 20%, rgba(217,185,108,.10), transparent 60%);
+  opacity:.7;
+  pointer-events:none;
+}
+.card-title{
+  margin:0 0 10px;
+  font-family:"Playfair Display", serif;
+  letter-spacing:.10em;
+}
+.muted{color: var(--muted); line-height:1.75; margin:0 0 14px}
+
+.list{margin:0; padding-left:18px; color: var(--muted); line-height:1.9}
+.divider{
+  height:1px;
+  background: linear-gradient(90deg, transparent, rgba(217,185,108,.35), transparent);
+  margin: 34px 0;
+}
+
+.product-media{display:flex; justify-content:center; margin-bottom:14px}
+.product .pouch{width:160px; height:210px}
+
+/* Gifting visuals */
+.gift-media{
+  display:flex;
+  gap:10px;
+  margin-bottom:14px;
+}
+.gift-media .pouch{width:84px;height:120px;border-radius:16px}
+
+/* Forms */
+.form, .comment-form{
+  display:grid;
+  gap:12px;
+}
+.field label{
+  display:block;
+  margin-bottom:6px;
+  color: rgba(243,241,234,.88);
+  letter-spacing:.10em;
+  text-transform:uppercase;
+  font-size:12px;
+}
+input, textarea, select{
+  width:100%;
+  padding: 12px 12px;
+  border-radius: 14px;
+  border:1px solid rgba(217,185,108,.22);
+  background: rgba(0,0,0,.22);
+  color: rgba(243,241,234,.92);
+  outline:none;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.25);
+}
+input:focus, textarea:focus, select:focus{
+  border-color: rgba(217,185,108,.55);
+  box-shadow: 0 0 0 4px rgba(217,185,108,.10);
+}
+.form-note{color: var(--muted2); margin:10px 0 0; line-height:1.6}
+.form-inline{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.form-inline input{flex:1; min-width:220px}
+
+/* Callout */
+.callout{
+  border-radius: var(--r2);
+  border:1px solid rgba(217,185,108,.22);
+  background: transparent; /* made fully transparent per request */
+  box-shadow: none;
+  padding: 24px;
+  display:flex;
+  gap:14px;
+  align-items:center;
+  justify-content:space-between;
+}
+.callout-copy{max-width:60ch}
+.callout .section-title{font-size:30px;margin-bottom:8px}
+
+/* Juniors vibe */
+.juniors-hero{
+  background:
+    radial-gradient(600px 360px at 20% 15%, rgba(242,230,191,.10), transparent 60%),
+    radial-gradient(600px 360px at 80% 35%, rgba(137, 202, 255, .06), transparent 62%);
+}
+.juniors-card{border-color: rgba(242,230,191,.24)}
+.bottle-placeholder, .book-placeholder{
+  width:100%;
+  height:160px;
+  border-radius: 16px;
+  border:none;
+  background: transparent;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+.bottle-placeholder img, .book-placeholder img{
+  max-width: 100%;
+  max-height: 150px;
+  width: auto;
+  height: auto;
+  display:block;
+}
+.bottle-placeholder img, .book-placeholder img{
+  max-width: 100%;
+  max-height: 150px;
+  width: auto;
+  height: auto;
+  display:block;
+}
+.mini-card{
+  border-radius:16px;
+  border:1px solid rgba(217,185,108,.18);
+  background: rgba(0,0,0,.18);
+  padding:12px;
+}
+.mini-title{
+  margin-top:10px;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+  font-size:12px;
+  color: rgba(243,241,234,.9);
+}
+.mini-cta{
+  display:inline-flex;
+  margin-top:10px;
+  font-size:12px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color: var(--gold0);
+  border-bottom:1px solid rgba(217,185,108,.35);
+  padding-bottom:6px;
+}
+
+/* Comments */
+.comment-list{display:grid; gap:10px; margin-top:14px}
+.comment{
+  border-radius: 16px;
+  border:none;
+  background: rgba(0,0,0,.22);
+  padding:12px;
+}
+.comment .meta{
+  color: var(--muted2);
+  font-size:12px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+.comment .text{margin:0; color: rgba(243,241,234,.92); line-height:1.7}
+
+/* Partner badge */
+.partner-badge-row{margin-top:24px; display:flex; justify-content:center}
+.badge-link{
+  display:inline-flex;
+  padding: 12px 18px;
+  border-radius:999px;
+  border:1px solid rgba(217,185,108,.45);
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  font-size:12px;
+  background: rgba(0,0,0,.20);
+  box-shadow: var(--shadow2);
+}
+.badge-link:hover{box-shadow: 0 18px 60px rgba(217,185,108,.18)}
+
+/* Footer */
+.site-footer{
+  border-top:1px solid rgba(217,185,108,.18);
+  padding: 30px 0;
+  background: rgba(0,0,0,.18);
+}
+.footer-inner{
+  display:grid;
+  grid-template-columns: 1.2fr .8fr .8fr;
+  gap:16px;
+  align-items:start;
+}
+.footer-line{color: rgba(243,241,234,.88); letter-spacing:.08em}
+.footer-tag{margin-top:6px; color: var(--muted2); line-height:1.6}
+.footer-mid, .footer-right{display:flex; flex-direction:column; gap:10px}
+.footer-mid a, .footer-right a{
+  color: rgba(243,241,234,.80);
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  font-size:12px;
+}
+.footer-mid a:hover, .footer-right a:hover{color: var(--gold0)}
+
+/* Chat */
+.chat-fab{
+  position:fixed; right:18px; bottom:18px;
+  width:56px;height:56px;border-radius:999px;
+  border:1px solid rgba(217,185,108,.55);
+  background: rgba(0,0,0,.35);
+  color: var(--gold0);
+  box-shadow: 0 18px 60px rgba(0,0,0,.55);
+  z-index:90;
+}
+.chat-fab-glow{
+  position:absolute; inset:-14px;
+  border-radius:999px;
+  background: radial-gradient(circle, rgba(217,185,108,.22), transparent 60%);
+  filter: blur(.2px);
+  pointer-events:none;
+}
+.chat-fab-icon{font-size:18px}
+.chat{
+  position:fixed;
+  right:18px; bottom:84px;
+  width:min(420px, calc(100% - 36px));
+  height: 540px;
+  border-radius: 20px;
+  border:1px solid rgba(217,185,108,.28);
+  background: linear-gradient(180deg, rgba(12,12,18,.94), rgba(8,8,12,.96));
+  box-shadow: none;
+  overflow:hidden;
+  z-index:95;
+  display:grid;
+  grid-template-rows: auto 1fr auto;
+}
+.chat-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding: 14px 14px;
+  border-bottom:1px solid rgba(217,185,108,.18);
+  background: rgba(0,0,0,.25);
+}
+.chat-brand{display:flex; gap:10px; align-items:center}
+.chat-spark{
+  width:34px;height:34px;border-radius:12px;
+  border:1px solid rgba(217,185,108,.35);
+  background: radial-gradient(circle at 35% 35%, rgba(242,230,191,.65), rgba(0,0,0,.7));
+}
+.chat-title{
+  font-family:"Playfair Display", serif;
+  letter-spacing:.10em;
+}
+.chat-sub{color: var(--muted2); font-size:12px; letter-spacing:.08em}
+.chat-close{
+  width:40px;height:40px;border-radius:14px;
+  border:1px solid rgba(217,185,108,.25);
+  background: rgba(0,0,0,.25);
+  color: rgba(243,241,234,.85);
+  font-size:22px; line-height:1;
+}
+.chat-body{
+  padding: 14px;
+  overflow:auto;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.bubble{
+  max-width: 88%;
+  padding: 12px 12px;
+  border-radius: 16px;
+  border:1px solid rgba(217,185,108,.18);
+  background: rgba(0,0,0,.20);
+  line-height:1.7;
+}
+.bubble.user{
+  margin-left:auto;
+  border-color: rgba(217,185,108,.30);
+  background: rgba(217,185,108,.10);
+}
+.bubble .label{
+  display:block;
+  color: var(--muted2);
+  font-size:11px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  margin-bottom:6px;
+}
+.chat-input{
+  display:flex;
+  gap:10px;
+  padding: 12px 12px;
+  border-top:1px solid rgba(217,185,108,.18);
+  background: rgba(0,0,0,.25);
+}
+.chat-input input{flex:1}
+
+/* Toast */
+.toast{
+  position:fixed;
+  left:50%;
+  transform: translateX(-50%);
+  bottom: 18px;
+  background: rgba(0,0,0,.72);
+  border:1px solid rgba(217,185,108,.35);
+  border-radius: 999px;
+  padding: 12px 16px;
+  color: var(--gold0);
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  font-size:12px;
+  box-shadow: var(--shadow2);
+  z-index:100;
+}
+
+/* Flash sale bar */
+.flash-sale{
+  position:sticky; top:0; z-index:70;
+  background: linear-gradient(90deg, rgba(0,0,0,.85), rgba(217,185,108,.10), rgba(0,0,0,.85));
+  border-bottom:1px solid rgba(217,185,108,.25);
+}
+.flash-sale-inner{
+  display:flex;
+  gap:12px;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 0;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  font-size:12px;
+}
+.flash-sale strong{color: var(--gold0)}
+.countdown{color: rgba(243,241,234,.88)}
+
+/* Responsive */
+@media (max-width: 1024px){
+  .hero-title{font-size:48px}
+  .grid.products{grid-template-columns: repeat(2, minmax(0,1fr))}
+  .grid.three{grid-template-columns: repeat(2, minmax(0,1fr))}
+  .footer-inner{grid-template-columns: 1fr; gap:14px}
+}
+@media (max-width: 880px){
+  .nav-toggle{display:inline-block}
+  .main-nav{
+    position:absolute;
+    right:20px; top:72px;
+    width:min(320px, calc(100% - 40px));
+    flex-direction:column;
+    align-items:stretch;
+    gap:6px;
+    padding: 10px;
+    border-radius: 18px;
+    border:1px solid rgba(217,185,108,.25);
+    background: rgba(0,0,0,.82);
+    box-shadow: none;
+    display:none;
+  }
+  .main-nav.nav-open{display:flex}
+  .nav-link{padding:12px 12px}
+  .hero-grid{grid-template-columns: 1fr}
+  .hero-stage .stage-frame{min-height: 420px}
+  .carousel-item{grid-template-columns: 150px 1fr}
+  .pouch{width:150px;height:210px}
+  .callout{flex-direction:column; align-items:stretch}
+}
+@media (max-width: 600px){
+  .section{padding: 64px 0}
+  .hero-title{font-size:42px}
+  .carousel{grid-template-columns: 50px 1fr 50px}
+  .carousel-item{grid-template-columns: 1fr; text-align:left}
+  .pouch{width:100%; max-width:240px; height:220px; margin:0 auto}
+  .grid.two{grid-template-columns: 1fr}
+  .grid.products{grid-template-columns: 1fr}
+  .grid.three{grid-template-columns: 1fr}
+}
+
+/* --- Overrides: placeholder pouches should not draw a box/frame --- */
+.pouch.pouch-placeholder{
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: contain !important;
+}
+
+/* --- Product cards: subtle pop on hover (no layout shift) --- */
+.card.product{
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.card.product:hover{
+  transform: translateY(-6px);
+}
+
+/* --- Ensure any carousel shell/frame stays fully transparent --- */
+.stage, .stage-frame, .carousel, .carousel-shell, .carousel-container{
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+.stage::before, .stage::after,
+.stage-frame::before, .stage-frame::after,
+.carousel-shell::before, .carousel-shell::after,
+.carousel-container::before, .carousel-container::after{
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* --- Chat minimize state (keeps header visible) --- */
+.chat.is-minimized .chat-body,
+.chat.is-minimized form{
+  display: none !important;
+}
+.chat.is-minimized{
+  height: auto !important;
+}
+
+/* Chat header controls */
+.chat-head{ position: relative; }
+.chat-close, .chat-min{
+  width: 34px;
+  height: 34px;
+  line-height: 34px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 10px;
+}
+.chat-min{
+  position: absolute;
+  right: 52px;
+  top: 10px;
+}
+.chat-close{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+/* --- Juniors bottle scroller --- */
+.scroll-x{
+  display: flex !important;
+  overflow-x: auto;
+  gap: 14px;
+  padding-bottom: 8px;
+  scroll-snap-type: x mandatory;
+}
+.scroll-x::-webkit-scrollbar{
+  height: 10px;
+}
+.mini-card{
+  min-width: 220px;
+  scroll-snap-align: start;
+  border-radius: 18px;
+  background: rgba(10,10,10,.28);
+  padding: 14px;
+  box-shadow: 0 10px 24px rgba(0,0,0,.28);
+}
+.mini-card .bottle-placeholder{
+  height: 180px;
+  width: 100%;
+  border-radius: 14px;
+  background-color: transparent;
+}
+.mini-title{
+  margin-top: 10px;
+  font-weight: 700;
+}
+.mini-cta{
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(216,179,90,.55);
+  color: var(--gold);
+  text-decoration: none;
+}
+.mini-cta:hover{
+  background: rgba(216,179,90,.10);
+}
+
+/* Juniors mini media (product images injected via JS) */
+.mini-media-img{width:100%;height:160px;object-fit:contain;display:block;}
+@media (max-width:720px){
+  .mini-media-img{height:140px;}
+}
+/* =============================== */
+/* SHOP PRODUCT IMAGE RESET        */
+/* =============================== */
+
+.product-card img,
+.product-tile img,
+.shop-card img {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+
+  transform: none !important;
+  opacity: 1 !important;
+
+  width: 100%;
+  height: auto;
+  max-height: 260px;
+
+  object-fit: contain;
+  display: block;
+}
+
+/* ======================================================
+   FIXES (ADDED) — layout cleanup only, no redesign
+   - Align Classic Bottles + Books panels (equal height)
+   - Classic Bottles carousel: 2 items per view on desktop
+====================================================== */
+
+/* 1) Make the two Juniors panels (Classic Bottles / Books) behave as equal-height siblings */
+.juniors-hero .grid.two{
+  align-items: stretch;
+}
+.juniors-hero .grid.two > .juniors-card{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* 2) Classic Bottles: force 2-up cards per view (desktop) by overriding the inline <style> 3-up rule */
+.juniors-hero .jr-carousel-track > .mini-card{
+  flex: 0 0 calc((100% - 16px) / 2);
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+/* Keep existing responsive behavior from your inline styles:
+   - <=879px becomes 2-up already
+   - <=639px becomes ~1-up already
+   We only needed to fix desktop to be 2-up.
+*/

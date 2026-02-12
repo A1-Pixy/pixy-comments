@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Individual Spices. Pixy Dust Seasoning</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="assets/css/site.css" />
+  <script src="assets/js/flash-sales.js" defer></script>
+  <script src="assets/js/cms.js" defer></script>
+  <script src="assets/js/chatbot.js" defer></script>
+  <script src="assets/js/products.js" defer></script>
+  <script src="assets/js/main.js" defer></script>
+
+  <style>
+    .carousel-wrap{ position: relative; margin-top: 12px; }
+    .carousel-controls{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin: 10px 0 12px; }
+    .carousel-controls .left{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+    .carousel-controls .right{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+    .carousel-btn{ display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px; border-radius:999px; border:1px solid rgba(255,255,255,.14); background: rgba(0,0,0,.18); color: rgba(255,255,255,.88); cursor:pointer; user-select:none; }
+    .carousel-btn:disabled{ opacity:.45; cursor:default; }
+    .viewall-btn{ display:inline-flex; align-items:center; justify-content:center; border-radius:999px; border:1px solid rgba(255,255,255,.14); background: rgba(0,0,0,.18); color: rgba(255,255,255,.88); padding: 10px 14px; cursor:pointer; user-select:none; font-size: 13px; }
+    .carousel-track{ display:flex; gap: 16px; overflow-x:auto; padding-bottom: 6px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
+    .carousel-track::-webkit-scrollbar{ height: 10px; }
+    .carousel-track::-webkit-scrollbar-thumb{ background: rgba(255,255,255,.14); border-radius: 999px; }
+    .carousel-track > .card{ flex: 0 0 auto; width: min(320px, 86vw); scroll-snap-align: center; }
+    .carousel-wrap.view-all .carousel-track{ display:grid; gap: 18px; overflow: visible; scroll-snap-type: none; padding-bottom: 0; }
+    .carousel-wrap.view-all .carousel-track.products{ grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+    .product-actions{ display:flex; align-items:center; gap: 10px; flex-wrap:wrap; margin-top: 10px; }
+    .btn.btn-secondary{ background: transparent; border: 1px solid rgba(255,255,255,.18); color: rgba(255,255,255,.90); }
+  </style>
+
+  <!-- Ecwid cart-only (no storefront) -->
+  <script>
+    window.ec = window.ec || {};
+    window.ec.storefront = window.ec.storefront || {};
+    window.ec.storefront.enable_catalog = false;
+    window.ec.storefront.enable_search = false;
+    window.ec.storefront.enable_categories = false;
+    window.ec.storefront.enable_minicart = true;
+  </script>
+  <script src="https://app.ecwid.com/script.js?62406545&data_platform=code&data_date=2026-02-02" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="Pixy Dust home">
+        <img class="brand-mark" src="assets/images/logo-circle.png" alt="Pixy Dust" />
+        <div class="brand-text">
+          <div class="brand-name">Pixy Dust</div>
+          <div class="brand-tag">Flavor With a Purpose</div>
+        </div>
+      </a>
+
+      <nav class="nav" aria-label="Primary">
+        <a class="nav-link" href="shop.html">Shop</a>
+        <a class="nav-link" href="juniors.html">Juniors</a>
+        <a class="nav-link" href="gallery.html">Gallery</a>
+        <a class="nav-link" href="gifting.html">Gifting</a>
+        <a class="nav-link" href="about.html">About</a>
+        <a class="nav-link" href="recipes.html">Recipes</a>
+        <a class="nav-link" href="wholesale.html">Wholesale</a>
+        <a class="nav-link" href="contact.html">Contact</a>
+      </nav>
+
+      <button class="cart-btn" id="openCartBtn" type="button">Cart</button>
+    </div>
+  </header>
+
+  <main id="main" class="page">
+    <section class="section collection">
+      <div class="container">
+        <div class="section-head">
+          <h1 class="page-title">Individual Spices</h1>
+          <p class="section-sub">Swipe to browse. Tap any item for full details.</p>
+          <p><a class="btn btn-secondary" href="shop.html?view=Individual%20Spices">Back to shop</a></p>
+        </div>
+
+        <div class="card">
+          <div class="carousel-wrap" data-carousel="spices" data-category="Individual Spices">
+            <div class="carousel-controls">
+              <div class="left">
+                <button class="carousel-btn" type="button" aria-label="Previous" data-carousel-prev>‹</button>
+                <button class="carousel-btn" type="button" aria-label="Next" data-carousel-next>›</button>
+              </div>
+              <div class="right">
+                <button class="viewall-btn" type="button" data-carousel-viewall>View all</button>
+              </div>
+            </div>
+            <div class="carousel-track products" data-carousel-track aria-label="Spices carousel"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function(){
+      "use strict";
+
+      function getProducts(){
+        return (window.PIXY_PRODUCTS && Array.isArray(window.PIXY_PRODUCTS)) ? window.PIXY_PRODUCTS : [];
+      }
+
+      function safeText(s){ return (s == null) ? "" : String(s); }
+
+      function buildCard(p){
+        var card = document.createElement("article");
+        card.className = "card product";
+        card.id = p.key;
+        card.setAttribute("data-product-key", p.key);
+        if (p.ecwidProductId) card.setAttribute("data-ecwid-id", String(p.ecwidProductId));
+
+        var a = document.createElement("a");
+        a.className = "product-link";
+        a.href = "product.html?key=" + encodeURIComponent(p.key);
+
+        var ph = document.createElement("div");
+        ph.className = "pouch-placeholder";
+        var img = p.image ? p.image : "assets/images/logo-circle.png";
+        ph.style.backgroundImage = "url('" + img + "')";
+        a.appendChild(ph);
+
+        var h3 = document.createElement("h3");
+        h3.className = "card-title";
+        h3.textContent = safeText(p.title);
+        a.appendChild(h3);
+
+        card.appendChild(a);
+
+        var blurb = document.createElement("p");
+        blurb.className = "muted";
+        blurb.textContent = safeText(p.blurb || "");
+        card.appendChild(blurb);
+
+        var actions = document.createElement("div");
+        actions.className = "product-actions";
+
+        var details = document.createElement("a");
+        details.className = "btn btn-secondary";
+        details.href = "product.html?key=" + encodeURIComponent(p.key);
+        details.textContent = "View Details";
+        actions.appendChild(details);
+
+        var btn = document.createElement("button");
+        btn.className = "btn btn-primary";
+        btn.type = "button";
+
+        if (p.ecwidProductId) {
+          btn.textContent = "View & Order";
+          btn.addEventListener("click", function(){ addToCart(p.ecwidProductId, 1); });
+        } else {
+          btn.textContent = "Coming Soon";
+          btn.disabled = true;
+        }
+        actions.appendChild(btn);
+
+        card.appendChild(actions);
+        return card;
+      }
+
+      function ecwidReady(){
+        return !!(window.Ecwid && window.Ecwid.Cart && window.Ecwid.Cart.addProduct && window.Ecwid.openPage);
+      }
+
+      function waitForEcwid(cb){
+        var start = Date.now();
+        var t = setInterval(function(){
+          if (ecwidReady()) { clearInterval(t); cb(true); return; }
+          if (Date.now() - start > 12000) { clearInterval(t); cb(false); }
+        }, 120);
+      }
+
+      function addToCart(id, qty){
+        id = Number(id);
+        qty = Number(qty || 1);
+        if (!id || !isFinite(id)) return;
+        waitForEcwid(function(ok){
+          if (!ok) return;
+          window.Ecwid.Cart.addProduct({ id: id, quantity: qty });
+          window.Ecwid.openPage("cart");
+        });
+      }
+
+      function wireCarousel(wrap){
+        var track = wrap.querySelector("[data-carousel-track]");
+        var prev = wrap.querySelector("[data-carousel-prev]");
+        var next = wrap.querySelector("[data-carousel-next]");
+        var viewAll = wrap.querySelector("[data-carousel-viewall]");
+        if (!track || !prev || !next || !viewAll) return;
+
+        function updateBtns(){
+          var max = track.scrollWidth - track.clientWidth;
+          prev.disabled = track.scrollLeft <= 4;
+          next.disabled = track.scrollLeft >= (max - 4);
+        }
+
+        function step(dir){
+          var card = track.querySelector('.card');
+          var w = card ? card.getBoundingClientRect().width : 320;
+          track.scrollBy({ left: dir * (w + 16), behavior: "smooth" });
+          setTimeout(updateBtns, 220);
+        }
+
+        prev.addEventListener("click", function(){ step(-1); });
+        next.addEventListener("click", function(){ step(1); });
+
+        viewAll.addEventListener("click", function(){
+          var on = wrap.classList.toggle("view-all");
+          viewAll.textContent = on ? "Collapse" : "View all";
+          if (!on) track.scrollTo({ left: 0, behavior: "smooth" });
+          setTimeout(updateBtns, 250);
+        });
+
+        var startX = 0, startY = 0, tracking = false, moved = false;
+        function threshold(){ return Math.max(45, Math.floor((track.clientWidth || 0) * 0.10)); }
+        function ignore(t){ return !!(t && t.closest && t.closest("a,button,input,textarea,select,label")); }
+
+        track.addEventListener("touchstart", function(e){
+          if (ignore(e.target)) return;
+          if (!e.touches || e.touches.length !== 1) return;
+          tracking = true;
+          moved = false;
+          startX = e.touches[0].clientX;
+          startY = e.touches[0].clientY;
+        }, { passive: true });
+
+        track.addEventListener("touchmove", function(e){
+          if (!tracking) return;
+          var t = e.touches && e.touches[0];
+          if (!t) return;
+          var dx = t.clientX - startX;
+          var dy = t.clientY - startY;
+          if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) moved = true;
+        }, { passive: true });
+
+        track.addEventListener("touchend", function(e){
+          if (!tracking) return;
+          tracking = false;
+          if (!moved) return;
+          var t = e.changedTouches && e.changedTouches[0];
+          if (!t) return;
+          var dx = t.clientX - startX;
+          var dy = t.clientY - startY;
+          if (Math.abs(dy) > 90) return;
+          if (Math.abs(dx) < threshold()) return;
+          if (dx < 0) step(1);
+          else step(-1);
+        }, { passive: true });
+
+        track.addEventListener("scroll", updateBtns, { passive: true });
+        window.addEventListener("resize", updateBtns);
+        updateBtns();
+      }
+
+      function render(){
+        var wrap = document.querySelector("[data-carousel][data-category]");
+        if (!wrap) return;
+        var track = wrap.querySelector("[data-carousel-track]");
+        if (!track) return;
+
+        var all = getProducts().filter(function(p){ return p && p.category === "Individual Spices"; });
+        track.innerHTML = "";
+        for (var i = 0; i < all.length; i++) track.appendChild(buildCard(all[i]));
+        wireCarousel(wrap);
+      }
+
+      document.addEventListener("DOMContentLoaded", render);
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Juniors. Pixy Dust</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="assets/css/site.css" />
+
+  <style>
+    @media (max-width: 980px){
+      .juniors-hero .grid.three{grid-template-columns: repeat(3, minmax(0,1fr));}
+    }
+
+    .mini-media-img{
+      width:100%;
+      height:auto;
+      display:block;
+    }
+
+    /* Juniors carousels: true 3-up */
+    .jr-carousel-wrap{ position: relative; margin-top: 12px; }
+    .jr-carousel-controls{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin: 10px 0 12px;
+    }
+    .jr-carousel-controls .left,
+    .jr-carousel-controls .right{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .jr-carousel-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:42px;
+      height:42px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      color: rgba(255,255,255,.88);
+      cursor:pointer;
+      user-select:none;
+    }
+    .jr-carousel-btn:disabled{ opacity:.45; cursor:default; }
+    .jr-viewall-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      color: rgba(255,255,255,.88);
+      padding: 10px 14px;
+      cursor:pointer;
+      user-select:none;
+      font-size: 13px;
+    }
+
+    .jr-carousel-track{
+      display:flex;
+      gap: 16px;
+      overflow-x:auto;
+      padding-bottom: 6px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    .jr-carousel-track::-webkit-scrollbar{ height: 10px; }
+    .jr-carousel-track::-webkit-scrollbar-thumb{ background: rgba(255,255,255,.14); border-radius: 999px; }
+
+    /* 3-up on desktop */
+    .jr-carousel-track > .mini-card,
+    .jr-carousel-track > .card{
+      flex: 0 0 calc((100% - 32px)/3);
+      scroll-snap-align: start;
+    }
+
+    @media (max-width: 879px){
+      .jr-carousel-track > .mini-card,
+      .jr-carousel-track > .card{ flex-basis: calc((100% - 16px)/2); }
+    }
+
+    @media (max-width: 639px){
+      .jr-carousel-track > .mini-card,
+      .jr-carousel-track > .card{ flex-basis: 86vw; scroll-snap-align: center; }
+    }
+
+    .jr-carousel-wrap.view-all .jr-carousel-track{
+      display:grid;
+      gap: 18px;
+      overflow: visible;
+      scroll-snap-type: none;
+      padding-bottom: 0;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    .jr-actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+    .btn.btn-secondary{ background: transparent; border: 1px solid rgba(255,255,255,.18); color: rgba(255,255,255,.90); }
+    .btn[disabled]{ opacity:.55; cursor:not-allowed; }
+
+    .jr-media{
+      background-position:center;
+      background-size: contain;
+      background-repeat:no-repeat;
+    }
+    .jr-media.fallback{
+      background-image: radial-gradient(circle at 30% 30%, rgba(216,179,90,.18), rgba(0,0,0,0) 55%),
+                        radial-gradient(circle at 70% 70%, rgba(216,179,90,.12), rgba(0,0,0,0) 58%);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .jr-media.fallback img{ width: 72px; height:auto; opacity:.55; filter: drop-shadow(0 10px 16px rgba(0,0,0,.55)); }
+  </style>
+
+  <script src="assets/js/flash-sales.js" defer></script>
+  <script src="assets/js/cms.js" defer></script>
+  <script src="assets/js/chatbot.js" defer></script>
+  <script src="assets/js/main.js" defer></script>
+
+  <!-- Ecwid cart-only -->
+  <script>
+    window.ec = window.ec || {};
+    window.ec.storefront = window.ec.storefront || {};
+    window.ec.storefront.enable_catalog = false;
+  </script>
+  <script src="https://app.ecwid.com/script.js?62406545&data_platform=code&data_date=2026-01-01" charset="utf-8"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div id="flash-sale-bar" class="flash-sale" hidden></div>
+
+  <!-- HEADER: CLASSIC LOGO ONLY -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="Pixy Dust Seasoning home">
+        <img src="assets/images/logo-pixy-classic.png" alt="Pixy Dust Seasoning" style="height:56px;width:auto;" />
+      </a>
+
+      <button class="nav-toggle" type="button" aria-label="Open menu" aria-controls="mainNav" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav id="mainNav" class="main-nav" aria-label="Primary">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link" href="shop.html">Shop</a>
+        <a class="nav-link active" href="juniors.html">Juniors</a>
+        <a class="nav-link" href="gifting.html">Gifting</a>
+        <a class="nav-link" href="about.html">About</a>
+        <a class="nav-link" href="recipes.html">Recipes</a>
+        <a class="nav-link" href="wholesale.html">Wholesale</a>
+        <a class="nav-link" href="contact.html">Contact</a>
+      </nav>
+
+      <button class="cart-btn" id="openCartBtn" type="button">Cart</button>
+    </div>
+  </header>
+
+  <main id="main" class="page">
+    <section class="section juniors-hero">
+      <div class="container">
+        <div class="section-head">
+          <h1 class="page-title">Juniors by Pixy Dust</h1>
+          <p class="section-sub">
+            A playful, premium space for kids and families. Cooking confidence, flavor education, and fun.
+          </p>
+        </div>
+
+        <div class="grid two">
+          <div class="card juniors-card">
+            <h2 class="section-title">Classic Bottles</h2>
+            <p class="muted">This is the only page where classic bottles appear.</p>
+
+            <div class="jr-carousel-wrap" data-jr-carousel data-jr-type="mini">
+              <div class="jr-carousel-controls">
+                <div class="left">
+                  <button class="jr-carousel-btn" type="button" aria-label="Previous" data-jr-prev>‹</button>
+                  <button class="jr-carousel-btn" type="button" aria-label="Next" data-jr-next>›</button>
+                </div>
+                <div class="right">
+                  <button class="jr-viewall-btn" type="button" data-jr-viewall>View all</button>
+                </div>
+              </div>
+
+              <div class="jr-carousel-track" data-jr-track aria-label="Classic bottles carousel">
+                <article class="mini-card" data-product-key="bottle-all-purpose">
+                  <div class="bottle-placeholder" data-media></div>
+                  <div class="mini-title" data-title></div>
+                  <a class="mini-cta" data-cta href="#">View Details</a>
+                </article>
+
+                <article class="mini-card" data-product-key="bottle-jerk">
+                  <div class="bottle-placeholder" data-media></div>
+                  <div class="mini-title" data-title></div>
+                  <a class="mini-cta" data-cta href="#">View Details</a>
+                </article>
+
+                <article class="mini-card" data-product-key="bottle-sugar-free-all-purpose">
+                  <div class="bottle-placeholder" data-media></div>
+                  <div class="mini-title" data-title></div>
+                  <a class="mini-cta" data-cta href="#">View Details</a>
+                </article>
+              </div>
+            </div>
+          </div>
+
+          <div class="card juniors-card">
+            <h2 class="section-title">Books</h2>
+            <p class="muted">Stories that build culinary curiosity.</p>
+
+            <div class="grid two">
+              <article class="mini-card" data-product-key="book-zen-pearl-market">
+                <div class="book-placeholder" data-media></div>
+                <div class="mini-title" data-title></div>
+                <a class="mini-cta" data-cta href="#">View Details</a>
+              </article>
+
+              <article class="mini-card" data-product-key="book-coming-soon">
+                <div class="book-placeholder" data-media></div>
+                <div class="mini-title" data-title></div>
+                <a class="mini-cta" data-coming-soon href="#">Notify Me</a>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+      
+
+       <div class="divider"></div>
+
+        <div class="card juniors-card">
+          <h2 class="section-title">Juniors Kits</h2>
+          <p class="muted">A starter kit for family cooking nights. Tap for full details.</p>
+
+          <div class="jr-carousel-wrap" data-jr-carousel data-jr-type="full" data-jr-category="Bundles">
+            <div class="jr-carousel-controls">
+              <div class="left">
+                <button class="jr-carousel-btn" type="button" aria-label="Previous" data-jr-prev>‹</button>
+                <button class="jr-carousel-btn" type="button" aria-label="Next" data-jr-next>›</button>
+              </div>
+              <div class="right">
+                <button class="jr-viewall-btn" type="button" data-jr-viewall>View all</button>
+              </div>
+            </div>
+
+            <div class="jr-carousel-track" data-jr-track aria-label="Bundles carousel"></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <button class="chat-fab" type="button" aria-label="Open Pixy Assistant" data-chat-open>
+    <span class="chat-fab-glow" aria-hidden="true"></span>
+    <span class="chat-fab-icon" aria-hidden="true">✦</span>
+  </button>
+  <section class="chat" role="dialog" aria-label="Pixy Assistant" aria-modal="true" hidden data-chat>
+    <header class="chat-head">
+      <div class="chat-brand">
+        <span class="chat-spark" aria-hidden="true"></span>
+        <div>
+          <div class="chat-title">Pixy Assistant</div>
+          <div class="chat-sub">Food-focused answers. Non-medical.</div>
+        </div>
+      </div>
+      <button class="chat-close" type="button" aria-label="Close chat" data-chat-close>×</button>
+    </header>
+    <div class="chat-body" data-chat-body aria-live="polite"></div>
+    <form class="chat-input" data-chat-form>
+      <label class="sr-only" for="chatTextJuniors">Message</label>
+      <input id="chatTextJuniors" name="message" type="text" placeholder="Ask about flavors, ingredients, pairings" autocomplete="off" required />
+      <button class="btn btn-primary" type="submit">Send</button>
+    </form>
+  </section>
+
+  <div class="toast" role="status" aria-live="polite" hidden data-toast></div>
+
+  <script src="assets/js/products.js"></script>
+
+  <script>
+    (function () {
+      "use strict";
+
+      function products(){
+        return (window.PIXY_PRODUCTS && Array.isArray(window.PIXY_PRODUCTS)) ? window.PIXY_PRODUCTS : [];
+      }
+
+      function findByKey(key){
+        var all = products();
+        for (var i=0;i<all.length;i++){
+          if (all[i] && all[i].key === key) return all[i];
+        }
+        return null;
+      }
+
+      function encodeKey(key){ return encodeURIComponent(String(key || "")); }
+
+      function ensureEcwidReady(timeoutMs){
+        timeoutMs = typeof timeoutMs === "number" ? timeoutMs : 12000;
+        return new Promise(function(resolve, reject){
+          var start = Date.now();
+          function ready(){
+            return (window.Ecwid && window.Ecwid.Cart && typeof window.Ecwid.Cart.addProduct === "function");
+          }
+          if (ready()) { resolve(); return; }
+          if (window.Ecwid && window.Ecwid.OnAPILoaded) {
+            window.Ecwid.OnAPILoaded.add(function(){ if (ready()) resolve(); });
+          }
+          var t = setInterval(function(){
+            if (ready()) { clearInterval(t); resolve(); return; }
+            if (Date.now() - start > timeoutMs) { clearInterval(t); reject(new Error("Ecwid not ready")); }
+          }, 120);
+        });
+      }
+
+      function addToCart(id){
+        var pid = Number(id);
+        if (!pid || !isFinite(pid)) return;
+        ensureEcwidReady().then(function(){
+          window.Ecwid.Cart.addProduct({ id: pid, quantity: 1 });
+          window.Ecwid.openPage("cart");
+        }).catch(function(){
+          alert("Cart is still loading. Try again in a second.");
+        });
+      }
+
+      function wireCarousel(wrap){
+        if (!wrap) return;
+        var track = wrap.querySelector("[data-jr-track]");
+        var prev = wrap.querySelector("[data-jr-prev]");
+        var next = wrap.querySelector("[data-jr-next]");
+        var viewAll = wrap.querySelector("[data-jr-viewall]");
+        if (!track) return;
+
+        function updateBtns(){
+          if (!prev || !next) return;
+          prev.disabled = track.scrollLeft <= 2;
+          next.disabled = (track.scrollLeft + track.clientWidth) >= (track.scrollWidth - 2);
+        }
+
+        function step(dir){
+          var first = track.querySelector(".card, .mini-card");
+          var gap = 16;
+          var amount = first ? (first.offsetWidth + gap) : Math.max(240, Math.floor((track.clientWidth || 0) * 0.85));
+          track.scrollBy({ left: dir * amount, behavior: "smooth" });
+          window.setTimeout(updateBtns, 260);
+        }
+
+        if (prev) prev.addEventListener("click", function(){ step(-1); });
+        if (next) next.addEventListener("click", function(){ step(1); });
+
+        if (viewAll){
+          viewAll.addEventListener("click", function(){
+            wrap.classList.toggle("view-all");
+            viewAll.textContent = wrap.classList.contains("view-all") ? "Collapse" : "View all";
+          });
+        }
+
+        var startX=0,startY=0,tracking=false,moved=false;
+
+        function threshold(){ return Math.max(45, Math.floor((track.clientWidth || 0) * 0.10)); }
+        function ignore(t){ return !!(t && t.closest && t.closest("a,button,input,textarea,select,label")); }
+
+        track.addEventListener("touchstart", function(e){
+          if (ignore(e.target)) return;
+          if (!e.touches || e.touches.length !== 1) return;
+          tracking = true; moved = false;
+          startX = e.touches[0].clientX;
+          startY = e.touches[0].clientY;
+        }, { passive:true });
+
+        track.addEventListener("touchmove", function(e){
+          if (!tracking) return;
+          var t = e.touches && e.touches[0];
+          if (!t) return;
+          var dx = t.clientX - startX;
+          var dy = t.clientY - startY;
+          if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) moved = true;
+        }, { passive:true });
+
+        track.addEventListener("touchend", function(e){
+          if (!tracking) return;
+          tracking = false;
+          if (!moved) return;
+          var t = e.changedTouches && e.changedTouches[0];
+          if (!t) return;
+          var dx = t.clientX - startX;
+          var dy = t.clientY - startY;
+          if (Math.abs(dy) > 90) return;
+          if (Masth.abs(dx) < threshold()) return;
+          if (dx < 0) step(1);
+          else step(-1);
+        }, { passive:true });
+
+        track.addEventListener("scroll", updateBtns, { passive:true });
+        window.addEventListener("resize", updateBtns);
+        updateBtns();
+      }
+
+      function renderKeyedCards(){
+        var all = products();
+        var nodes = document.querySelectorAll("[data-product-key]");
+        for (var i=0;i<nodes.length;i++){
+          var card = nodes[i];
+          var key = card.getAttribute("data-product-key");
+          var p = findByKey(key);
+          if (!p) continue;
+
+          var t = card.querySelector("[data-title]");
+          var m = card.querySelector("[data-media]");
+          var c = card.querySelector("[data-cta]");
+
+          if (t) t.textContent = p.title || "";
+          if (c && p.key) c.href = "product.html?key=" + encodeKey(p.key);
+
+          if (m && p.image){
+            var img = document.createElement("img");
+            img.src = p.image;
+            img.alt = p.title || "";
+            img.className = "mini-media-img";
+            img.loading = "lazy";
+            m.innerHTML = "";
+            m.appendChild(img);
+          }
+        }
+      }
+
+      function buildBundleCard(p){
+        var art = document.createElement("article");
+        art.className = "card product";
+        art.setAttribute("data-product-key", p.key);
+
+        var href = "product.html?key=" + encodeKey(p.key);
+
+        var a = document.createElement("a");
+        a.className = "product-link";
+        a.href = href;
+
+        var media = document.createElement("div");
+        media.className = "jr-media" + (p.image ? "" : " fallback");
+        if (p.image) {
+          media.style.backgroundImage = "url(" + JSON.stringify(p.image) + ")";
+          media.style.minHeight = "170px";
+          media.style.borderRadius = "18px";
+        } else {
+          media.style.minHeight = "170px";
+          media.style.borderRadius = "18px";
+          var img = document.createElement("img");
+          img.src = "assets/images/logo-circle.png";
+          img.alt = "";
+          img.loading = "lazy";
+          media.appendChild(img);
+        }
+
+        var h3 = document.createElement("h3");
+        h3.className = "card-title";
+        h3.textContent = p.title || "";
+
+        a.appendChild(media);
+        a.appendChild(h3);
+
+        var bl = document.createElement("p");
+        bl.className = "muted";
+        bl.textContent = p.blurb || "";
+
+        var actions = document.createElement("div");
+        actions.className = "jr-actions";
+
+        var details = document.createElement("a");
+        details.className = "btn btn-secondary";
+        details.href = href;
+        details.textContent = "View Details";
+
+        var buy = document.createElement("button");
+        buy.className = "btn btn-primary";
+        buy.type = "button";
+
+        if (p.ecwidProductId) {
+          buy.textContent = "View & Order";
+          buy.addEventListener("click", function(e){
+            e.preventDefault();
+            addToCart(p.ecwidProductId);
+          });
+        } else {
+          buy.textContent = "Coming soon";
+          buy.disabled = true;
+          buy.setAttribute("aria-disabled", "true");
+        }
+
+        actions.appendChild(details);
+        actions.appendChild(buy);
+
+        art.appendChild(a);
+        art.appendChild(bl);
+        art.appendChild(actions);
+
+        return art;
+      }
+
+      function renderBundlesCarousel(){
+        var wrap = document.querySelector('[data-jr-carousel][data-jr-category="Bundles"]');
+        if (!wrap) return;
+        var track = wrap.querySelector("[data-jr-track]");
+        if (!track) return;
+
+        var list = products().filter(function(p){ return p && p.category === "Bundles"; });
+
+        track.innerHTML = "";
+        for (var i=0;i<list.length;i++){
+          track.appendChild(buildBundleCard(list[i]));
+        }
+
+        wireCarousel(wrap);
+      }
+
+      document.addEventListener("DOMContentLoaded", function(){
+        renderKeyedCards();
+        renderBundlesCarousel();
+
+        var miniWrap = document.querySelector('[data-jr-carousel][data-jr-type="mini"]');
+        wireCarousel(miniWrap);
+
+        var soon = document.querySelector("[data-coming-soon]");
+        if (soon) {
+          soon.addEventListener("click", function(e){
+            e.preventDefault();
+            alert("Coming soon.");
+          });
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

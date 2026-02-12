@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About. Pixy Dust</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="assets/css/site.css" />
+  <script src="assets/js/flash-sales.js" defer></script>
+  <script src="assets/js/cms.js" defer></script>
+  <script src="assets/js/chatbot.js" defer></script>
+  <script src="assets/js/main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div id="flash-sale-bar" class="flash-sale" role="region" aria-label="Flash sale" hidden></div>
+
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="Pixy Dust Seasoning home">
+        <div class="brand-mark" aria-hidden="true"><img src="assets/images/logo-circle.png" alt="" class="brand-logo" loading="eager" /></div>
+        <div class="brand-type">
+          <div class="brand-name">Pixy Dust</div>
+          <div class="brand-sub">Seasoning</div>
+        </div>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-label="Open menu" aria-controls="mainNav" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav id="mainNav" class="main-nav" aria-label="Primary">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link" href="shop.html">Shop</a>
+        <a class="nav-link" href="juniors.html">Juniors</a>
+        <a class="nav-link" href="gifting.html">Gifting</a>
+        <a class="nav-link active" href="about.html">About</a>
+        <a class="nav-link" href="recipes.html">Recipes</a>
+        <a class="nav-link" href="wholesale.html">Wholesale</a>
+        <a class="nav-link" href="contact.html">Contact</a>
+      </nav>
+    </div>
+    <div id="admin-badge" class="admin-badge" hidden>Admin Mode</div>
+  </header>
+
+  <main id="main" class="page">
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <h1 class="page-title">About Pixy Dust</h1>
+          <p class="section-sub">Luxury flavor with a purpose. Built for real kitchens, retail, and hospitality.</p>
+        </div>
+
+        <div class="grid two">
+          <div class="card">
+            <h2 class="section-title">The Brand</h2>
+            <p class="muted">
+              Pixy Dust Seasoning is built on globally inspired blends, premium ingredients, and a clean luxury presentation.
+              This site is a showroom experience. Purchase links will connect to your live store.
+            </p>
+          </div>
+
+          <div class="card">
+            <h2 class="section-title">What We Stand For</h2>
+            <ul class="list">
+              <li>High-end product experience with real culinary performance</li>
+              <li>Clear flavor identity across signature blends</li>
+              <li>Designed for retail shelves and professional kitchens</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="card">
+          <h2 class="section-title">Press and Media</h2>
+          <p class="muted">
+            Media references were removed from the homepage as requested. Use Recipes and social channels as the primary content loop.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <button class="chat-fab" type="button" aria-label="Open Pixy Assistant" data-chat-open>
+    <span class="chat-fab-glow" aria-hidden="true"></span>
+    <span class="chat-fab-icon" aria-hidden="true">✦</span>
+  </button>
+  <section class="chat" role="dialog" aria-label="Pixy Assistant" aria-modal="true" hidden data-chat>
+    <header class="chat-head">
+      <div class="chat-brand">
+        <span class="chat-spark" aria-hidden="true"></span>
+        <div>
+          <div class="chat-title">Pixy Assistant</div>
+          <div class="chat-sub">Food-focused answers. Non-medical.</div>
+        </div>
+      </div>
+      <button class="chat-close" type="button" aria-label="Close chat" data-chat-close>×</button>
+    </header>
+    <div class="chat-body" data-chat-body aria-live="polite"></div>
+    <form class="chat-input" data-chat-form>
+      <label class="sr-only" for="chatTextAbout">Message</label>
+      <input id="chatTextAbout" name="message" type="text" placeholder="Ask about flavors, ingredients, pairings" autocomplete="off" required />
+      <button class="btn btn-primary" type="submit">Send</button>
+    </form>
+  </section>
+
+  <div class="toast" role="status" aria-live="polite" hidden data-toast></div>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-left">
+        <div class="footer-line">© <span id="year"></span> Pixy Dust Seasoning. All rights reserved.</div>
+        <div class="footer-tag">Luxury gourmet blends. Let’s sprinkle a little magic.</div>
+      </div>
+      <div class="footer-mid">
+        <a href="about.html">About Pixy Dust</a>
+        <a href="recipes.html">Recipes</a>
+        <a href="#">Policies</a>
+      </div>
+      <div class="footer-right">
+        <a href="https://www.facebook.com/PixyDustSeasoning" target="_blank" rel="noreferrer">Facebook</a>
+        <a href="https://www.instagram.com/pixydustseasoning" target="_blank" rel="noreferrer">Instagram</a>
+        <a href="https://www.youtube.com/@PixyDustcookoff" target="_blank" rel="noreferrer">YouTube</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/products.js" defer></script>
+
+</body>
+</html>
+
