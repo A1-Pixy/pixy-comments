@@ -13,9 +13,11 @@
     return;
   }
 
-  if (!window.supabase?.createClient) {
-    showFail("Supabase client not loaded");
-    return;
+if (!window.supabase) {
+  showFail("Supabase not available");
+  return;
+}
+
   }
 
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
