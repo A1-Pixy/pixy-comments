@@ -1,16 +1,31 @@
 (() => {
-  const SUPABASE_URL = window.SUPABASE_URL || "";
-  const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || "";
-
-  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-    console.error("Missing SUPABASE_URL or SUPABASE_ANON_KEY");
-    return;
+  function waitForSupabase(callback) {
+    if (window.supabase?.createClient) {
+      callback();
+    } else {
+      setTimeout(() => waitForSupabase(callback), 50);
+    }
   }
 
-  if (!window.supabase?.createClient) {
-    console.error("Supabase client not loaded");
-    return;
-  }
+  waitForSupabase(init);
+
+  function init() {
+    const SUPABASE_URL = window.SUPABASE_URL || "";
+    const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || "";
+
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+      console.error("Missing SUPABASE_URL or SUPABASE_ANON_KEY");
+      return;
+    }
+
+    const sb = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+
+    // ⬇️ keep the rest of your file exactly as it is,
+    // but everything must now live inside this init() function
+
 
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
