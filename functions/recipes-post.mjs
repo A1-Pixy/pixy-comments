@@ -1,58 +1,54 @@
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
+import { createClient } from "@supabase/supabase-js";
 
-export default async (req) => {
-  if (req.method !== "POST") {
-    return json(405, { ok: false, error: "Method not allowed" });
+export async function handler(event) {
+  if (event.httpMethod !== "POST") {
+    return { statusCode: 405 };
   }
 
-  try {
-    const { accessToken, displayName, kind, recipeId, title, body } = await req.json();
+  const { accessToken, displayName, kind, recipeId, title, body } =
+    JSON.parse(event.body || "{}");
 
-    if (!accessToken) return json(401, { ok: false, error: "Missing access token" });
-    if (!displayName || !body) return json(400, { ok: false, error: "Missing fields" });
+  const supabaseUser = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_ANON_KEY,
+    { global: { headers: { Authorization: `Bearer ${accessToken}` } } }
+  );
 
-    const insertPayload = {
-      display_name: displayName,
-      kind,
-      recipe_id: recipeId,
-      title,
-      body
+  const {
+    data: { user },
+    error: authError
+  } = await supabaseUser.auth.getUser();
+
+  if (authError || !user) {
+    return {
+      statusCode: 401,
+      body: JSON.stringify({ ok: false, error: "Unauthorized" })
     };
-
-    const insertRes = await fetch(
-      `${SUPABASE_URL}/rest/v1/recipe_posts`,
-      {
-        method: "POST",
-        headers: {
-          apikey: SUPABASE_ANON_KEY,
-          Authorization: `Bearer ${accessToken}`,
-          "content-type": "application/json",
-          Prefer: "return=representation"
-        },
-        body: JSON.stringify(insertPayload)
-      }
-    );
-
-    const text = await insertRes.text();
-
-    if (!insertRes.ok) {
-      return json(500, { ok: false, error: "Insert failed", detail: text });
-    }
-
-    return json(200, { ok: true });
-
-  } catch (e) {
-    return json(500, { ok: false, error: String(e.message || e) });
   }
-};
 
-function json(status, body) {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: {
-      "content-type": "application/json",
-      "cache-control": "no-store"
-    }
+  const supabaseAdmin = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  );
+
+  const { error } = await supabaseAdmin.from("community_posts").insert({
+    user_id: user.id,
+    display_name: displayName,
+    kind,
+    recipe_id: recipeId,
+    title,
+    body
   });
+
+  if (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ ok: false, error: error.message })
+    };
+  }
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ ok: true })
+  };
 }
