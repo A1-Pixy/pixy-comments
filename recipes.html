@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,22 +8,26 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="/assets/css/site.css" />
+
+  <!-- Define Supabase globals FIRST -->
+  <script>
+    window.SUPABASE_URL = "https://inacwknisxdzdtvjglwq.supabase.co";
+    window.SUPABASE_ANON_KEY = "sb_publishable_5YXj9hFsDytwD7M7buGbxA_rhYznkhP";
+  </script>
+
+  <!-- Load Supabase WITHOUT defer -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Other site scripts -->
   <script src="/assets/js/flash-sales.js" defer></script>
   <script src="/assets/js/cms.js" defer></script>
   <script src="/assets/js/chatbot.js" defer></script>
   <script src="/assets/js/main.js" defer></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-
-  <script>
-  window.SUPABASE_URL = "https://inacwknisxdzdtvjglwq.supabase.co";
-  window.SUPABASE_ANON_KEY = "sb_publishable_5YXj9hFsDytwD7M7buGbxA_rhYznkhP";
-</script>
-
-
- <script src="/assets/js/recipes-wall.js" defer></script>
-
+  <!-- Community wall script (can stay deferred) -->
+  <script src="/assets/js/recipes-wall.js" defer></script>
 </head>
+
 
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
