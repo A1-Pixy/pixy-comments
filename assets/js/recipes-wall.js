@@ -167,7 +167,12 @@
   });
 
   el.sendCode?.addEventListener("click", async () => {
-    if (!sb) return setStatus("Auth not ready.");
+  if (!sb) {
+    setStatus("Initializing...");
+    await initSupabase();
+    if (!sb) return setStatus("Auth unavailable.");
+  }
+
 
     const email = el.email.value.trim();
     if (!email) return setStatus("Enter email.");
@@ -205,7 +210,12 @@
   });
 
   el.submit?.addEventListener("click", async () => {
-    if (!sb) return setStatus("Auth not ready.");
+   if (!sb) {
+  setStatus("Initializing...");
+  await initSupabase();
+  if (!sb) return setStatus("Auth unavailable.");
+}
+
 
     const { data } = await sb.auth.getSession();
     const session = data?.session;
