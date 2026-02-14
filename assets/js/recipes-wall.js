@@ -1,4 +1,5 @@
 (() => {
+console.log("recipes-wall loaded");
 
   const el = {
     feed: document.getElementById("community-feed"),
