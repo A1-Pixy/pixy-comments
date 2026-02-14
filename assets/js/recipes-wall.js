@@ -1,5 +1,19 @@
 (() => {
-console.log("recipes-wall loaded");
+
+  console.log("recipes-wall loaded");
+
+  const el = {
+    open: document.getElementById("community-open"),
+    modal: document.getElementById("community-modal"),
+  };
+
+  el.open?.addEventListener("click", () => {
+    console.log("open clicked");
+    el.modal.style.display = "block";
+  });
+
+})();
+
 
   const el = {
     feed: document.getElementById("community-feed"),
