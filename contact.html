@@ -58,7 +58,16 @@
         <div class="grid two">
           <div class="card">
             <h2 class="section-title">Message</h2>
-            <form class="form" novalidate>
+         <form name="contact" method="POST" data-netlify="true">
+  <input type="hidden" name="form-name" value="contact" />
+
+  <input type="text" name="name" required />
+  <input type="email" name="email" required />
+  <textarea name="message" required></textarea>
+
+  <button type="submit">Send Message</button>
+</form>
+
               <div class="field">
                 <label for="nameC">Name</label>
                 <input id="nameC" name="name" type="text" required />
