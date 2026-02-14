@@ -73,17 +73,28 @@
         <div class="divider"></div>
 
         <div class="card">
-          <h2 class="section-title">Wholesale Application</h2>
-         <form name="wholesale" method="POST" data-netlify="true">
+         <h2 class="section-title">Wholesale Application</h2>
+
+<form name="wholesale" method="POST" data-netlify="true">
+
   <input type="hidden" name="form-name" value="wholesale" />
 
-  <input type="text" name="business_name" required />
-  <input type="text" name="contact_name" required />
-  <input type="email" name="email" required />
-  <textarea name="details" required></textarea>
+  <label for="business_name">Business Name</label>
+  <input id="business_name" type="text" name="business_name" required />
+
+  <label for="contact_name">Contact Name</label>
+  <input id="contact_name" type="text" name="contact_name" required />
+
+  <label for="email">Email</label>
+  <input id="email" type="email" name="email" required />
+
+  <label for="details">Business Details</label>
+  <textarea id="details" name="details" required></textarea>
 
   <button type="submit">Submit Inquiry</button>
+
 </form>
+
 
             <div class="grid two">
               <div class="field">
