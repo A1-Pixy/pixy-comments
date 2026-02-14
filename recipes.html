@@ -8,122 +8,131 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
-
   <link rel="stylesheet" href="/assets/css/site.css" />
 
-  <!-- Supabase Configuration (DEFINE ONCE) -->
+  <!-- Supabase Keys -->
   <script>
     window.SUPABASE_URL = "https://inacwknisxdzdtvjglwq.supabase.co";
     window.SUPABASE_ANON_KEY = "sb_publishable_5YXj9hFsDytwD7M7buGbxA_rhYznkhP";
   </script>
 
-  <!-- Load Supabase ONCE -->
+  <!-- Supabase (load first, no defer) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <!-- Site Scripts -->
+  <!-- Site scripts -->
   <script src="/assets/js/flash-sales.js" defer></script>
   <script src="/assets/js/cms.js" defer></script>
   <script src="/assets/js/chatbot.js" defer></script>
   <script src="/assets/js/main.js" defer></script>
 
-  <!-- Community Script -->
+  <!-- Community wall -->
   <script src="/assets/js/recipes-wall.js" defer></script>
 </head>
 
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
-  <div id="flash-sale-bar" class="flash-sale" hidden></div>
 
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="/index.html">
-        <div class="brand-mark">
-          <img src="/assets/images/logo-circle.png" class="brand-logo" loading="eager" />
-        </div>
-        <div class="brand-type">
-          <div class="brand-name">Pixy Dust</div>
-          <div class="brand-sub">Seasoning</div>
-        </div>
-      </a>
+<a class="skip-link" href="#main">Skip to content</a>
+<div id="flash-sale-bar" class="flash-sale" hidden></div>
 
-      <button class="nav-toggle" type="button"></button>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/index.html">
+      <div class="brand-mark">
+        <img src="/assets/images/logo-circle.png" class="brand-logo" loading="eager" />
+      </div>
+      <div class="brand-type">
+        <div class="brand-name">Pixy Dust</div>
+        <div class="brand-sub">Seasoning</div>
+      </div>
+    </a>
 
-      <nav id="mainNav" class="main-nav">
-        <a href="/index.html">Home</a>
-        <a href="/shop.html">Shop</a>
-        <a href="/juniors.html">Juniors</a>
-        <a href="/gifting.html">Gifting</a>
-        <a href="/about.html">About</a>
-        <a class="active" href="/recipes/">Recipes</a>
-        <a href="/wholesale.html">Wholesale</a>
-        <a href="/contact.html">Contact</a>
-      </nav>
+    <button class="nav-toggle" type="button">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="main-nav">
+      <a class="nav-link" href="/index.html">Home</a>
+      <a class="nav-link" href="/shop.html">Shop</a>
+      <a class="nav-link" href="/juniors.html">Juniors</a>
+      <a class="nav-link" href="/gifting.html">Gifting</a>
+      <a class="nav-link" href="/about.html">About</a>
+      <a class="nav-link active" href="/recipes/">Recipes</a>
+      <a class="nav-link" href="/wholesale.html">Wholesale</a>
+      <a class="nav-link" href="/contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="page">
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <h1 class="page-title">Recipes</h1>
+        <p class="section-sub">Luxury-styled recipe modules with a community comments wall.</p>
+      </div>
+
+      <div class="grid two">
+
+        <article class="card recipe">
+          <h2 class="section-title">Featured Recipes</h2>
+          <p class="muted">Curated ideas. Community comments are in the next card.</p>
+        </article>
+
+        <article class="card recipe">
+          <h2 class="section-title">Comments</h2>
+          <p class="muted">Everyone can read. Sign in to post.</p>
+
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;">
+            <button id="community-open" type="button">Sign in to post</button>
+            <button id="community-refresh" type="button">Refresh</button>
+            <button id="community-signout" type="button">Sign out</button>
+          </div>
+
+          <div id="community-feed" style="margin-top:18px;">Loading...</div>
+        </article>
+
+      </div>
     </div>
-  </header>
+  </section>
+</main>
 
-  <main id="main" class="page">
-    <section class="section">
-      <div class="container">
-        <div class="grid two">
-          <article class="card recipe">
-            <h2 class="section-title">Featured Recipes</h2>
-            <p class="muted">Curated ideas. Community comments are in the next card.</p>
-          </article>
+<!-- Modal -->
+<div id="community-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:9999;">
+  <div style="max-width:680px;margin:6vh auto;background:rgba(10,10,10,.92);border-radius:16px;padding:18px;color:#fff;">
+    <div style="display:flex;justify-content:space-between;">
+      <div>Community</div>
+      <button id="community-close" type="button">Close</button>
+    </div>
 
-          <article class="card recipe">
-            <h2 class="section-title">Comments</h2>
-            <p class="muted">Everyone can read. Sign in to post.</p>
+    <div id="community-auth-status" style="margin-top:10px;">Not signed in.</div>
 
-            <div style="display:flex;gap:12px;margin-top:14px;">
-              <button id="community-open" type="button">Sign in to post</button>
-              <button id="community-refresh" type="button">Refresh</button>
-              <button id="community-signout" type="button">Sign out</button>
-            </div>
+    <div style="margin-top:14px;display:grid;gap:10px;">
+      <input id="community-email" type="email" placeholder="Email" />
+      <button id="community-send-code" type="button">Send code</button>
+      <input id="community-code" type="text" placeholder="Enter code" />
+      <button id="community-verify-code" type="button">Verify</button>
+    </div>
 
-            <div id="community-feed" style="margin-top:18px;">Loading...</div>
-          </article>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- Modal -->
-  <div id="community-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:9999;">
-    <div style="max-width:680px;margin:6vh auto;background:rgba(10,10,10,.92);border-radius:16px;padding:18px;color:#fff;">
-      <div style="display:flex;justify-content:space-between;">
-        <div>Community</div>
-        <button id="community-close" type="button">Close</button>
-      </div>
-
-      <div id="community-auth-status" style="margin-top:10px;">Not signed in.</div>
-
-      <div style="margin-top:14px;">
-        <input id="community-email" type="email" placeholder="Email" />
-        <button id="community-send-code" type="button">Send code</button>
-
-        <input id="community-code" type="text" placeholder="Enter code" />
-        <button id="community-verify-code" type="button">Verify</button>
-      </div>
-
-      <div style="margin-top:16px;">
-        <input id="community-display-name" type="text" placeholder="Display name" />
-
-        <select id="community-kind">
-          <option value="comment">Comment</option>
-          <option value="recipe">Recipe</option>
-        </select>
-
-        <input id="community-recipe-id" type="text" value="community" />
-        <input id="community-title" type="text" placeholder="Title (recipes only)" />
-        <textarea id="community-body" placeholder="Write here"></textarea>
-
-        <button id="community-submit" type="button">Post</button>
-      </div>
+    <div style="margin-top:16px;border-top:1px solid #333;padding-top:14px;">
+      <input id="community-display-name" type="text" placeholder="Display name" />
+      <select id="community-kind" style="margin-top:10px;">
+        <option value="comment">Comment</option>
+        <option value="recipe">Recipe</option>
+      </select>
+      <input id="community-title" type="text" placeholder="Title (recipes only)" style="margin-top:10px;" />
+      <textarea id="community-body" placeholder="Write here" style="margin-top:10px;min-height:140px;"></textarea>
+      <button id="community-submit" type="button" style="margin-top:12px;">Post</button>
     </div>
   </div>
+</div>
 
-  <!-- Only remaining script -->
-  <script src="/assets/js/products.js" defer></script>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>© <span id="year"></span> Pixy Dust Seasoning</div>
+  </div>
+</footer>
+
+<script src="/assets/js/products.js" defer></script>
 
 </body>
 </html>
