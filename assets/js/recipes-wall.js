@@ -1,5 +1,4 @@
 (() => {
-  // Always bind UI first. Never gate modal binding behind Supabase checks.
 
   const el = {
     feed: document.getElementById("community-feed"),
@@ -23,6 +22,8 @@
     body: document.getElementById("community-body"),
     submit: document.getElementById("community-submit")
   };
+
+  let sb = null;
 
   function setStatus(msg) {
     if (el.status) el.status.textContent = msg;
@@ -53,16 +54,67 @@
       .replaceAll("'", "&#039;");
   }
 
+  async function waitForSupabase() {
+    return new Promise(resolve => {
+      function check() {
+        if (window.supabase?.createClient) {
+          resolve();
+        } else {
+          setTimeout(check, 50);
+        }
+      }
+      check();
+    });
+  }
+
+  async function initSupabase() {
+    await waitForSupabase();
+
+    const SUPABASE_URL = window.SUPABASE_URL || "";
+    const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || "";
+
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+      setStatus("Supabase keys missing.");
+      return;
+    }
+
+    sb = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+
+    await refreshAuthUI();
+  }
+
+  async function refreshAuthUI() {
+    if (!sb) return;
+
+    const { data } = await sb.auth.getSession();
+    const session = data?.session;
+
+    if (!session) {
+      setStatus("Not signed in.");
+      return;
+    }
+
+    const email = session.user?.email || "";
+    setStatus(email ? `Signed in as ${email}` : "Signed in.");
+  }
+
   async function loadFeed(recipeId) {
     if (!el.feed) return;
+
     el.feed.textContent = "Loading...";
+
     try {
       const r = await fetch(`/.netlify/functions/recipes-get?recipeId=${encodeURIComponent(recipeId)}&limit=50`);
-      const j = await r.json().catch(() => null);
+      const j = await r.json();
+
       if (!r.ok || !j?.ok) {
         el.feed.textContent = "Could not load feed.";
         return;
       }
+
       renderFeed(j.rows || []);
     } catch {
       el.feed.textContent = "Could not load feed.";
@@ -70,7 +122,6 @@
   }
 
   function renderFeed(rows) {
-    if (!el.feed) return;
     if (!rows.length) {
       el.feed.textContent = "No posts yet.";
       return;
@@ -99,65 +150,28 @@
     }).join("");
   }
 
-  function getSupabaseClientOrNull() {
-    const SUPABASE_URL = window.SUPABASE_URL || "";
-    const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || "";
-
-    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return null;
-    if (!window.supabase?.createClient) return null;
-
-    try {
-      return window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    } catch {
-      return null;
-    }
-  }
-
-  async function refreshAuthUI(sb) {
-    if (!sb) {
-      setStatus("Auth not ready. Supabase client not loaded.");
-      return;
-    }
-    const { data } = await sb.auth.getSession();
-    const session = data?.session;
-    if (!session) return setStatus("Not signed in.");
-    const email = session.user?.email || "";
-    setStatus(email ? `Signed in as ${email}` : "Signed in.");
-  }
-
   // Bind UI immediately
-  el.open?.addEventListener("click", async () => {
-    openModal();
-
-    // Try to refresh auth status whenever modal opens
-    const sb = getSupabaseClientOrNull();
-    await refreshAuthUI(sb);
-  });
-
+  el.open?.addEventListener("click", openModal);
   el.close?.addEventListener("click", closeModal);
-
-  el.modal?.addEventListener("click", (e) => {
+  el.modal?.addEventListener("click", e => {
     if (e.target === el.modal) closeModal();
   });
 
-  el.refresh?.addEventListener("click", async () => {
-    await loadFeed(getRecipeId());
-  });
+  el.refresh?.addEventListener("click", () => loadFeed(getRecipeId()));
 
   el.signout?.addEventListener("click", async () => {
-    const sb = getSupabaseClientOrNull();
-    if (!sb) return setStatus("Auth not ready. Supabase client not loaded.");
+    if (!sb) return;
     await sb.auth.signOut();
     setStatus("Signed out.");
-    await refreshAuthUI(sb);
+    await refreshAuthUI();
   });
 
   el.sendCode?.addEventListener("click", async () => {
-    const sb = getSupabaseClientOrNull();
-    if (!sb) return setStatus("Auth not ready. Supabase client not loaded.");
+    if (!sb) return setStatus("Auth not ready.");
 
-    const email = (el.email?.value || "").trim();
+    const email = el.email.value.trim();
     if (!email) return setStatus("Enter email.");
+
     setStatus("Sending code...");
 
     const { error } = await sb.auth.signInWithOtp({
@@ -166,18 +180,16 @@
     });
 
     if (error) return setStatus(error.message);
-    setStatus("Email sent. Check inbox and spam.");
+    setStatus("Email sent. Check inbox.");
   });
 
   el.verifyCode?.addEventListener("click", async () => {
-    const sb = getSupabaseClientOrNull();
-    if (!sb) return setStatus("Auth not ready. Supabase client not loaded.");
+    if (!sb) return setStatus("Auth not ready.");
 
-    const email = (el.email?.value || "").trim();
-    const token = (el.code?.value || "").trim();
+    const email = el.email.value.trim();
+    const token = el.code.value.trim();
+
     if (!email || !token) return setStatus("Enter email and code.");
-
-    setStatus("Verifying...");
 
     const { data, error } = await sb.auth.verifyOtp({
       email,
@@ -189,22 +201,21 @@
     if (!data?.session) return setStatus("Sign-in failed.");
 
     setStatus("Signed in.");
-    await refreshAuthUI(sb);
+    await refreshAuthUI();
   });
 
   el.submit?.addEventListener("click", async () => {
-    const sb = getSupabaseClientOrNull();
-    if (!sb) return setStatus("Auth not ready. Supabase client not loaded.");
+    if (!sb) return setStatus("Auth not ready.");
 
     const { data } = await sb.auth.getSession();
     const session = data?.session;
     if (!session?.access_token) return setStatus("Sign in required.");
 
-    const displayName = (el.displayName?.value || "").trim();
-    const kind = String(el.kind?.value || "comment");
+    const displayName = el.displayName.value.trim();
+    const kind = el.kind.value;
     const recipeId = getRecipeId();
-    const title = (el.title?.value || "").trim();
-    const body = (el.body?.value || "").trim();
+    const title = el.title.value.trim();
+    const body = el.body.value.trim();
 
     if (!displayName) return setStatus("Enter your name.");
     if (!body) return setStatus("Enter text.");
@@ -227,15 +238,16 @@
         })
       });
 
-      const j = await r.json().catch(() => null);
+      const j = await r.json();
+
       if (!r.ok || !j?.ok) {
         setStatus(j?.error || "Post failed.");
         return;
       }
 
       setStatus("Posted.");
-      if (el.title) el.title.value = "";
-      if (el.body) el.body.value = "";
+      el.title.value = "";
+      el.body.value = "";
       await loadFeed(recipeId);
     } catch {
       setStatus("Post failed.");
@@ -244,14 +256,8 @@
     }
   });
 
-  // Initial page load
-  window.addEventListener("DOMContentLoaded", async () => {
-    await loadFeed(getRecipeId());
-
-    // Try to show initial auth state without blocking anything
-    const sb = getSupabaseClientOrNull();
-    await refreshAuthUI(sb);
-  });
+  // Initial load
+  loadFeed(getRecipeId());
+  initSupabase();
 
 })();
-
