@@ -1,24 +1,5 @@
 (() => {
 
-  console.log("recipes-wall loaded");
-
-  const el = {
-    open: document.getElementById("community-open"),
-    modal: document.getElementById("community-modal"),
-  };
-
-  el.open?.addEventListener("click", () => {
-    console.log("open clicked");
-    el.modal.style.display = "block";
-  });
-
-})();
-
-
-  const el = {
-    feed: document.getElementById("community-feed"),
-
-
   const el = {
     feed: document.getElementById("community-feed"),
     open: document.getElementById("community-open"),
@@ -73,41 +54,24 @@
       .replaceAll("'", "&#039;");
   }
 
-  async function waitForSupabase() {
-    return new Promise(resolve => {
-      function check() {
-        if (window.supabase?.createClient) {
-          resolve();
-        } else {
-          setTimeout(check, 50);
-        }
-      }
-      check();
-    });
-  }
+  async function ensureSupabase() {
+    if (sb) return sb;
 
-  async function initSupabase() {
-    await waitForSupabase();
-
-    const SUPABASE_URL = window.SUPABASE_URL || "";
-    const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || "";
-
-    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-      setStatus("Supabase keys missing.");
-      return;
+    if (!window.supabase?.createClient) {
+      setStatus("Supabase not loaded.");
+      return null;
     }
 
     sb = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_ANON_KEY
+      window.SUPABASE_URL,
+      window.SUPABASE_ANON_KEY
     );
 
-    await refreshAuthUI();
+    return sb;
   }
 
   async function refreshAuthUI() {
     if (!sb) return;
-
     const { data } = await sb.auth.getSession();
     const session = data?.session;
 
@@ -116,8 +80,7 @@
       return;
     }
 
-    const email = session.user?.email || "";
-    setStatus(email ? `Signed in as ${email}` : "Signed in.");
+    setStatus("Signed in as " + (session.user?.email || ""));
   }
 
   async function loadFeed(recipeId) {
@@ -127,7 +90,7 @@
 
     try {
       const r = await fetch(`/.netlify/functions/recipes-get?recipeId=${encodeURIComponent(recipeId)}&limit=50`);
-      const j = await r.json();
+      const j = await r.json().catch(() => null);
 
       if (!r.ok || !j?.ok) {
         el.feed.textContent = "Could not load feed.";
@@ -141,6 +104,8 @@
   }
 
   function renderFeed(rows) {
+    if (!el.feed) return;
+
     if (!rows.length) {
       el.feed.textContent = "No posts yet.";
       return;
@@ -169,9 +134,14 @@
     }).join("");
   }
 
-  // Bind UI immediately
-  el.open?.addEventListener("click", openModal);
+  el.open?.addEventListener("click", async () => {
+    openModal();
+    await ensureSupabase();
+    await refreshAuthUI();
+  });
+
   el.close?.addEventListener("click", closeModal);
+
   el.modal?.addEventListener("click", e => {
     if (e.target === el.modal) closeModal();
   });
@@ -179,21 +149,19 @@
   el.refresh?.addEventListener("click", () => loadFeed(getRecipeId()));
 
   el.signout?.addEventListener("click", async () => {
+    await ensureSupabase();
     if (!sb) return;
+
     await sb.auth.signOut();
     setStatus("Signed out.");
     await refreshAuthUI();
   });
 
   el.sendCode?.addEventListener("click", async () => {
-  if (!sb) {
-    setStatus("Initializing...");
-    await initSupabase();
-    if (!sb) return setStatus("Auth unavailable.");
-  }
+    await ensureSupabase();
+    if (!sb) return;
 
-
-    const email = el.email.value.trim();
+    const email = (el.email?.value || "").trim();
     if (!email) return setStatus("Enter email.");
 
     setStatus("Sending code...");
@@ -204,14 +172,15 @@
     });
 
     if (error) return setStatus(error.message);
-    setStatus("Email sent. Check inbox.");
+    setStatus("Email sent.");
   });
 
   el.verifyCode?.addEventListener("click", async () => {
-    if (!sb) return setStatus("Auth not ready.");
+    await ensureSupabase();
+    if (!sb) return;
 
-    const email = el.email.value.trim();
-    const token = el.code.value.trim();
+    const email = (el.email?.value || "").trim();
+    const token = (el.code?.value || "").trim();
 
     if (!email || !token) return setStatus("Enter email and code.");
 
@@ -229,22 +198,18 @@
   });
 
   el.submit?.addEventListener("click", async () => {
-   if (!sb) {
-  setStatus("Initializing...");
-  await initSupabase();
-  if (!sb) return setStatus("Auth unavailable.");
-}
-
+    await ensureSupabase();
+    if (!sb) return;
 
     const { data } = await sb.auth.getSession();
     const session = data?.session;
     if (!session?.access_token) return setStatus("Sign in required.");
 
-    const displayName = el.displayName.value.trim();
-    const kind = el.kind.value;
+    const displayName = (el.displayName?.value || "").trim();
+    const kind = String(el.kind?.value || "comment");
     const recipeId = getRecipeId();
-    const title = el.title.value.trim();
-    const body = el.body.value.trim();
+    const title = (el.title?.value || "").trim();
+    const body = (el.body?.value || "").trim();
 
     if (!displayName) return setStatus("Enter your name.");
     if (!body) return setStatus("Enter text.");
@@ -267,7 +232,7 @@
         })
       });
 
-      const j = await r.json();
+      const j = await r.json().catch(() => null);
 
       if (!r.ok || !j?.ok) {
         setStatus(j?.error || "Post failed.");
@@ -275,8 +240,8 @@
       }
 
       setStatus("Posted.");
-      el.title.value = "";
-      el.body.value = "";
+      if (el.title) el.title.value = "";
+      if (el.body) el.body.value = "";
       await loadFeed(recipeId);
     } catch {
       setStatus("Post failed.");
@@ -285,9 +250,6 @@
     }
   });
 
-  // Initial load
   loadFeed(getRecipeId());
-  initSupabase();
 
 })();
-
