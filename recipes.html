@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,35 +11,34 @@
 
   <link rel="stylesheet" href="/assets/css/site.css" />
 
-  <!-- Define Supabase globals FIRST -->
+  <!-- Supabase Configuration (DEFINE ONCE) -->
   <script>
     window.SUPABASE_URL = "https://inacwknisxdzdtvjglwq.supabase.co";
     window.SUPABASE_ANON_KEY = "sb_publishable_5YXj9hFsDytwD7M7buGbxA_rhYznkhP";
   </script>
 
-  <!-- Load Supabase WITHOUT defer -->
+  <!-- Load Supabase ONCE -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <!-- Other site scripts -->
+  <!-- Site Scripts -->
   <script src="/assets/js/flash-sales.js" defer></script>
   <script src="/assets/js/cms.js" defer></script>
   <script src="/assets/js/chatbot.js" defer></script>
   <script src="/assets/js/main.js" defer></script>
 
-  <!-- Community wall script (can stay deferred) -->
+  <!-- Community Script -->
   <script src="/assets/js/recipes-wall.js" defer></script>
 </head>
 
-
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
-  <div id="flash-sale-bar" class="flash-sale" role="region" aria-label="Flash sale" hidden></div>
+  <div id="flash-sale-bar" class="flash-sale" hidden></div>
 
-  <header class="site-header" role="banner">
+  <header class="site-header">
     <div class="container header-inner">
-      <a class="brand" href="/index.html" aria-label="Pixy Dust Seasoning home">
-        <div class="brand-mark" aria-hidden="true">
-          <img src="/assets/images/logo-circle.png" alt="" class="brand-logo" loading="eager" />
+      <a class="brand" href="/index.html">
+        <div class="brand-mark">
+          <img src="/assets/images/logo-circle.png" class="brand-logo" loading="eager" />
         </div>
         <div class="brand-type">
           <div class="brand-name">Pixy Dust</div>
@@ -45,43 +46,35 @@
         </div>
       </a>
 
-      <button class="nav-toggle" type="button" aria-label="Open menu" aria-controls="mainNav" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
+      <button class="nav-toggle" type="button"></button>
 
-      <nav id="mainNav" class="main-nav" aria-label="Primary">
-        <a class="nav-link" href="/index.html">Home</a>
-        <a class="nav-link" href="/shop.html">Shop</a>
-        <a class="nav-link" href="/juniors.html">Juniors</a>
-        <a class="nav-link" href="/gifting.html">Gifting</a>
-        <a class="nav-link" href="/about.html">About</a>
-        <a class="nav-link active" href="/recipes/">Recipes</a>
-        <a class="nav-link" href="/wholesale.html">Wholesale</a>
-        <a class="nav-link" href="/contact.html">Contact</a>
+      <nav id="mainNav" class="main-nav">
+        <a href="/index.html">Home</a>
+        <a href="/shop.html">Shop</a>
+        <a href="/juniors.html">Juniors</a>
+        <a href="/gifting.html">Gifting</a>
+        <a href="/about.html">About</a>
+        <a class="active" href="/recipes/">Recipes</a>
+        <a href="/wholesale.html">Wholesale</a>
+        <a href="/contact.html">Contact</a>
       </nav>
     </div>
-    <div id="admin-badge" class="admin-badge" hidden>Admin Mode</div>
   </header>
 
   <main id="main" class="page">
-    <section class="section" data-cms-section="recipes">
+    <section class="section">
       <div class="container">
-        <div class="section-head">
-          <h1 class="page-title">Recipes</h1>
-          <p class="section-sub">Luxury-styled recipe modules with a community comments wall.</p>
-        </div>
-
         <div class="grid two">
-          <article class="card recipe" data-cms-card data-recipe-id="featured">
-            <h2 class="section-title" data-cms-text>Featured Recipes</h2>
-            <p class="muted" data-cms-text>Curated ideas. Community comments are in the next card.</p>
+          <article class="card recipe">
+            <h2 class="section-title">Featured Recipes</h2>
+            <p class="muted">Curated ideas. Community comments are in the next card.</p>
           </article>
 
-          <article class="card recipe" data-cms-card data-recipe-id="comments">
-            <h2 class="section-title" data-cms-text>Comments</h2>
-            <p class="muted" data-cms-text>Everyone can read. Sign in to post.</p>
+          <article class="card recipe">
+            <h2 class="section-title">Comments</h2>
+            <p class="muted">Everyone can read. Sign in to post.</p>
 
-            <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:14px;">
+            <div style="display:flex;gap:12px;margin-top:14px;">
               <button id="community-open" type="button">Sign in to post</button>
               <button id="community-refresh" type="button">Refresh</button>
               <button id="community-signout" type="button">Sign out</button>
@@ -94,92 +87,43 @@
     </section>
   </main>
 
+  <!-- Modal -->
   <div id="community-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:9999;">
-    <div style="max-width:680px;margin:6vh auto;background:rgba(10,10,10,.92);border:1px solid rgba(216,179,90,.22);border-radius:16px;padding:18px 18px 16px;color:#fff;">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
-        <div style="font-size:14px;letter-spacing:.12em;text-transform:uppercase;">Community</div>
+    <div style="max-width:680px;margin:6vh auto;background:rgba(10,10,10,.92);border-radius:16px;padding:18px;color:#fff;">
+      <div style="display:flex;justify-content:space-between;">
+        <div>Community</div>
         <button id="community-close" type="button">Close</button>
       </div>
 
-      <div id="community-auth-status" style="margin-top:10px;opacity:.8;">Not signed in.</div>
+      <div id="community-auth-status" style="margin-top:10px;">Not signed in.</div>
 
-      <div style="margin-top:14px;display:grid;gap:10px;">
+      <div style="margin-top:14px;">
         <input id="community-email" type="email" placeholder="Email" />
         <button id="community-send-code" type="button">Send code</button>
+
         <input id="community-code" type="text" placeholder="Enter code" />
         <button id="community-verify-code" type="button">Verify</button>
       </div>
 
-      <div style="margin-top:16px;border-top:1px solid rgba(216,179,90,.18);padding-top:14px;">
+      <div style="margin-top:16px;">
         <input id="community-display-name" type="text" placeholder="Display name" />
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
-          <select id="community-kind">
-            <option value="comment">Comment</option>
-            <option value="recipe">Recipe</option>
-          </select>
-          <input id="community-recipe-id" type="text" value="community" />
-        </div>
-        <input id="community-title" type="text" placeholder="Title (recipes only)" style="margin-top:10px;" />
-        <textarea id="community-body" placeholder="Write here" style="margin-top:10px;min-height:140px;"></textarea>
-        <button id="community-submit" type="button" style="margin-top:12px;">Post</button>
+
+        <select id="community-kind">
+          <option value="comment">Comment</option>
+          <option value="recipe">Recipe</option>
+        </select>
+
+        <input id="community-recipe-id" type="text" value="community" />
+        <input id="community-title" type="text" placeholder="Title (recipes only)" />
+        <textarea id="community-body" placeholder="Write here"></textarea>
+
+        <button id="community-submit" type="button">Post</button>
       </div>
     </div>
   </div>
 
-  <button class="chat-fab" type="button" aria-label="Open Pixy Assistant" data-chat-open>
-    <span class="chat-fab-glow" aria-hidden="true"></span>
-    <span class="chat-fab-icon" aria-hidden="true">✦</span>
-  </button>
-
-  <section class="chat" role="dialog" aria-label="Pixy Assistant" aria-modal="true" hidden data-chat>
-    <header class="chat-head">
-      <div class="chat-brand">
-        <span class="chat-spark" aria-hidden="true"></span>
-        <div>
-          <div class="chat-title">Pixy Assistant</div>
-          <div class="chat-sub">Food-focused answers. Non-medical.</div>
-        </div>
-      </div>
-      <button class="chat-close" type="button" aria-label="Close chat" data-chat-close>×</button>
-    </header>
-    <div class="chat-body" data-chat-body aria-live="polite"></div>
-    <form class="chat-input" data-chat-form>
-      <label class="sr-only" for="chatTextRec">Message</label>
-      <input id="chatTextRec" name="message" type="text" placeholder="Ask about flavors, ingredients, pairings" autocomplete="off" required />
-      <button class="btn btn-primary" type="submit">Send</button>
-    </form>
-  </section>
-
-  <div class="toast" role="status" aria-live="polite" hidden data-toast></div>
-
-  <footer class="site-footer" role="contentinfo">
-    <div class="container footer-inner">
-      <div class="footer-left">
-        <div class="footer-line">© <span id="year"></span> Pixy Dust Seasoning. All rights reserved.</div>
-        <div class="footer-tag">Luxury gourmet blends. Let’s sprinkle a little magic.</div>
-      </div>
-      <div class="footer-mid">
-        <a href="/about.html">About Pixy Dust</a>
-        <a href="/recipes/">Recipes</a>
-        <a href="#">Policies</a>
-      </div>
-      <div class="footer-right">
-        <a href="https://www.facebook.com/PixyDustSeasoning" target="_blank" rel="noreferrer">Facebook</a>
-        <a href="https://www.instagram.com/pixydustseasoning" target="_blank" rel="noreferrer">Instagram</a>
-        <a href="https://www.youtube.com/@PixyDustcookoff" target="_blank" rel="noreferrer">YouTube</a>
-      </div>
-    </div>
-  </footer>
-
+  <!-- Only remaining script -->
   <script src="/assets/js/products.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-  window.SUPABASE_URL = "https://inacwknisxdzdtvjglwq.supabase.co";
-  window.SUPABASE_ANON_KEY = "sb_publishable_5YXj9hFsDytwD7M7buGbxA_rhYznkhP";
-</script>
-
-<script src="/assets/js/recipes-wall.js" defer></script>
 
 </body>
 </html>
