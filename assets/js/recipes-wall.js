@@ -85,6 +85,14 @@
       check();
     });
   }
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  window.SUPABASE_URL = "https://inacwknisxdzdtvjglwq.supabase.co";
+  window.SUPABASE_ANON_KEY = "sb_publishable_5YXj9hFsDytwD7M7buGbxA_rhYznkhP";
+</script>
+
+<script src="/assets/js/recipes-wall.js" defer></script>
 
   async function initSupabase() {
     await waitForSupabase();
