@@ -2,6 +2,10 @@
 
   const el = {
     feed: document.getElementById("community-feed"),
+
+
+  const el = {
+    feed: document.getElementById("community-feed"),
     open: document.getElementById("community-open"),
     refresh: document.getElementById("community-refresh"),
     signout: document.getElementById("community-signout"),
@@ -271,3 +275,4 @@
   initSupabase();
 
 })();
+
