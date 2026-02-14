@@ -575,11 +575,30 @@
             <p class="section-sub" data-cms-text>New drops, flash sales, and early access. Stored locally for now.</p>
           </div>
 
-          <form class="form-inline" data-subscribe-form>
-            <label class="sr-only" for="emailHome">Email</label>
-            <input id="emailHome" name="email" type="email" inputmode="email" autocomplete="email" placeholder="Enter your email" required />
-            <button class="btn btn-primary" type="submit">Subscribe</button>
-          </form>
+         <form 
+  name="vip-list" 
+  method="POST" 
+  data-netlify="true" 
+  class="form-inline" 
+  data-subscribe-form>
+
+  <input type="hidden" name="form-name" value="vip-list" />
+
+  <label class="sr-only" for="emailHome">Email</label>
+  <input 
+    id="emailHome" 
+    name="email" 
+    type="email" 
+    inputmode="email" 
+    autocomplete="email" 
+    placeholder="Enter your email" 
+    required />
+
+  <button class="btn btn-primary" type="submit">
+    Subscribe
+  </button>
+</form>
+
 
           <div class="form-note" id="subscribe-note" aria-live="polite"></div>
         </div>
