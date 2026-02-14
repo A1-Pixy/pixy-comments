@@ -22,7 +22,9 @@
   <header class="site-header" role="banner">
     <div class="container header-inner">
       <a class="brand" href="index.html" aria-label="Pixy Dust Seasoning home">
-        <div class="brand-mark" aria-hidden="true"><img src="assets/images/logo-circle.png" alt="" class="brand-logo" loading="eager" /></div>
+        <div class="brand-mark" aria-hidden="true">
+          <img src="assets/images/logo-circle.png" alt="" class="brand-logo" loading="eager" />
+        </div>
         <div class="brand-type">
           <div class="brand-name">Pixy Dust</div>
           <div class="brand-sub">Seasoning</div>
@@ -58,34 +60,34 @@
         <div class="grid two">
           <div class="card">
             <h2 class="section-title">Message</h2>
-         <form name="contact" method="POST" data-netlify="true">
-  <input type="hidden" name="form-name" value="contact" />
 
-  <input type="text" name="name" required />
-  <input type="email" name="email" required />
-  <textarea name="message" required></textarea>
+            <!-- Netlify Form -->
+            <form name="contact" method="POST" data-netlify="true">
 
-  <button type="submit">Send Message</button>
-</form>
+              <input type="hidden" name="form-name" value="contact" />
 
               <div class="field">
                 <label for="nameC">Name</label>
                 <input id="nameC" name="name" type="text" required />
               </div>
+
               <div class="field">
                 <label for="emailC">Email</label>
                 <input id="emailC" name="email" type="email" inputmode="email" autocomplete="email" required />
               </div>
+
               <div class="field">
                 <label for="subC">Subject</label>
                 <input id="subC" name="subject" type="text" required />
               </div>
+
               <div class="field">
                 <label for="msgC">Message</label>
                 <textarea id="msgC" name="message" rows="6" required></textarea>
               </div>
+
               <button class="btn btn-primary" type="submit">Submit</button>
-              <p class="form-note">No backend connected yet. This form is UI-complete.</p>
+
             </form>
           </div>
 
@@ -129,6 +131,7 @@
     <span class="chat-fab-glow" aria-hidden="true"></span>
     <span class="chat-fab-icon" aria-hidden="true">✦</span>
   </button>
+
   <section class="chat" role="dialog" aria-label="Pixy Assistant" aria-modal="true" hidden data-chat>
     <header class="chat-head">
       <div class="chat-brand">
@@ -170,10 +173,5 @@
   </footer>
 
   <script src="assets/js/products.js" defer></script>
-
 </body>
 </html>
-
-<a href="mailto:support@pixydustseasoning.com?subject=General Inquiry">
-  Contact Support
-</a>
