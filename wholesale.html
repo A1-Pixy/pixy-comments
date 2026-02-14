@@ -22,7 +22,9 @@
   <header class="site-header" role="banner">
     <div class="container header-inner">
       <a class="brand" href="index.html" aria-label="Pixy Dust Seasoning home">
-        <div class="brand-mark" aria-hidden="true"><img src="assets/images/logo-circle.png" alt="" class="brand-logo" loading="eager" /></div>
+        <div class="brand-mark" aria-hidden="true">
+          <img src="assets/images/logo-circle.png" alt="" class="brand-logo" loading="eager" />
+        </div>
         <div class="brand-type">
           <div class="brand-name">Pixy Dust</div>
           <div class="brand-sub">Seasoning</div>
@@ -73,46 +75,33 @@
         <div class="divider"></div>
 
         <div class="card">
-         <h2 class="section-title">Wholesale Application</h2>
+          <h2 class="section-title">Wholesale Application</h2>
 
-<form name="wholesale" method="POST" data-netlify="true">
-
-  <input type="hidden" name="form-name" value="wholesale" />
-
-  <label for="business_name">Business Name</label>
-  <input id="business_name" type="text" name="business_name" required />
-
-  <label for="contact_name">Contact Name</label>
-  <input id="contact_name" type="text" name="contact_name" required />
-
-  <label for="email">Email</label>
-  <input id="email" type="email" name="email" required />
-
-  <label for="details">Business Details</label>
-  <textarea id="details" name="details" required></textarea>
-
-  <button type="submit">Submit Inquiry</button>
-
-</form>
-
+          <!-- Netlify Form -->
+          <form name="wholesale" method="POST" data-netlify="true">
+            <input type="hidden" name="form-name" value="wholesale" />
 
             <div class="grid two">
               <div class="field">
                 <label for="biz">Business Name</label>
-                <input id="biz" name="business" type="text" required />
+                <input id="biz" name="business_name" type="text" required />
               </div>
+
               <div class="field">
                 <label for="contactName">Contact Name</label>
-                <input id="contactName" name="contact" type="text" required />
+                <input id="contactName" name="contact_name" type="text" required />
               </div>
+
               <div class="field">
                 <label for="emailW">Email</label>
                 <input id="emailW" name="email" type="email" inputmode="email" autocomplete="email" required />
               </div>
+
               <div class="field">
                 <label for="phoneW">Phone</label>
                 <input id="phoneW" name="phone" type="tel" inputmode="tel" autocomplete="tel" required />
               </div>
+
               <div class="field">
                 <label for="typeW">Business Type</label>
                 <select id="typeW" name="type" required>
@@ -123,13 +112,15 @@
                   <option>Other</option>
                 </select>
               </div>
+
               <div class="field">
                 <label for="msgW">Message and Volume Needs</label>
                 <textarea id="msgW" name="message" rows="5" required></textarea>
               </div>
             </div>
+
             <button class="btn btn-primary" type="submit">Submit</button>
-            <p class="form-note">No backend connected yet. This form is UI-complete.</p>
+
           </form>
         </div>
       </div>
@@ -140,6 +131,7 @@
     <span class="chat-fab-glow" aria-hidden="true"></span>
     <span class="chat-fab-icon" aria-hidden="true">✦</span>
   </button>
+
   <section class="chat" role="dialog" aria-label="Pixy Assistant" aria-modal="true" hidden data-chat>
     <header class="chat-head">
       <div class="chat-brand">
@@ -181,10 +173,6 @@
   </footer>
 
   <script src="assets/js/products.js" defer></script>
-
 </body>
 </html>
 
-<a href="mailto:support@pixydustseasoning.com?subject=Wholesale Inquiry">
-  Contact Wholesale Department
-</a>
