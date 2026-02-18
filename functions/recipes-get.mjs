@@ -10,7 +10,7 @@ export async function handler(event) {
   const limit = Number(event.queryStringParameters?.limit || 50);
 
   const { data, error } = await supabase
-    .from("community_posts")
+    .from("recipe_posts")
     .select("*")
     .eq("recipe_id", recipeId)
     .order("created_at", { ascending: false })
