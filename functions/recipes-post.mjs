@@ -31,7 +31,7 @@ export async function handler(event) {
     process.env.SUPABASE_SERVICE_ROLE_KEY
   );
 
-  const { error } = await supabaseAdmin.from("community_posts").insert({
+  const { error } = await supabaseAdmin.from("recipe_posts").insert({
     user_id: user.id,
     display_name: displayName,
     kind,
