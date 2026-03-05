@@ -1,0 +1,565 @@
+<!-- checkout.html
+     Drop this file into your site root.
+     Then open: /checkout.html?key=jerk  (or any product key in products.js)
+     Requires: assets/js/products.js to exist and define window.PIXY_PRODUCTS
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Checkout. Pixy Dust Seasoning</title>
+
+  <!-- Keep your existing site CSS if you want consistent typography -->
+  <link rel="stylesheet" href="assets/css/site.css" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+
+  <style>
+    :root{
+      --bg:#07070a;
+      --panel:rgba(255,255,255,.06);
+      --panel2:rgba(0,0,0,.35);
+      --line:rgba(255,255,255,.12);
+      --text:#f3f3f3;
+      --muted:rgba(243,243,243,.78);
+      --gold1:#d8b35a;
+      --gold2:#b69034;
+      --shadow: 0 10px 30px rgba(0,0,0,.45);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0;
+      background: radial-gradient(900px 600px at 15% 15%, rgba(216,179,90,.10), transparent 60%),
+                  radial-gradient(900px 600px at 85% 25%, rgba(216,179,90,.08), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    /* Minimal header so page stands alone */
+    .topbar{
+      position:sticky; top:0; z-index:50;
+      background: rgba(7,7,10,.72);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .wrap{
+      max-width:1120px; margin:0 auto; padding:14px 16px;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .brand{display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--text)}
+    .brand img{height:34px; width:auto; display:block}
+    .brand .name{font-family: ui-serif, Georgia, "Times New Roman", Times, serif; letter-spacing:.4px}
+    .brand .tag{font-size:12px; color:var(--muted)}
+    .btn{
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
+    }
+    .btn:disabled{opacity:.45; cursor:not-allowed}
+    .btn.primary{
+      background: linear-gradient(180deg,var(--gold1),var(--gold2));
+      border-color: rgba(0,0,0,.18);
+      color:#121212;
+      font-weight:800;
+    }
+    .btn.ghost{
+      background: transparent;
+      border-color: rgba(255,255,255,.16);
+    }
+
+    main{max-width:1120px; margin:0 auto; padding:20px 16px 110px}
+    .grid{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap:18px;
+      align-items:start;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card.pad{padding:18px}
+    .hero{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:0;
+    }
+    .hero-img{
+      width:100%;
+      display:block;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.25);
+    }
+    .hero-img img{
+      width:100%;
+      height:auto;
+      display:block;
+    }
+    .hero-body{padding:18px}
+    .kicker{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:12px;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color: rgba(243,243,243,.70);
+    }
+    .kicker .dot{
+      width:6px; height:6px; border-radius:999px;
+      background: linear-gradient(180deg,var(--gold1),var(--gold2));
+      box-shadow: 0 0 14px rgba(216,179,90,.35);
+    }
+    h1{
+      margin:10px 0 10px;
+      font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+      font-size:42px;
+      line-height:1.04;
+    }
+    @media (max-width: 520px){ h1{font-size:34px} }
+
+    .sub{margin:0 0 14px; color:var(--muted); font-size:15px; line-height:1.45}
+    .bullets{margin:12px 0 0; padding-left:18px; color: rgba(243,243,243,.84)}
+    .bullets li{margin:8px 0}
+
+    .row{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+      margin-top:14px;
+    }
+    .qty{
+      display:inline-flex; align-items:center; gap:0;
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:12px;
+      overflow:hidden;
+      background: rgba(0,0,0,.22);
+    }
+    .qty button{
+      border:0;
+      background: transparent;
+      color:var(--text);
+      padding:10px 12px;
+      cursor:pointer;
+      font-size:16px;
+    }
+    .qty input{
+      width:48px;
+      text-align:center;
+      border:0;
+      outline:0;
+      background: transparent;
+      color:var(--text);
+      padding:10px 6px;
+      font-weight:700;
+    }
+    .divider{height:1px; background: rgba(255,255,255,.10); margin:14px 0}
+
+    /* Right column */
+    .summary-title{
+      font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+      font-size:22px;
+      margin:0 0 10px;
+    }
+    .summary-line{
+      display:flex; justify-content:space-between; gap:10px;
+      padding:10px 0;
+      border-bottom:1px dashed rgba(255,255,255,.12);
+      color: rgba(243,243,243,.86);
+      font-size:14px;
+    }
+    .summary-line:last-child{border-bottom:0}
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.22);
+      color: rgba(243,243,243,.86);
+      font-size:13px;
+    }
+    .trust{
+      display:flex; flex-wrap:wrap; gap:10px;
+      margin-top:12px;
+    }
+    .fine{
+      margin-top:10px;
+      font-size:12px;
+      color: rgba(243,243,243,.70);
+      line-height:1.45;
+    }
+
+    /* Sticky checkout bar for mobile */
+    .sticky{
+      position:fixed; left:0; right:0; bottom:0; z-index:60;
+      background: rgba(7,7,10,.82);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(255,255,255,.10);
+      padding:12px 14px;
+    }
+    .sticky-inner{
+      max-width:1120px;
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .sticky-left{min-width:0}
+    .sticky-name{font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+    .sticky-sub{font-size:12px; color: rgba(243,243,243,.72)}
+    .sticky-right{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end}
+
+    /* Light “loading” state */
+    .loading{
+      opacity:.65;
+      pointer-events:none;
+    }
+    .error{
+      border:1px solid rgba(255,90,90,.35);
+      background: rgba(255,90,90,.08);
+      color: rgba(255,255,255,.92);
+      padding:12px 14px;
+      border-radius:14px;
+      margin-top:12px;
+      font-size:14px;
+      line-height:1.4;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="index.html" aria-label="Pixy Dust home">
+        <img src="assets/images/logo-pixy-gold.png" alt="Pixy Dust Seasoning" />
+        <div>
+          <div class="name">Pixy Dust</div>
+          <div class="tag">Flavor with a purpose</div>
+        </div>
+      </a>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <button class="btn ghost" id="openCartBtn" type="button">Cart</button>
+        <a class="btn ghost" href="shop.html?view=Pouches" style="text-decoration:none; display:inline-flex; align-items:center;">Shop</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="grid">
+      <!-- LEFT: “CSS checkout” product card -->
+      <section class="card hero" id="checkoutCard">
+        <div class="hero-img">
+          <img id="productImg" src="" alt="" />
+        </div>
+        <div class="hero-body">
+          <div class="kicker"><span class="dot"></span><span>Direct checkout</span></div>
+          <h1 id="productTitle">Loading…</h1>
+          <p class="sub" id="productBlurb"></p>
+
+          <ul class="bullets" id="productBullets">
+            <li>Fast flavor. Clean finish. Built for real cooking.</li>
+            <li>Use on proteins, vegetables, and sauces.</li>
+            <li>Add a little. Taste. Build.</li>
+          </ul>
+
+          <div class="divider"></div>
+
+          <div class="row">
+            <div class="qty" aria-label="Quantity selector">
+              <button type="button" id="qtyMinus" aria-label="Decrease quantity">−</button>
+              <input id="qtyInput" type="text" inputmode="numeric" value="1" aria-label="Quantity" />
+              <button type="button" id="qtyPlus" aria-label="Increase quantity">+</button>
+            </div>
+
+            <button class="btn" id="addBtn" type="button">Add to Cart</button>
+            <button class="btn primary" id="buyBtn" type="button">Buy Now</button>
+          </div>
+
+          <div class="fine">
+            Buy Now sends you to Ecwid checkout. Add to Cart opens your cart first.
+          </div>
+
+          <div class="error" id="errorBox" style="display:none;"></div>
+        </div>
+      </section>
+
+      <!-- RIGHT: order summary + trust -->
+      <aside class="card pad">
+        <div class="summary-title">Order Summary</div>
+
+        <div class="summary-line">
+          <div>Item</div>
+          <div id="sumItem">—</div>
+        </div>
+        <div class="summary-line">
+          <div>Quantity</div>
+          <div id="sumQty">1</div>
+        </div>
+        <div class="summary-line">
+          <div>Checkout</div>
+          <div>Ecwid secure checkout</div>
+        </div>
+
+        <div class="trust">
+          <div class="pill">Secure payment</div>
+          <div class="pill">Fast checkout</div>
+          <div class="pill">Direct response page</div>
+        </div>
+
+        <div class="fine">
+          Shipping, tax, and payment are handled inside Ecwid at checkout.
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Sticky bottom bar (mobile) -->
+  <div class="sticky">
+    <div class="sticky-inner">
+      <div class="sticky-left">
+        <div class="sticky-name" id="stickyName">Loading…</div>
+        <div class="sticky-sub" id="stickySub">Direct checkout</div>
+      </div>
+      <div class="sticky-right">
+        <button class="btn" id="stickyAdd" type="button">Add</button>
+        <button class="btn primary" id="stickyBuy" type="button">Buy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- products.js must define window.PIXY_PRODUCTS -->
+  <script src="assets/js/products.js"></script>
+
+  <script>
+    (function () {
+      "use strict";
+
+      // Your Ecwid store id (locked in your project notes)
+      var ECWID_STORE_ID = 62406545;
+
+      function $(id){ return document.getElementById(id); }
+      function setText(id, v){ var el=$(id); if(el) el.textContent = v == null ? "" : String(v); }
+      function setImg(id, src, alt){
+        var el=$(id); if(!el) return;
+        el.src = src || "";
+        el.alt = alt || "";
+      }
+      function getParam(name){
+        try { return new URL(location.href).searchParams.get(name); }
+        catch(e){ return null; }
+      }
+
+      function findByKey(key){
+        var list = window.PIXY_PRODUCTS;
+        if(!list || !list.length) return null;
+        for (var i=0;i<list.length;i++){
+          if(list[i] && list[i].key === key) return list[i];
+        }
+        return null;
+      }
+
+      function showError(msg){
+        var box = $("errorBox");
+        if(!box) return;
+        box.style.display = "block";
+        box.textContent = msg;
+      }
+      function clearError(){
+        var box = $("errorBox");
+        if(!box) return;
+        box.style.display = "none";
+        box.textContent = "";
+      }
+
+      // Ecwid load and actions
+      function ecwidReady(){
+        return !!(window.Ecwid && window.Ecwid.Cart && typeof window.Ecwid.Cart.addProduct === "function");
+      }
+
+      function injectEcwid(){
+        if(document.getElementById("ecwid-script")) return;
+        var s = document.createElement("script");
+        s.id = "ecwid-script";
+        s.async = true;
+        s.src = "https://app.ecwid.com/script.js?" + ECWID_STORE_ID + "&data_platform=singleproduct_v2";
+        document.head.appendChild(s);
+      }
+
+      function ensureEcwid(){
+        injectEcwid();
+        return new Promise(function(resolve, reject){
+          if(ecwidReady()) { resolve(true); return; }
+          var start = Date.now();
+          var t = setInterval(function(){
+            if(ecwidReady()){ clearInterval(t); resolve(true); return; }
+            if(Date.now() - start > 12000){ clearInterval(t); reject(new Error("Ecwid not ready")); }
+          }, 120);
+        });
+      }
+
+      function openCart(){
+        return ensureEcwid().then(function(){
+          window.Ecwid.openPage("cart");
+          return true;
+        }).catch(function(){
+          return false;
+        });
+      }
+
+      function addToCart(productId, qty){
+        var pid = Number(productId);
+        qty = Number(qty || 1);
+        if(!pid || !isFinite(pid)) return Promise.resolve(false);
+
+        return ensureEcwid().then(function(){
+          window.Ecwid.Cart.addProduct({ id: pid, quantity: qty });
+          return true;
+        }).catch(function(){
+          return false;
+        });
+      }
+
+      function buyNow(productId, qty){
+        var pid = Number(productId);
+        qty = Number(qty || 1);
+        if(!pid || !isFinite(pid)) return Promise.resolve(false);
+
+        return ensureEcwid().then(function(){
+          window.Ecwid.Cart.addProduct({ id: pid, quantity: qty });
+          window.Ecwid.openPage("checkout");
+          return true;
+        }).catch(function(){
+          return false;
+        });
+      }
+
+      // Quantity controls
+      function clampQty(n){
+        n = parseInt(String(n), 10);
+        if(!isFinite(n) || isNaN(n)) n = 1;
+        if(n < 1) n = 1;
+        if(n > 20) n = 20;
+        return n;
+      }
+
+      function setQty(n){
+        n = clampQty(n);
+        $("qtyInput").value = String(n);
+        setText("sumQty", String(n));
+        return n;
+      }
+
+      function setLoading(isLoading){
+        var card = $("checkoutCard");
+        if(!card) return;
+        if(isLoading) card.classList.add("loading");
+        else card.classList.remove("loading");
+      }
+
+      function wire(product){
+        // Cart button
+        $("openCartBtn").addEventListener("click", function(e){
+          e.preventDefault();
+          clearError();
+          openCart().then(function(ok){
+            if(!ok) showError("Cart is not ready yet. Reload and try again.");
+          });
+        });
+
+        // Qty
+        $("qtyMinus").addEventListener("click", function(){ setQty(Number($("qtyInput").value) - 1); });
+        $("qtyPlus").addEventListener("click", function(){ setQty(Number($("qtyInput").value) + 1); });
+        $("qtyInput").addEventListener("input", function(){ setQty($("qtyInput").value); });
+
+        function doAdd(){
+          clearError();
+          if(!product || product.ecwidProductId == null){
+            showError("Missing Ecwid product id for this item.");
+            return;
+          }
+          var qty = clampQty($("qtyInput").value);
+          setLoading(true);
+          addToCart(product.ecwidProductId, qty).then(function(ok){
+            setLoading(false);
+            if(!ok){ showError("Unable to add to cart. Ecwid not ready or product id invalid."); return; }
+            openCart();
+          });
+        }
+
+        function doBuy(){
+          clearError();
+          if(!product || product.ecwidProductId == null){
+            showError("Missing Ecwid product id for this item.");
+            return;
+          }
+          var qty = clampQty($("qtyInput").value);
+          setLoading(true);
+          buyNow(product.ecwidProductId, qty).then(function(ok){
+            setLoading(false);
+            if(!ok){ showError("Unable to start checkout. Ecwid not ready or product id invalid."); return; }
+          });
+        }
+
+        $("addBtn").addEventListener("click", function(e){ e.preventDefault(); doAdd(); });
+        $("buyBtn").addEventListener("click", function(e){ e.preventDefault(); doBuy(); });
+
+        // Sticky buttons
+        $("stickyAdd").addEventListener("click", function(e){ e.preventDefault(); doAdd(); });
+        $("stickyBuy").addEventListener("click", function(e){ e.preventDefault(); doBuy(); });
+      }
+
+      function render(){
+        var key = getParam("key");
+        var p = findByKey(key);
+
+        if(!key){
+          setText("productTitle", "Missing product key");
+          setText("productBlurb", "Open this page with ?key=YOUR_PRODUCT_KEY");
+          setText("stickyName", "Missing product key");
+          setText("sumItem", "—");
+          showError("Example: /checkout.html?key=jerk");
+          return;
+        }
+
+        if(!p){
+          setText("productTitle", "Product not found");
+          setText("productBlurb", "No product matches key: " + key);
+          setText("stickyName", "Product not found");
+          setText("sumItem", "—");
+          showError("No product matches key: " + key);
+          return;
+        }
+
+        setText("productTitle", p.title || "");
+        setText("productBlurb", p.blurb || "");
+        setImg("productImg", p.image || "", p.title || "Product image");
+
+        setText("stickyName", p.title || "");
+        setText("sumItem", p.title || "");
+        setQty(1);
+
+        // If the product id is missing, disable checkout actions
+        if(p.ecwidProductId == null){
+          $("addBtn").disabled = true;
+          $("buyBtn").disabled = true;
+          $("stickyAdd").disabled = true;
+          $("stickyBuy").disabled = true;
+          showError("This product is missing ecwidProductId in products.js.");
+        }
+
+        wire(p);
+      }
+
+      document.addEventListener("DOMContentLoaded", render);
+    })();
