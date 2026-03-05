@@ -61,11 +61,27 @@ export async function handler(event) {
     };
   }
 
+  if (body.length > 5000) {
+    return {
+      statusCode: 400,
+      headers,
+      body: JSON.stringify({ ok: false, error: "Body exceeds 5000 character limit" })
+    };
+  }
+
+  if (displayName.length > 100) {
+    return {
+      statusCode: 400,
+      headers,
+      body: JSON.stringify({ ok: false, error: "Display name exceeds 100 character limit" })
+    };
+  }
+
   if (!process.env.SUPABASE_URL) {
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ ok: false, error: "Missing SUPABASE_URL" })
+      body: JSON.stringify({ ok: false, error: "Missing SUPABASE_URL env var. Set it in Netlify site settings." })
     };
   }
 
@@ -73,7 +89,7 @@ export async function handler(event) {
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ ok: false, error: "Missing SUPABASE_ANON_KEY" })
+      body: JSON.stringify({ ok: false, error: "Missing SUPABASE_ANON_KEY env var. Set it in Netlify site settings." })
     };
   }
 
@@ -83,7 +99,7 @@ export async function handler(event) {
       headers,
       body: JSON.stringify({
         ok: false,
-        error: "Missing SUPABASE_SERVICE_ROLE_KEY"
+        error: "Missing SUPABASE_SERVICE_ROLE_KEY env var. Set it in Netlify site settings."
       })
     };
   }

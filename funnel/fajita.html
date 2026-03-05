@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fajita — Pixy Dust Seasoning</title>
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    .funnel-hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 4rem 1.5rem 3rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .funnel-hero .funnel-image {
+      width: 100%;
+      max-width: 420px;
+      border-radius: var(--pd-radius-lg);
+      box-shadow: var(--pd-shadow-soft);
+      margin-bottom: 2.5rem;
+    }
+    .funnel-hero h1 {
+      font-family: var(--pd-font-heading);
+      font-size: clamp(2rem, 5vw, 3rem);
+      letter-spacing: var(--pd-ls-heading);
+      color: var(--pd-gold);
+      margin-bottom: 1rem;
+    }
+    .funnel-story {
+      font-family: var(--pd-font-body);
+      font-size: 1.125rem;
+      line-height: 1.8;
+      color: var(--pd-text-soft);
+      margin-bottom: 2rem;
+    }
+    .funnel-ingredients {
+      font-family: var(--pd-font-body);
+      font-size: 0.95rem;
+      color: var(--pd-text-muted);
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
+    .funnel-ingredients strong {
+      color: var(--pd-text-soft);
+    }
+    .funnel-cta {
+      display: inline-block;
+      padding: 1.1rem 3rem;
+      font-family: var(--pd-font-body);
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: var(--pd-ls-button);
+      text-transform: uppercase;
+      color: #050608;
+      background: linear-gradient(135deg, var(--pd-gold), var(--pd-gold-strong));
+      border: none;
+      border-radius: var(--pd-radius-pill);
+      cursor: pointer;
+      box-shadow: var(--pd-shadow-gold);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .funnel-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 60px rgba(217, 181, 116, 0.85);
+    }
+  </style>
+</head>
+<body data-funnel-product="fajita-mexican">
+
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a class="brand" href="../index.html" aria-label="Pixy Dust Seasoning home">
+        <div class="brand-mark" aria-hidden="true">
+          <img src="../assets/images/logo-pixy-gold.png" alt="" class="brand-logo" loading="eager" />
+        </div>
+        <div class="brand-type">
+          <div class="brand-name">Pixy Dust</div>
+          <div class="brand-sub">Seasoning</div>
+        </div>
+      </a>
+      <nav id="mainNav" class="main-nav" aria-label="Primary">
+        <a class="nav-link" href="../index.html">Home</a>
+        <a class="nav-link" href="../shop.html">Shop</a>
+        <a class="nav-link" href="../kitchen-table.html">Kitchen Table</a>
+        <a class="nav-link" href="../gallery.html">Gallery</a>
+        <a class="nav-link" href="../juniors.html">Juniors</a>
+        <a class="nav-link" href="../gifting.html">Gifting</a>
+        <a class="nav-link" href="../recipes.html">Recipes</a>
+        <a class="nav-link" href="../wholesale.html">Wholesale</a>
+        <a class="nav-link" href="../about.html">About</a>
+        <a class="nav-link" href="../contact.html">Contact</a>
+      </nav>
+      <button class="cart-btn" id="openCartBtn" type="button" aria-label="Open cart">Cart</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="funnel-hero">
+      <img class="funnel-image" id="funnelImage" src="" alt="" />
+      <h1 id="funnelTitle"></h1>
+      <p class="funnel-story" id="funnelStory"></p>
+      <p class="funnel-ingredients" id="funnelIngredients"></p>
+      <button class="funnel-cta" id="funnelCta" type="button">Add to Cart &mdash; Order Now</button>
+    </section>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-left">
+        <div class="footer-line">&copy; <span id="year"></span> Pixy Dust Seasoning. All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/products.js" defer></script>
+  <script src="../assets/js/main.js" defer></script>
+  <script>
+    (function () {
+      var productKey = document.body.getAttribute('data-funnel-product');
+
+      function init() {
+        var products = window.PIXY_PRODUCTS;
+        if (!products) { setTimeout(init, 50); return; }
+
+        var product = null;
+        for (var i = 0; i < products.length; i++) {
+          if (products[i].key === productKey) { product = products[i]; break; }
+        }
+        if (!product) return;
+
+        var imgEl = document.getElementById('funnelImage');
+        if (product.image) {
+          imgEl.src = '../' + product.image;
+          imgEl.alt = product.title + ' — Pixy Dust Seasoning';
+        }
+        document.getElementById('funnelTitle').textContent = product.title;
+        document.getElementById('funnelStory').textContent = product.story || '';
+        document.getElementById('funnelIngredients').innerHTML =
+          '<strong>Ingredients:</strong> ' + (product.ingredients || '');
+
+        var ecwidId = product.ecwidProductId;
+
+        document.getElementById('funnelCta').addEventListener('click', function () {
+          function addToCart() {
+            Ecwid.Cart.addProduct({ id: ecwidId, quantity: 1 });
+            Ecwid.openPage('cart');
+          }
+
+          if (typeof Ecwid !== 'undefined' && Ecwid.Cart) {
+            addToCart();
+          } else {
+            var s = document.createElement('script');
+            s.src = 'https://app.ecwid.com/script.js?62406545&data_platform=code';
+            s.onload = function () {
+              Ecwid.OnAPILoaded.add(function () { addToCart(); });
+            };
+            document.body.appendChild(s);
+          }
+        });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+
+      var yearEl = document.getElementById('year');
+      if (yearEl) yearEl.textContent = new Date().getFullYear();
+    })();
+  </script>
+
+</body>
+</html>
