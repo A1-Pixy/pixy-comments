@@ -106,20 +106,32 @@
   }
 
   
-function responseFor(message){
-  const t = (message || "").toLowerCase();
+function getBlendInfo() {
+  var info = {};
+  var list = Array.isArray(window.PIXY_PRODUCTS) ? window.PIXY_PRODUCTS : [];
+  for (var i = 0; i < list.length; i++) {
+    var p = list[i];
+    if (p && p.category === "Pouches" && p.key) {
+      info[p.key] = { name: p.title || p.key, ingredients: p.ingredients || "", blurb: p.blurb || "" };
+    }
+  }
+  return info;
+}
 
-  // Identify blend by keywords.
+function responseFor(message){
+  var BLEND_INFO = getBlendInfo();
+
+  // Identify blend by keywords — keys match products.js
   const alias = [
-    { key: "universal-all-purpose-pouch", re: /(universal|all purpose|all-purpose|ap\b)/i },
-    { key: "sugar-free-universal-all-purpose-pouch", re: /(sugar[- ]?free|sf\b)/i },
-    { key: "asian-stir-fry-pouch", re: /(asian|stir\s*fry|kitchen\s*samurai)/i },
-    { key: "fajita-mexican-pouch", re: /(fajita|taco|mexican)/i },
-    { key: "jerk-bbq-pouch", re: /(jerk)/i },
-    { key: "smoke-bbq-pouch", re: /(smoke\s*bbq|smoke\s*barbecue|bbq\b)/i },
-    { key: "garlic-pepper-pouch", re: /(garlic\s*pepper|divine\s*trinity)/i },
-    { key: "deep-blue-seafood-pouch", re: /(deep\s*blue|seafood)/i },
-    { key: "chophouse-steak-rub-pouch", re: /(chop\s*house|chophouse|steak\s*rub|steak\s*blend)/i }
+    { key: "all-purpose", re: /(universal|all purpose|all-purpose|ap\b)/i },
+    { key: "sugar-free-all-purpose", re: /(sugar[- ]?free|sf\b)/i },
+    { key: "asian-stir-fry", re: /(asian|stir\s*fry|kitchen\s*samurai)/i },
+    { key: "fajita-mexican", re: /(fajita|taco|mexican)/i },
+    { key: "jerk", re: /(jerk)/i },
+    { key: "smoke-bbq", re: /(smoke\s*bbq|smoke\s*barbecue|bbq\b)/i },
+    { key: "garlic-pepper", re: /(garlic\s*pepper|divine\s*trinity)/i },
+    { key: "deep-blue-seafood", re: /(deep\s*blue|seafood)/i },
+    { key: "chophouse-steak-rub", re: /(chop\s*house|chophouse|steak\s*rub|steak\s*blend)/i }
   ];
 
   let blendKey = "";
@@ -133,10 +145,10 @@ function responseFor(message){
     const b = BLEND_INFO[blendKey];
 
     if (asksIngredients) {
-      return b.name + " ingredients. " + b.ingredients + " If you need the label view, open the product page.";
+      return b.name + " ingredients: " + b.ingredients + " If you need the label view, open the product page.";
     }
 
-    return "Best uses for " + b.name + ". " + (b.best_on || "") + " Tap View & Order to shop this blend.";
+    return b.name + ": " + b.blurb + " Tap View & Order to shop this blend.";
   }
 
   // Food intent recommendations.

@@ -3,14 +3,28 @@ import { createClient } from "@supabase/supabase-js";
 export async function handler(event) {
   const headers = {
     "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*"
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Methods": "GET, OPTIONS"
   };
+
+  if (event.httpMethod === "OPTIONS") {
+    return { statusCode: 204, headers, body: "" };
+  }
+
+  if (event.httpMethod !== "GET") {
+    return {
+      statusCode: 405,
+      headers,
+      body: JSON.stringify({ ok: false, error: "Method Not Allowed" })
+    };
+  }
 
   if (!process.env.SUPABASE_URL) {
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ ok: false, error: "Missing SUPABASE_URL" })
+      body: JSON.stringify({ ok: false, error: "Missing SUPABASE_URL env var. Set it in Netlify site settings." })
     };
   }
 
@@ -18,7 +32,7 @@ export async function handler(event) {
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ ok: false, error: "Missing SUPABASE_SERVICE_ROLE_KEY" })
+      body: JSON.stringify({ ok: false, error: "Missing SUPABASE_SERVICE_ROLE_KEY env var. Set it in Netlify site settings." })
     };
   }
 
@@ -27,8 +41,9 @@ export async function handler(event) {
     process.env.SUPABASE_SERVICE_ROLE_KEY
   );
 
-  const recipeId = event.queryStringParameters?.recipeId || "community";
-  const limit = Number(event.queryStringParameters?.limit || 50);
+  const recipeId = (event.queryStringParameters?.recipeId || "community").trim();
+  const rawLimit = Number(event.queryStringParameters?.limit || 50);
+  const limit = Math.max(1, Math.min(100, isFinite(rawLimit) ? rawLimit : 50));
 
   const { data, error } = await supabase
     .from("recipe_posts")

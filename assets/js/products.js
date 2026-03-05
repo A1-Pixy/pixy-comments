@@ -70,7 +70,7 @@
       ingredients: INGREDIENTS["garlic-pepper"],
       category: "Pouches",
       price: null,
-      image: "assets/images/pouches/Garlicpepper.png",
+      image: "assets/images/pouches/garlic-pepper.png",
       blurb: "Classic garlic warmth with bright pepper finish for daily use.",
       ecwidProductId: 808797435
     },
@@ -114,7 +114,7 @@
       ingredients: INGREDIENTS["all-purpose"],
       category: "Pouches",
       price: null,
-      image: "assets/images/pouches/AP-.png",
+      image: "assets/images/pouches/all-purpose.png",
       blurb: "Universal coverage for proteins, vegetables, eggs, and sides.",
       ecwidProductId: 808804341
     },
@@ -363,7 +363,7 @@
       title: "Mustard Powder",
       category: "Individual Spices",
       price: null,
-      image: "assets/images/individual-spices/mustard-powder.png",
+      image: null, /* mustard-powder.png not available yet */
       blurb: "Sharp, tangy heat for sauces and rubs.",
       story: "Mustard Powder adds bite and depth to dry rubs and dressings.",
       ingredients: "Mustard Seed",
@@ -498,7 +498,7 @@
 
     // L90000 appears as two separate products in admin. Keep both.
     { key: "lion-l90000", title: "Lion L90000", category: "Grills", price: null, image: "assets/images/lion-grills/lion-l90000.png", blurb: "Lion Premium Grills.", ecwidProductId: 808797939 },
-    { key: "lion-l90000-alt", title: "Lion L90000 (Alt Listing)", category: "Grills", price: null, image: "assets/images/lion-grills/Lion-cart.png", blurb: "Lion Premium Grills.", ecwidProductId: 690085682 },
+    { key: "lion-l90000-alt", title: "Lion L90000 (Alt Listing)", category: "Grills", price: null, image: "assets/images/lion-grills/lion-cart.png", blurb: "Lion Premium Grills.", ecwidProductId: 690085682 },
 
     // L75000 cart listing
     { key: "lion-l75000-cart", title: "Lion L75000 Cart", category: "Grills", price: null, image: "assets/images/lion-grills/lion-l75000-cart.png", blurb: "Lion Premium Grills.", ecwidProductId: 808797437 },
@@ -506,8 +506,8 @@
     // ===============================
     // Books (Juniors)
     // ===============================
-    { key: "book-zen-pearl-market", title: "Zen in the Pearl Market", category: "Books", price: null, image: "assets/images/Books/zen-pearl-market-cover.png", blurb: "Juniors storybook.", ecwidProductId: null },
-    { key: "book-coming-soon", title: "More Books Coming", category: "Books", price: null, image: "assets/images/Books/577f7438-9523-43f5-b825-852f53c4fb73.png", blurb: "Juniors storybook.", ecwidProductId: null }
+    { key: "book-zen-pearl-market", title: "Zen in the Pearl Market", category: "Books", price: null, image: "assets/images/books/zen-pearl-market-cover.png", blurb: "Juniors storybook.", ecwidProductId: null },
+    { key: "book-coming-soon", title: "More Books Coming", category: "Books", price: null, image: "assets/images/books/577f7438-9523-43f5-b825-852f53c4fb73.png", blurb: "Juniors storybook.", ecwidProductId: null }
   ];
 
   window.PIXY_PRODUCTS = PRODUCTS;

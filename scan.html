@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Welcome Back | Pixy Dust Seasoning</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+
+  <style>
+    :root {
+      --bg: #050608;
+      --gold: #d8b574;
+      --gold2: #b69034;
+      --text: #f3f3f3;
+      --muted: rgba(243,243,243,.70);
+      --line: rgba(255,255,255,.10);
+      --shadow: 0 20px 60px rgba(0,0,0,.55);
+      --serif: 'Playfair Display', ui-serif, Georgia, "Times New Roman", Times, serif;
+      --sans: 'Inter', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ---- Page ---- */
+    .scan-page {
+      min-height: 100vh;
+      padding-top: 24px;
+      background:
+        radial-gradient(1200px 520px at 50% 8%, rgba(216,181,116,.10), transparent 60%),
+        radial-gradient(900px 520px at 20% 20%, rgba(255,255,255,.04), transparent 55%);
+    }
+
+    .scan-container {
+      width: min(680px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 40px 0 80px;
+    }
+
+    /* ---- Product Card ---- */
+    .scan-card {
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      text-align: center;
+      padding: 0 0 36px;
+    }
+
+    .scan-media {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 36px 24px;
+      min-height: 300px;
+      background:
+        radial-gradient(420px 220px at 50% 60%, rgba(216,181,116,.14), transparent 62%),
+        radial-gradient(420px 220px at 50% 85%, rgba(0,0,0,.55), transparent 65%);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .scan-media img {
+      width: min(320px, 80%);
+      height: auto;
+      filter: drop-shadow(0 28px 60px rgba(0,0,0,.70));
+    }
+
+    .scan-body {
+      padding: 28px 28px 0;
+    }
+
+    .scan-kicker {
+      font-size: 11px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin: 0 0 10px;
+    }
+
+    .scan-title {
+      margin: 0 0 10px;
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: clamp(28px, 4vw, 40px);
+      letter-spacing: -.01em;
+      line-height: 1.08;
+    }
+
+    .scan-blurb {
+      margin: 0 0 22px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.55;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .scan-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+    }
+
+    .btn-scan {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      padding: 14px 28px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.22);
+      color: rgba(243,243,243,.88);
+      cursor: pointer;
+      transition: transform .15s ease, background .2s ease, border-color .2s ease;
+      text-decoration: none;
+    }
+    .btn-scan:hover {
+      transform: translateY(-1px);
+      border-color: rgba(216,181,116,.45);
+    }
+
+    .btn-gold {
+      background: linear-gradient(180deg, rgba(216,181,116,.95), rgba(182,144,52,.95));
+      border-color: rgba(216,181,116,.55);
+      color: rgba(10,10,10,.92);
+      font-weight: 700;
+      box-shadow: 0 14px 40px rgba(0,0,0,.35);
+    }
+    .btn-gold:hover {
+      border-color: rgba(216,181,116,.85);
+    }
+
+    /* ---- Section dividers ---- */
+    .scan-section {
+      margin-top: 32px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      box-shadow: 0 12px 40px rgba(0,0,0,.35);
+      padding: 28px 28px;
+      text-align: center;
+    }
+
+    .scan-section-title {
+      margin: 0 0 8px;
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: 22px;
+      letter-spacing: -.01em;
+    }
+
+    .scan-section-text {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    /* ---- VIP form ---- */
+    .vip-form {
+      display: flex;
+      gap: 10px;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+    .vip-form input[type="email"] {
+      flex: 1;
+      min-width: 0;
+      padding: 12px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.30);
+      color: var(--text);
+      font-size: 14px;
+      font-family: var(--sans);
+      outline: none;
+      transition: border-color .2s ease;
+    }
+    .vip-form input[type="email"]::placeholder {
+      color: rgba(243,243,243,.40);
+    }
+    .vip-form input[type="email"]:focus {
+      border-color: rgba(216,181,116,.55);
+    }
+    .vip-form button {
+      flex-shrink: 0;
+    }
+    .vip-msg {
+      margin: 10px 0 0;
+      font-size: 13px;
+      min-height: 20px;
+    }
+    .vip-msg.success { color: #7dcea0; }
+    .vip-msg.error   { color: #e57373; }
+
+    /* ---- Welcome fallback ---- */
+    .welcome-hero {
+      text-align: center;
+      padding: 80px 24px 60px;
+    }
+    .welcome-hero h1 {
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: clamp(32px, 5vw, 48px);
+      margin: 0 0 14px;
+    }
+    .welcome-hero p {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.55;
+      max-width: 480px;
+      margin: 0 auto 28px;
+    }
+
+    /* ---- Responsive ---- */
+    @media (max-width: 520px) {
+      .scan-container { width: calc(100% - 24px); }
+      .scan-body { padding: 22px 18px 0; }
+      .scan-section { padding: 22px 18px; }
+      .vip-form { flex-direction: column; }
+      .vip-form button { width: 100%; }
+    }
+  </style>
+</head>
+
+<body>
+
+<header class="site-header" role="banner">
+  <div class="container header-inner">
+    <a class="brand" href="index.html" aria-label="Pixy Dust Seasoning home">
+      <div class="brand-mark" aria-hidden="true">
+        <img src="assets/images/logo-pixy-gold.png" alt="" class="brand-logo" loading="eager" />
+      </div>
+      <div class="brand-type">
+        <div class="brand-name">Pixy Dust</div>
+        <div class="brand-sub">Seasoning</div>
+      </div>
+    </a>
+    <nav id="mainNav" class="main-nav" aria-label="Primary">
+      <a class="nav-link" href="index.html">Home</a>
+      <a class="nav-link" href="shop.html">Shop</a>
+      <a class="nav-link" href="kitchen-table.html">Kitchen Table</a>
+      <a class="nav-link" href="gallery.html">Gallery</a>
+      <a class="nav-link" href="juniors.html">Juniors</a>
+      <a class="nav-link" href="gifting.html">Gifting</a>
+      <a class="nav-link" href="recipes.html">Recipes</a>
+      <a class="nav-link" href="wholesale.html">Wholesale</a>
+      <a class="nav-link" href="about.html">About</a>
+      <a class="nav-link" href="contact.html">Contact</a>
+    </nav>
+    <button class="cart-btn" id="openCartBtn" type="button" aria-label="Open cart">Cart</button>
+  </div>
+</header>
+
+<main class="scan-page" id="scanPage">
+  <div class="scan-container">
+
+    <!-- Product content (populated by script) -->
+    <div id="productView" style="display:none;">
+
+      <div class="scan-card">
+        <div class="scan-media">
+          <img id="productImage" src="" alt="" />
+        </div>
+        <div class="scan-body">
+          <p class="scan-kicker">Signature Blend</p>
+          <h1 class="scan-title" id="productTitle"></h1>
+          <p class="scan-blurb" id="productBlurb"></p>
+
+          <div class="scan-actions">
+            <button class="btn-scan btn-gold" id="orderAgainBtn" type="button">Order Again</button>
+            <a class="btn-scan" id="viewProductLink" href="#">View Product</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recipes suggestion -->
+      <div class="scan-section">
+        <h2 class="scan-section-title">Need Recipe Ideas?</h2>
+        <p class="scan-section-text">
+          Discover new ways to use your favorite blend. From weeknight dinners to weekend grilling,
+          our recipe collection has you covered.
+        </p>
+        <a class="btn-scan" id="recipesLink" href="recipes.html">Browse Recipes</a>
+      </div>
+
+      <!-- VIP signup -->
+      <div class="scan-section">
+        <h2 class="scan-section-title">Join the VIP List</h2>
+        <p class="scan-section-text">
+          Get early access to new blends, exclusive discounts, and recipes delivered to your inbox.
+        </p>
+        <form class="vip-form" id="vipForm" autocomplete="on">
+          <input type="email" id="vipEmail" name="email" placeholder="Enter your email" required aria-label="Email address" />
+          <button class="btn-scan btn-gold" type="submit">Join VIP</button>
+        </form>
+        <div class="vip-msg" id="vipMsg" role="status" aria-live="polite"></div>
+      </div>
+
+    </div>
+
+    <!-- Fallback: no blend or invalid blend -->
+    <div id="welcomeView" style="display:none;">
+      <div class="welcome-hero">
+        <h1>Welcome to Pixy Dust</h1>
+        <p>
+          Luxury gourmet seasonings crafted for real cooking. Explore our full collection of
+          signature blends, individual spices, and gift sets.
+        </p>
+        <a class="btn-scan btn-gold" href="shop.html">Shop All Blends</a>
+      </div>
+
+      <!-- VIP signup (also on fallback) -->
+      <div class="scan-section">
+        <h2 class="scan-section-title">Join the VIP List</h2>
+        <p class="scan-section-text">
+          Get early access to new blends, exclusive discounts, and recipes delivered to your inbox.
+        </p>
+        <form class="vip-form" id="vipFormFallback" autocomplete="on">
+          <input type="email" name="email" placeholder="Enter your email" required aria-label="Email address" />
+          <button class="btn-scan btn-gold" type="submit">Join VIP</button>
+        </form>
+        <div class="vip-msg" id="vipMsgFallback" role="status" aria-live="polite"></div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="site-footer" role="contentinfo">
+  <div class="container footer-inner">
+    <div class="footer-left">
+      <div class="footer-line">&copy; <span id="year"></span> Pixy Dust Seasoning. All rights reserved.</div>
+      <div class="footer-tag">Luxury gourmet blends. Let's sprinkle a little magic.</div>
+    </div>
+    <div class="footer-mid">
+      <a href="about.html">About Pixy Dust</a>
+      <a href="recipes.html">Recipes</a>
+      <a href="shop.html">Shop</a>
+    </div>
+    <div class="footer-right">
+      <a href="https://www.facebook.com/PixyDustSeasoning" target="_blank" rel="noreferrer">Facebook</a>
+      <a href="https://www.instagram.com/pixydustseasoning" target="_blank" rel="noreferrer">Instagram</a>
+      <a href="https://www.youtube.com/@PixyDustcookoff" target="_blank" rel="noreferrer">YouTube</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/products.js" defer></script>
+<script src="assets/js/main.js" defer></script>
+
+<script>
+(function () {
+  "use strict";
+
+  var ECWID_STORE_ID = 62406545;
+
+  // Blend short-name to product key mapping
+  var BLEND_MAP = {
+    "all-purpose":   "all-purpose",
+    "asian":         "asian-stir-fry",
+    "jerk":          "jerk",
+    "smoke":         "smoke-bbq",
+    "fajita":        "fajita-mexican",
+    "garlic-pepper": "garlic-pepper",
+    "seafood":       "deep-blue-seafood",
+    "chophouse":     "chophouse-steak-rub"
+  };
+
+  // ---- Helpers ----
+
+  function getParam(name) {
+    try { return new URLSearchParams(window.location.search).get(name); }
+    catch (e) { return null; }
+  }
+
+  function byId(id) { return document.getElementById(id); }
+
+  function getProducts() {
+    return Array.isArray(window.PIXY_PRODUCTS) ? window.PIXY_PRODUCTS : null;
+  }
+
+  function findByKey(key) {
+    var list = getProducts();
+    if (!list) return null;
+    for (var i = 0; i < list.length; i++) {
+      if (list[i] && String(list[i].key) === key) return list[i];
+    }
+    return null;
+  }
+
+  // ---- Ecwid ----
+
+  function ecwidReady() {
+    return !!(
+      window.Ecwid &&
+      window.Ecwid.Cart &&
+      typeof window.Ecwid.Cart.addProduct === "function" &&
+      typeof window.Ecwid.openPage === "function"
+    );
+  }
+
+  function ensureEcwid() {
+    return new Promise(function (resolve, reject) {
+      if (ecwidReady()) { resolve(true); return; }
+
+      // Inject script if not present
+      var existing = document.querySelector('script[src*="app.ecwid.com/script.js?' + ECWID_STORE_ID + '"]');
+      if (!existing) {
+        window.ec = window.ec || {};
+        window.ec.storefront = window.ec.storefront || {};
+        window.ec.storefront.enable_catalog = false;
+
+        var s = document.createElement("script");
+        s.src = "https://app.ecwid.com/script.js?" + ECWID_STORE_ID + "&data_platform=code&data_date=2026-01-01";
+        s.async = true;
+        s.charset = "utf-8";
+        document.head.appendChild(s);
+      }
+
+      var start = Date.now();
+      var t = setInterval(function () {
+        if (ecwidReady()) { clearInterval(t); resolve(true); return; }
+        if (Date.now() - start > 15000) { clearInterval(t); reject(new Error("Ecwid not ready")); }
+      }, 120);
+    });
+  }
+
+  // ---- VIP signup handler ----
+
+  function wireVipForm(formId, msgId) {
+    var form = byId(formId);
+    var msg = byId(msgId);
+    if (!form) return;
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var emailInput = form.querySelector('input[type="email"]');
+      var email = (emailInput.value || "").trim();
+      if (!email) return;
+
+      msg.textContent = "Subscribing...";
+      msg.className = "vip-msg";
+
+      fetch("/.netlify/functions/vip-subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email })
+      })
+      .then(function (res) {
+        if (res.ok) {
+          msg.textContent = "You're in! Welcome to the VIP list.";
+          msg.className = "vip-msg success";
+          emailInput.value = "";
+        } else {
+          return res.text().then(function (body) {
+            throw new Error(body || "Subscription failed");
+          });
+        }
+      })
+      .catch(function (err) {
+        msg.textContent = "Something went wrong. Please try again.";
+        msg.className = "vip-msg error";
+      });
+    });
+  }
+
+  // ---- Fire QR scan event (fire-and-forget) ----
+
+  function logScanEvent(blendParam) {
+    try {
+      fetch("/.netlify/functions/event", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type: "qr_scan", data: { blend: blendParam } })
+      });
+    } catch (e) { /* silent */ }
+  }
+
+  // ---- Wait for products.js ----
+
+  function waitForProducts(cb) {
+    if (getProducts()) { cb(); return; }
+    var start = Date.now();
+    var t = setInterval(function () {
+      if (getProducts()) { clearInterval(t); cb(); return; }
+      if (Date.now() - start > 6000) { clearInterval(t); cb(); }
+    }, 100);
+  }
+
+  // ---- Init ----
+
+  document.addEventListener("DOMContentLoaded", function () {
+    var blendParam = getParam("blend");
+    var productKey = blendParam ? BLEND_MAP[blendParam.toLowerCase()] : null;
+
+    // Wire VIP forms on both views
+    wireVipForm("vipForm", "vipMsg");
+    wireVipForm("vipFormFallback", "vipMsgFallback");
+
+    // No valid blend: show welcome view
+    if (!blendParam || !productKey) {
+      byId("welcomeView").style.display = "";
+      return;
+    }
+
+    // Fire scan event (non-blocking)
+    logScanEvent(blendParam);
+
+    // Wait for products.js to populate window.PIXY_PRODUCTS
+    waitForProducts(function () {
+      var product = findByKey(productKey);
+
+      if (!product) {
+        // Product key mapped but not found in data -- show welcome
+        byId("welcomeView").style.display = "";
+        return;
+      }
+
+      // Populate product view
+      document.title = product.title + " | Pixy Dust Seasoning";
+
+      var img = byId("productImage");
+      img.src = product.image || "assets/images/logo-pixy-gold.png";
+      img.alt = product.title || "Pixy Dust Blend";
+      img.onerror = function () {
+        this.onerror = null;
+        this.src = "assets/images/logo-pixy-gold.png";
+      };
+
+      byId("productTitle").textContent = product.title || "";
+      byId("productBlurb").textContent = product.story || product.blurb || "";
+
+      // View Product link
+      var viewLink = byId("viewProductLink");
+      viewLink.href = "product.html?key=" + encodeURIComponent(product.key);
+
+      // Order Again button -- add to Ecwid cart and open cart
+      var orderBtn = byId("orderAgainBtn");
+      if (product.ecwidProductId) {
+        orderBtn.addEventListener("click", function (e) {
+          e.preventDefault();
+          orderBtn.disabled = true;
+          orderBtn.textContent = "Adding...";
+
+          ensureEcwid()
+            .then(function () {
+              window.Ecwid.Cart.addProduct({
+                id: Number(product.ecwidProductId),
+                quantity: 1,
+                callback: function (success) {
+                  orderBtn.disabled = false;
+                  orderBtn.textContent = "Order Again";
+                  if (success) {
+                    window.Ecwid.openPage("cart");
+                  }
+                }
+              });
+            })
+            .catch(function () {
+              orderBtn.disabled = false;
+              orderBtn.textContent = "Order Again";
+            });
+        });
+      } else {
+        orderBtn.style.display = "none";
+      }
+
+      // Show the product view
+      byId("productView").style.display = "";
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
