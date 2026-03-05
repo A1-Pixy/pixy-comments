@@ -1,16 +1,16 @@
 <!-- checkout.html
-     Drop this file into your site root.
-     Then open: /checkout.html?key=jerk  (or any product key in products.js)
-     Requires: assets/js/products.js to exist and define window.PIXY_PRODUCTS
+     Place this file in your SITE ROOT (same folder as index.html).
+     Works with your existing: assets/js/products.js which defines window.PIXY_PRODUCTS
+     Example: /checkout.html?key=jerk
 -->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Checkout. Pixy Dust Seasoning</title>
+  <title>Checkout | Pixy Dust Seasoning</title>
 
-  <!-- Keep your existing site CSS if you want consistent typography -->
+  <!-- Keep existing site CSS -->
   <link rel="stylesheet" href="assets/css/site.css" />
   <link rel="stylesheet" href="assets/css/styles.css" />
 
@@ -18,7 +18,6 @@
     :root{
       --bg:#07070a;
       --panel:rgba(255,255,255,.06);
-      --panel2:rgba(0,0,0,.35);
       --line:rgba(255,255,255,.12);
       --text:#f3f3f3;
       --muted:rgba(243,243,243,.78);
@@ -30,14 +29,13 @@
     html,body{height:100%}
     body{
       margin:0;
-      background: radial-gradient(900px 600px at 15% 15%, rgba(216,179,90,.10), transparent 60%),
-                  radial-gradient(900px 600px at 85% 25%, rgba(216,179,90,.08), transparent 55%),
-                  var(--bg);
+      background:
+        radial-gradient(900px 600px at 15% 15%, rgba(216,179,90,.10), transparent 60%),
+        radial-gradient(900px 600px at 85% 25%, rgba(216,179,90,.08), transparent 55%),
+        var(--bg);
       color:var(--text);
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     }
-
-    /* Minimal header so page stands alone */
     .topbar{
       position:sticky; top:0; z-index:50;
       background: rgba(7,7,10,.72);
@@ -67,10 +65,7 @@
       color:#121212;
       font-weight:800;
     }
-    .btn.ghost{
-      background: transparent;
-      border-color: rgba(255,255,255,.16);
-    }
+    .btn.ghost{background:transparent}
 
     main{max-width:1120px; margin:0 auto; padding:20px 16px 110px}
     .grid{
@@ -79,9 +74,7 @@
       gap:18px;
       align-items:start;
     }
-    @media (max-width: 980px){
-      .grid{grid-template-columns:1fr}
-    }
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr} }
 
     .card{
       background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
@@ -91,23 +84,16 @@
       overflow:hidden;
     }
     .card.pad{padding:18px}
-    .hero{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:0;
-    }
+
     .hero-img{
       width:100%;
       display:block;
       border-bottom: 1px solid rgba(255,255,255,.08);
       background: rgba(0,0,0,.25);
     }
-    .hero-img img{
-      width:100%;
-      height:auto;
-      display:block;
-    }
+    .hero-img img{width:100%; height:auto; display:block}
     .hero-body{padding:18px}
+
     .kicker{
       display:inline-flex;
       align-items:center;
@@ -134,10 +120,9 @@
     .bullets{margin:12px 0 0; padding-left:18px; color: rgba(243,243,243,.84)}
     .bullets li{margin:8px 0}
 
-    .row{
-      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
-      margin-top:14px;
-    }
+    .divider{height:1px; background: rgba(255,255,255,.10); margin:14px 0}
+    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:14px}
+
     .qty{
       display:inline-flex; align-items:center; gap:0;
       border:1px solid rgba(255,255,255,.14);
@@ -163,9 +148,7 @@
       padding:10px 6px;
       font-weight:700;
     }
-    .divider{height:1px; background: rgba(255,255,255,.10); margin:14px 0}
 
-    /* Right column */
     .summary-title{
       font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
       font-size:22px;
@@ -179,6 +162,7 @@
       font-size:14px;
     }
     .summary-line:last-child{border-bottom:0}
+
     .pill{
       display:inline-flex; align-items:center; gap:8px;
       padding:10px 12px;
@@ -188,18 +172,9 @@
       color: rgba(243,243,243,.86);
       font-size:13px;
     }
-    .trust{
-      display:flex; flex-wrap:wrap; gap:10px;
-      margin-top:12px;
-    }
-    .fine{
-      margin-top:10px;
-      font-size:12px;
-      color: rgba(243,243,243,.70);
-      line-height:1.45;
-    }
+    .trust{display:flex; flex-wrap:wrap; gap:10px; margin-top:12px}
+    .fine{margin-top:10px; font-size:12px; color: rgba(243,243,243,.70); line-height:1.45}
 
-    /* Sticky checkout bar for mobile */
     .sticky{
       position:fixed; left:0; right:0; bottom:0; z-index:60;
       background: rgba(7,7,10,.82);
@@ -208,23 +183,15 @@
       padding:12px 14px;
     }
     .sticky-inner{
-      max-width:1120px;
-      margin:0 auto;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
+      max-width:1120px; margin:0 auto;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
     }
     .sticky-left{min-width:0}
     .sticky-name{font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
     .sticky-sub{font-size:12px; color: rgba(243,243,243,.72)}
     .sticky-right{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end}
 
-    /* Light “loading” state */
-    .loading{
-      opacity:.65;
-      pointer-events:none;
-    }
+    .loading{opacity:.65; pointer-events:none}
     .error{
       border:1px solid rgba(255,90,90,.35);
       background: rgba(255,90,90,.08);
@@ -234,6 +201,33 @@
       margin-top:12px;
       font-size:14px;
       line-height:1.4;
+    }
+
+    .select{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+      margin-top:12px;
+    }
+    select{
+      background: rgba(0,0,0,.22);
+      border:1px solid rgba(255,255,255,.14);
+      color: var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      outline:none;
+      min-width: 260px;
+    }
+    .keys{
+      font-size:12px;
+      color: rgba(243,243,243,.72);
+      line-height:1.45;
+      margin-top:10px;
+      word-break: break-word;
+    }
+    code{
+      background: rgba(255,255,255,.08);
+      padding:2px 6px;
+      border-radius:8px;
+      border:1px solid rgba(255,255,255,.10);
     }
   </style>
 </head>
@@ -257,8 +251,7 @@
 
   <main>
     <div class="grid">
-      <!-- LEFT: “CSS checkout” product card -->
-      <section class="card hero" id="checkoutCard">
+      <section class="card" id="checkoutCard">
         <div class="hero-img">
           <img id="productImg" src="" alt="" />
         </div>
@@ -266,6 +259,11 @@
           <div class="kicker"><span class="dot"></span><span>Direct checkout</span></div>
           <h1 id="productTitle">Loading…</h1>
           <p class="sub" id="productBlurb"></p>
+
+          <div class="select">
+            <label for="productSelect" style="color:rgba(243,243,243,.82); font-size:13px;">Select product</label>
+            <select id="productSelect"></select>
+          </div>
 
           <ul class="bullets" id="productBullets">
             <li>Fast flavor. Clean finish. Built for real cooking.</li>
@@ -290,11 +288,11 @@
             Buy Now sends you to Ecwid checkout. Add to Cart opens your cart first.
           </div>
 
+          <div class="keys" id="keysBox"></div>
           <div class="error" id="errorBox" style="display:none;"></div>
         </div>
       </section>
 
-      <!-- RIGHT: order summary + trust -->
       <aside class="card pad">
         <div class="summary-title">Order Summary</div>
 
@@ -324,7 +322,6 @@
     </div>
   </main>
 
-  <!-- Sticky bottom bar (mobile) -->
   <div class="sticky">
     <div class="sticky-inner">
       <div class="sticky-left">
@@ -338,15 +335,15 @@
     </div>
   </div>
 
-  <!-- products.js must define window.PIXY_PRODUCTS -->
+  <!-- products.js defines window.PIXY_PRODUCTS in your zip -->
   <script src="assets/js/products.js"></script>
 
   <script>
     (function () {
       "use strict";
 
-      // Your Ecwid store id (locked in your project notes)
       var ECWID_STORE_ID = 62406545;
+      var DEFAULT_KEY = "jerk"; // from your products.js
 
       function $(id){ return document.getElementById(id); }
       function setText(id, v){ var el=$(id); if(el) el.textContent = v == null ? "" : String(v); }
@@ -355,18 +352,18 @@
         el.src = src || "";
         el.alt = alt || "";
       }
+
       function getParam(name){
         try { return new URL(location.href).searchParams.get(name); }
         catch(e){ return null; }
       }
 
-      function findByKey(key){
-        var list = window.PIXY_PRODUCTS;
-        if(!list || !list.length) return null;
-        for (var i=0;i<list.length;i++){
-          if(list[i] && list[i].key === key) return list[i];
-        }
-        return null;
+      function setParam(name, value){
+        try{
+          var u = new URL(location.href);
+          u.searchParams.set(name, value);
+          history.replaceState({}, "", u.toString());
+        }catch(e){}
       }
 
       function showError(msg){
@@ -382,7 +379,6 @@
         box.textContent = "";
       }
 
-      // Ecwid load and actions
       function ecwidReady(){
         return !!(window.Ecwid && window.Ecwid.Cart && typeof window.Ecwid.Cart.addProduct === "function");
       }
@@ -412,9 +408,7 @@
         return ensureEcwid().then(function(){
           window.Ecwid.openPage("cart");
           return true;
-        }).catch(function(){
-          return false;
-        });
+        }).catch(function(){ return false; });
       }
 
       function addToCart(productId, qty){
@@ -425,9 +419,7 @@
         return ensureEcwid().then(function(){
           window.Ecwid.Cart.addProduct({ id: pid, quantity: qty });
           return true;
-        }).catch(function(){
-          return false;
-        });
+        }).catch(function(){ return false; });
       }
 
       function buyNow(productId, qty){
@@ -439,12 +431,9 @@
           window.Ecwid.Cart.addProduct({ id: pid, quantity: qty });
           window.Ecwid.openPage("checkout");
           return true;
-        }).catch(function(){
-          return false;
-        });
+        }).catch(function(){ return false; });
       }
 
-      // Quantity controls
       function clampQty(n){
         n = parseInt(String(n), 10);
         if(!isFinite(n) || isNaN(n)) n = 1;
@@ -467,79 +456,35 @@
         else card.classList.remove("loading");
       }
 
-      function wire(product){
-        // Cart button
-        $("openCartBtn").addEventListener("click", function(e){
-          e.preventDefault();
-          clearError();
-          openCart().then(function(ok){
-            if(!ok) showError("Cart is not ready yet. Reload and try again.");
-          });
-        });
-
-        // Qty
-        $("qtyMinus").addEventListener("click", function(){ setQty(Number($("qtyInput").value) - 1); });
-        $("qtyPlus").addEventListener("click", function(){ setQty(Number($("qtyInput").value) + 1); });
-        $("qtyInput").addEventListener("input", function(){ setQty($("qtyInput").value); });
-
-        function doAdd(){
-          clearError();
-          if(!product || product.ecwidProductId == null){
-            showError("Missing Ecwid product id for this item.");
-            return;
-          }
-          var qty = clampQty($("qtyInput").value);
-          setLoading(true);
-          addToCart(product.ecwidProductId, qty).then(function(ok){
-            setLoading(false);
-            if(!ok){ showError("Unable to add to cart. Ecwid not ready or product id invalid."); return; }
-            openCart();
-          });
+      function findByKey(list, key){
+        for (var i=0;i<list.length;i++){
+          if(list[i] && list[i].key === key) return list[i];
         }
-
-        function doBuy(){
-          clearError();
-          if(!product || product.ecwidProductId == null){
-            showError("Missing Ecwid product id for this item.");
-            return;
-          }
-          var qty = clampQty($("qtyInput").value);
-          setLoading(true);
-          buyNow(product.ecwidProductId, qty).then(function(ok){
-            setLoading(false);
-            if(!ok){ showError("Unable to start checkout. Ecwid not ready or product id invalid."); return; }
-          });
-        }
-
-        $("addBtn").addEventListener("click", function(e){ e.preventDefault(); doAdd(); });
-        $("buyBtn").addEventListener("click", function(e){ e.preventDefault(); doBuy(); });
-
-        // Sticky buttons
-        $("stickyAdd").addEventListener("click", function(e){ e.preventDefault(); doAdd(); });
-        $("stickyBuy").addEventListener("click", function(e){ e.preventDefault(); doBuy(); });
+        return null;
       }
 
-      function render(){
-        var key = getParam("key");
-        var p = findByKey(key);
+      function buildSelect(list, selectedKey){
+        var sel = $("productSelect");
+        sel.innerHTML = "";
 
-        if(!key){
-          setText("productTitle", "Missing product key");
-          setText("productBlurb", "Open this page with ?key=YOUR_PRODUCT_KEY");
-          setText("stickyName", "Missing product key");
-          setText("sumItem", "—");
-          showError("Example: /checkout.html?key=jerk");
-          return;
+        for(var i=0;i<list.length;i++){
+          var p = list[i];
+          var opt = document.createElement("option");
+          opt.value = p.key;
+          opt.textContent = (p.title || p.key) + " (" + p.key + ")";
+          if(p.key === selectedKey) opt.selected = true;
+          sel.appendChild(opt);
         }
 
-        if(!p){
-          setText("productTitle", "Product not found");
-          setText("productBlurb", "No product matches key: " + key);
-          setText("stickyName", "Product not found");
-          setText("sumItem", "—");
-          showError("No product matches key: " + key);
-          return;
-        }
+        sel.addEventListener("change", function(){
+          var newKey = sel.value;
+          setParam("key", newKey);
+          renderWithKey(newKey);
+        });
+      }
+
+      function renderProduct(p){
+        clearError();
 
         setText("productTitle", p.title || "");
         setText("productBlurb", p.blurb || "");
@@ -549,17 +494,110 @@
         setText("sumItem", p.title || "");
         setQty(1);
 
-        // If the product id is missing, disable checkout actions
-        if(p.ecwidProductId == null){
-          $("addBtn").disabled = true;
-          $("buyBtn").disabled = true;
-          $("stickyAdd").disabled = true;
-          $("stickyBuy").disabled = true;
+        var hasId = (p.ecwidProductId != null);
+        $("addBtn").disabled = !hasId;
+        $("buyBtn").disabled = !hasId;
+        $("stickyAdd").disabled = !hasId;
+        $("stickyBuy").disabled = !hasId;
+
+        if(!hasId){
           showError("This product is missing ecwidProductId in products.js.");
         }
+      }
 
-        wire(p);
+      function wireButtons(getActiveProduct){
+        $("openCartBtn").addEventListener("click", function(e){
+          e.preventDefault();
+          clearError();
+          openCart().then(function(ok){
+            if(!ok) showError("Cart is not ready yet. Reload and try again.");
+          });
+        });
+
+        $("qtyMinus").addEventListener("click", function(){ setQty(Number($("qtyInput").value) - 1); });
+        $("qtyPlus").addEventListener("click", function(){ setQty(Number($("qtyInput").value) + 1); });
+        $("qtyInput").addEventListener("input", function(){ setQty($("qtyInput").value); });
+
+        function doAdd(){
+          clearError();
+          var p = getActiveProduct();
+          if(!p || p.ecwidProductId == null){ showError("Missing Ecwid product id for this item."); return; }
+          var qty = clampQty($("qtyInput").value);
+          setLoading(true);
+          addToCart(p.ecwidProductId, qty).then(function(ok){
+            setLoading(false);
+            if(!ok){ showError("Unable to add to cart. Ecwid not ready or product id invalid."); return; }
+            openCart();
+          });
+        }
+
+        function doBuy(){
+          clearError();
+          var p = getActiveProduct();
+          if(!p || p.ecwidProductId == null){ showError("Missing Ecwid product id for this item."); return; }
+          var qty = clampQty($("qtyInput").value);
+          setLoading(true);
+          buyNow(p.ecwidProductId, qty).then(function(ok){
+            setLoading(false);
+            if(!ok){ showError("Unable to start checkout. Ecwid not ready or product id invalid."); return; }
+          });
+        }
+
+        $("addBtn").addEventListener("click", function(e){ e.preventDefault(); doAdd(); });
+        $("buyBtn").addEventListener("click", function(e){ e.preventDefault(); doBuy(); });
+        $("stickyAdd").addEventListener("click", function(e){ e.preventDefault(); doAdd(); });
+        $("stickyBuy").addEventListener("click", function(e){ e.preventDefault(); doBuy(); });
+      }
+
+      var ALL = [];
+      var POUCHES = [];
+      var ACTIVE = null;
+
+      function renderWithKey(key){
+        var p = findByKey(POUCHES, key) || findByKey(ALL, key);
+        if(!p){
+          showError("No product matches key: " + key);
+          return;
+        }
+        ACTIVE = p;
+        renderProduct(p);
+
+        // keep select in sync if user typed a URL
+        var sel = $("productSelect");
+        if(sel && sel.value !== p.key) sel.value = p.key;
+      }
+
+      function render(){
+        ALL = (window.PIXY_PRODUCTS && window.PIXY_PRODUCTS.length) ? window.PIXY_PRODUCTS.slice() : [];
+        if(!ALL.length){
+          setText("productTitle", "products.js not loaded");
+          showError("Missing assets/js/products.js or it did not define window.PIXY_PRODUCTS.");
+          return;
+        }
+
+        // This page is for pouches. Pull exact keys from your products.js.
+        POUCHES = ALL.filter(function(p){ return p && p.category === "Pouches"; });
+
+        // Key list shown on page to prevent guessing.
+        var keys = POUCHES.map(function(p){ return p.key; }).join(", ");
+        $("keysBox").innerHTML =
+          "Pouches keys from your products.js: <code>" + keys + "</code><br>" +
+          "Example: <code>/checkout.html?key=jerk</code>";
+
+        var urlKey = getParam("key");
+        var key = (urlKey && String(urlKey).trim()) ? String(urlKey).trim() : DEFAULT_KEY;
+
+        buildSelect(POUCHES, key);
+        wireButtons(function(){ return ACTIVE; });
+
+        // If URL was missing, set it so the page is shareable.
+        if(!urlKey) setParam("key", key);
+
+        renderWithKey(key);
       }
 
       document.addEventListener("DOMContentLoaded", render);
     })();
+  </script>
+</body>
+</html>
