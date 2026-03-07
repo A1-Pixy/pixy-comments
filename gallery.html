@@ -4,8 +4,8 @@ Status: Full replacement file
 Purpose:
 - Gallery landing page for cinematic brand visuals and experiences
 - Informational only. No products rendered from products.js
-- No Ecwid storefront embed (cart-only)
-- Cart button opens Ecwid cart
+- No Ecwid storefront embed
+- Cart button opens Ecwid cart through assets/js/main.js
 
 Notes:
 - This file uses a simple image grid that expects optional placeholder images in:
@@ -487,61 +487,6 @@ Notes:
 
     </div>
   </main>
-
-  <!-- Ecwid cart-only (hidden unless cart opened) -->
-  <script>
-    window.ec = window.ec || {};
-    window.ec.storefront = window.ec.storefront || {};
-    window.ec.storefront.enable_catalog = false;
-  </script>
-  <script src="https://app.ecwid.com/script.js?62406545&data_platform=code&data_date=2026-01-01" charset="utf-8"></script>
-
-  <script>
-    (function () {
-      "use strict";
-
-      function waitForEcwidReady(timeoutMs) {
-        timeoutMs = typeof timeoutMs === "number" ? timeoutMs : 12000;
-
-        return new Promise(function (resolve, reject) {
-          var start = Date.now();
-
-          function readyNow() {
-            return (window.Ecwid && typeof window.Ecwid.openPage === "function");
-          }
-
-          if (readyNow()) { resolve(); return; }
-
-          if (window.Ecwid && typeof window.Ecwid.OnAPILoaded === "function") {
-            window.Ecwid.OnAPILoaded.add(function () {
-              if (readyNow()) resolve();
-            });
-          }
-
-          var timer = setInterval(function () {
-            if (readyNow()) {
-              clearInterval(timer);
-              resolve();
-              return;
-            }
-            if (Date.now() - start > timeoutMs) {
-              clearInterval(timer);
-              reject(new Error("Ecwid API not ready"));
-            }
-          }, 120);
-        });
-      }
-
-      var openCartBtn = document.getElementById("openCartBtn");
-      if (openCartBtn) {
-        openCartBtn.addEventListener("click", function () {
-          waitForEcwidReady()
-            .then(function () { window.Ecwid.openPage("cart"); })
-            .catch(function () { alert("Cart is still loading. Try again in a second."); });
-        });
-      }
-    })();
-  </script>
 
   <script src="assets/js/products.js"></script>
   <script src="assets/js/main.js"></script>

@@ -154,7 +154,7 @@
 
         if (p.ecwidProductId) {
           btn.textContent = "View & Order";
-          btn.addEventListener("click", function(){ addToCart(p.ecwidProductId, 1); });
+          btn.setAttribute("data-add-to-cart", "true");
         } else {
           btn.textContent = "Coming Soon";
           btn.disabled = true;
@@ -163,29 +163,6 @@
 
         card.appendChild(actions);
         return card;
-      }
-
-      function ecwidReady(){
-        return !!(window.Ecwid && window.Ecwid.Cart && window.Ecwid.Cart.addProduct && window.Ecwid.openPage);
-      }
-
-      function waitForEcwid(cb){
-        var start = Date.now();
-        var t = setInterval(function(){
-          if (ecwidReady()) { clearInterval(t); cb(true); return; }
-          if (Date.now() - start > 12000) { clearInterval(t); cb(false); }
-        }, 120);
-      }
-
-      function addToCart(id, qty){
-        id = Number(id);
-        qty = Number(qty || 1);
-        if (!id || !isFinite(id)) return;
-        waitForEcwid(function(ok){
-          if (!ok) return;
-          window.Ecwid.Cart.addProduct({ id: id, quantity: qty });
-          window.Ecwid.openPage("cart");
-        });
       }
 
       function wireCarousel(wrap){

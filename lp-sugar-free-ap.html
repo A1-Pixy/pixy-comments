@@ -1,0 +1,703 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sugar-Free Universal AP | Pixy Dust Seasoning</title>
+
+  <link rel="stylesheet" href="assets/css/site.css" />
+
+  <style>
+    :root{
+      --bg:#06070a;
+      --panel:rgba(255,255,255,.06);
+      --panel2:rgba(255,255,255,.04);
+      --line:rgba(255,255,255,.10);
+      --text:#f3f3f3;
+      --muted:rgba(243,243,243,.74);
+      --gold1:#d8b35a;
+      --gold2:#b69034;
+      --shadow:0 18px 60px rgba(0,0,0,.45);
+      --radius:22px;
+      --radius-sm:16px;
+      --max:1200px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      background:
+        radial-gradient(900px 520px at 12% 10%, rgba(216,179,90,.12), transparent 60%),
+        radial-gradient(1000px 620px at 88% 18%, rgba(216,179,90,.08), transparent 58%),
+        linear-gradient(180deg, #07080c 0%, #050607 100%);
+      color:var(--text);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      overflow-x:hidden;
+    }
+
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:50;
+      backdrop-filter:blur(12px);
+      background:rgba(7,8,12,.70);
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+
+    .wrap{
+      width:min(var(--max), calc(100% - 32px));
+      margin:0 auto;
+    }
+
+    .topbar-inner{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:14px 0;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .brand img{
+      height:42px;
+      width:auto;
+    }
+
+    .brand-copy{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+
+    .brand-name{
+      font-family: "Playfair Display", Georgia, serif;
+      font-size:18px;
+      letter-spacing:.02em;
+    }
+
+    .brand-tag{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .top-actions{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      min-height:50px;
+      padding:12px 18px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.05);
+      color:var(--text);
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      cursor:pointer;
+      transition:transform .18s ease, background .2s ease, border-color .2s ease;
+    }
+
+    .btn:hover{transform:translateY(-1px)}
+    .btn-gold{
+      background:linear-gradient(180deg, var(--gold1), var(--gold2));
+      color:#121212;
+      border-color:rgba(0,0,0,.18);
+      box-shadow:0 18px 50px rgba(0,0,0,.28);
+    }
+
+    .hero{
+      padding:34px 0 30px;
+    }
+
+    .hero-shell{
+      width:min(var(--max), calc(100% - 32px));
+      margin:0 auto;
+      border:1px solid var(--line);
+      border-radius:28px;
+      overflow:hidden;
+      background:
+        radial-gradient(700px 320px at 20% 20%, rgba(216,179,90,.10), transparent 60%),
+        radial-gradient(800px 420px at 80% 70%, rgba(255,255,255,.04), transparent 56%),
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      box-shadow:var(--shadow);
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:0;
+      align-items:center;
+    }
+
+    .hero-copy{
+      padding:44px 42px;
+    }
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      color:rgba(216,179,90,.88);
+      font-size:12px;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      margin-bottom:14px;
+    }
+
+    .eyebrow-dot{
+      width:7px;
+      height:7px;
+      border-radius:999px;
+      background:linear-gradient(180deg, var(--gold1), var(--gold2));
+      box-shadow:0 0 16px rgba(216,179,90,.35);
+    }
+
+    h1{
+      margin:0 0 14px;
+      font-family:"Playfair Display", Georgia, serif;
+      font-size:clamp(38px, 5vw, 66px);
+      line-height:.98;
+      letter-spacing:-.02em;
+    }
+
+    .hero-sub{
+      margin:0 0 18px;
+      max-width:640px;
+      color:var(--muted);
+      font-size:16px;
+      line-height:1.65;
+    }
+
+    .hero-points{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:10px 12px;
+      margin:20px 0 22px;
+      padding:0;
+      list-style:none;
+    }
+
+    .hero-points li{
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.03);
+      border-radius:14px;
+      padding:12px 14px;
+      color:rgba(243,243,243,.88);
+      font-size:14px;
+    }
+
+    .hero-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:8px;
+    }
+
+    .hero-note{
+      margin-top:14px;
+      color:rgba(243,243,243,.62);
+      font-size:13px;
+      line-height:1.55;
+    }
+
+    .hero-media{
+      min-height:620px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:34px;
+      border-left:1px solid rgba(255,255,255,.08);
+      background:
+        radial-gradient(520px 280px at 50% 55%, rgba(216,179,90,.16), transparent 62%),
+        radial-gradient(520px 260px at 50% 86%, rgba(0,0,0,.58), transparent 66%);
+    }
+
+    .hero-media img{
+      width:min(480px, 92%);
+      height:auto;
+      filter:drop-shadow(0 34px 74px rgba(0,0,0,.72));
+    }
+
+    .section{
+      padding:0 0 26px;
+    }
+
+    .section .wrap{
+      display:block;
+    }
+
+    .section-head{
+      margin:0 0 16px;
+    }
+
+    .section-kicker{
+      margin:0 0 8px;
+      color:rgba(216,179,90,.84);
+      font-size:12px;
+      letter-spacing:.20em;
+      text-transform:uppercase;
+    }
+
+    .section-title{
+      margin:0;
+      font-family:"Playfair Display", Georgia, serif;
+      font-size:clamp(28px, 3.2vw, 42px);
+      line-height:1.06;
+    }
+
+    .section-sub{
+      margin:10px 0 0;
+      max-width:760px;
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.65;
+    }
+
+    .grid-3{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:16px;
+    }
+
+    .grid-4{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:16px;
+    }
+
+    .card{
+      border-radius:var(--radius-sm);
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, var(--panel), var(--panel2));
+      box-shadow:0 16px 44px rgba(0,0,0,.26);
+      padding:20px 18px 18px;
+    }
+
+    .card h3{
+      margin:0 0 8px;
+      font-family:"Playfair Display", Georgia, serif;
+      font-size:21px;
+      line-height:1.15;
+    }
+
+    .card p{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.65;
+    }
+
+    .pill-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:12px;
+    }
+
+    .pill{
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+      padding:14px 16px;
+      text-align:center;
+      color:rgba(243,243,243,.90);
+      font-size:13px;
+      font-weight:700;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    .split{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+    }
+
+    .list{
+      margin:0;
+      padding-left:18px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.7;
+    }
+
+    .list li{margin:8px 0}
+
+    .cta-band{
+      margin-top:4px;
+      border:1px solid var(--line);
+      border-radius:26px;
+      overflow:hidden;
+      background:
+        radial-gradient(740px 280px at 15% 25%, rgba(216,179,90,.12), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      box-shadow:var(--shadow);
+    }
+
+    .cta-band-inner{
+      display:grid;
+      grid-template-columns:.95fr 1.05fr;
+      gap:0;
+      align-items:center;
+    }
+
+    .cta-media{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:26px;
+      min-height:360px;
+      border-right:1px solid rgba(255,255,255,.08);
+      background:
+        radial-gradient(520px 240px at 50% 58%, rgba(216,179,90,.16), transparent 62%),
+        radial-gradient(520px 240px at 50% 88%, rgba(0,0,0,.58), transparent 68%);
+    }
+
+    .cta-media img{
+      width:min(330px, 88%);
+      filter:drop-shadow(0 24px 54px rgba(0,0,0,.64));
+    }
+
+    .cta-copy{
+      padding:34px 34px 32px;
+    }
+
+    .cta-copy h2{
+      margin:0 0 10px;
+      font-family:"Playfair Display", Georgia, serif;
+      font-size:clamp(30px, 3.6vw, 48px);
+      line-height:1.04;
+    }
+
+    .cta-copy p{
+      margin:0 0 18px;
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.65;
+      max-width:620px;
+    }
+
+    .cta-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .footer-space{height:30px}
+
+    @media (max-width: 980px){
+      .hero-grid,
+      .cta-band-inner,
+      .split{
+        grid-template-columns:1fr;
+      }
+
+      .hero-media,
+      .cta-media{
+        border-left:0;
+        border-right:0;
+        border-top:1px solid rgba(255,255,255,.08);
+        min-height:420px;
+      }
+
+      .grid-3{grid-template-columns:1fr}
+      .grid-4{grid-template-columns:repeat(2, minmax(0,1fr))}
+      .pill-grid{grid-template-columns:repeat(2, minmax(0,1fr))}
+      .hero-points{grid-template-columns:1fr}
+    }
+
+    @media (max-width: 560px){
+      .wrap,
+      .hero-shell{
+        width:calc(100% - 22px);
+      }
+
+      .hero-copy,
+      .cta-copy{
+        padding:24px 20px;
+      }
+
+      .grid-4,
+      .pill-grid{
+        grid-template-columns:1fr;
+      }
+
+      .btn{
+        width:100%;
+      }
+
+      .top-actions{
+        width:100%;
+        justify-content:flex-end;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="index.html" aria-label="Pixy Dust home">
+        <img src="assets/images/logo-circle.png" alt="Pixy Dust Seasoning" />
+        <div class="brand-copy">
+          <div class="brand-name">Pixy Dust</div>
+          <div class="brand-tag">Flavor with a purpose</div>
+        </div>
+      </a>
+
+      <div class="top-actions">
+        <button class="btn" id="openCartBtn" type="button">Cart</button>
+        <a class="btn" href="shop.html?view=Pouches">Shop</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-shell">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            <span>Signature Blend</span>
+          </div>
+
+          <h1 id="heroTitle">Sugar-Free Universal AP</h1>
+          <p class="hero-sub" id="heroBlurb">
+            Everyday seasoning without the sugar. Built for clean savory coverage, flexible cooking, and repeat use across the foods you make most.
+          </p>
+
+          <ul class="hero-points">
+            <li>Built for chicken, seafood, vegetables, and steak</li>
+            <li>Sugar-free profile for cleaner everyday use</li>
+            <li>Balanced savory flavor without overcomplicating meals</li>
+            <li>Works dry, in marinades, and in butter-based finishes</li>
+          </ul>
+
+          <div class="hero-actions">
+            <a class="btn btn-gold" id="buyNowTop" href="checkout.html?key=sugar-free-all-purpose&mode=buy">Buy Now</a>
+          </div>
+
+          <div class="hero-note">
+            Direct-response checkout page. Secure payment and final shipping details are handled through checkout.
+          </div>
+        </div>
+
+        <div class="hero-media">
+          <img id="heroImage" src="assets/images/logo-circle.png" alt="Sugar-Free Universal AP" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="section-kicker">Why it works</p>
+        <h2 class="section-title">Clean daily coverage without the sugar.</h2>
+        <p class="section-sub">
+          Sugar-Free Universal AP is the blend you reach for when you want savory flexibility, everyday range, and a straightforward seasoning option that still feels complete.
+        </p>
+      </div>
+
+      <div class="grid-3">
+        <article class="card">
+          <h3>Everyday ease</h3>
+          <p>Built for fast use in real kitchens. Season, cook, and move without losing balance or depth.</p>
+        </article>
+
+        <article class="card">
+          <h3>Wide range</h3>
+          <p>Use it on proteins, vegetables, eggs, potatoes, rice, and butter bases when you want broad coverage from one blend.</p>
+        </article>
+
+        <article class="card">
+          <h3>Clean profile</h3>
+          <p>Sugar-free by design, with a savory finish that stays practical for repeat use across different meals.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="section-kicker">Best uses</p>
+        <h2 class="section-title">What to put it on first.</h2>
+      </div>
+
+      <div class="pill-grid">
+        <div class="pill">Chicken</div>
+        <div class="pill">Seafood</div>
+        <div class="pill">Vegetables</div>
+        <div class="pill">Steak</div>
+        <div class="pill">Eggs</div>
+        <div class="pill">Potatoes</div>
+        <div class="pill">Marinades</div>
+        <div class="pill">Butter Finishes</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="section-kicker">Flavor profile</p>
+        <h2 class="section-title">Savory. Clean. Flexible.</h2>
+      </div>
+
+      <div class="grid-4">
+        <article class="card">
+          <h3>Savory</h3>
+          <p>Built to support proteins and vegetables with a dependable everyday foundation.</p>
+        </article>
+        <article class="card">
+          <h3>Clean</h3>
+          <p>Sugar-free and straightforward, with a profile that stays focused instead of cluttered.</p>
+        </article>
+        <article class="card">
+          <h3>Layerable</h3>
+          <p>Use it as a base and keep building with citrus, smoke, herbs, butter, or heat.</p>
+        </article>
+        <article class="card">
+          <h3>Practical</h3>
+          <p>Made for daily cooking, from quick meals to more intentional plates where control still matters.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="section-kicker">How to use it</p>
+        <h2 class="section-title">Simple ways to start.</h2>
+      </div>
+
+      <div class="split">
+        <article class="card">
+          <h3>Quick use</h3>
+          <ul class="list">
+            <li>Season chicken before searing or roasting</li>
+            <li>Dust vegetables before grilling or roasting</li>
+            <li>Add to eggs or breakfast potatoes</li>
+            <li>Use as a finishing seasoning after cooking</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h3>Expanded use</h3>
+          <ul class="list">
+            <li>Blend into softened butter for steak or seafood</li>
+            <li>Build into a marinade with oil and acid</li>
+            <li>Use in rice or grain bowls for easy depth</li>
+            <li>Layer with heat, herbs, or citrus when needed</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="cta-band">
+        <div class="cta-band-inner">
+          <div class="cta-media">
+            <img id="ctaImage" src="assets/images/logo-circle.png" alt="Sugar-Free Universal AP" />
+          </div>
+
+          <div class="cta-copy">
+            <p class="section-kicker">Final call</p>
+            <h2 id="ctaTitle">Keep a sugar-free blend ready for everyday range.</h2>
+            <p id="ctaText">
+              Sugar-Free Universal AP is built for repeat use. Reach for it when you want savory flexibility, clean coverage, and less guesswork in the meals you cook most.
+            </p>
+
+            <div class="cta-actions">
+              <a class="btn btn-gold" id="buyNowBottom" href="checkout.html?key=sugar-free-all-purpose&mode=buy">Buy Now</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-space"></div>
+    </div>
+  </section>
+
+  <script src="assets/js/products.js"></script>
+  <script src="assets/js/main.js"></script>
+
+  <script>
+    (function(){
+      "use strict";
+
+      var PRODUCT_KEY = "sugar-free-all-purpose";
+
+      function getProducts(){
+        return Array.isArray(window.PIXY_PRODUCTS) ? window.PIXY_PRODUCTS : [];
+      }
+
+      function findProductByKey(key){
+        var list = getProducts();
+        for(var i = 0; i < list.length; i++){
+          if(list[i] && String(list[i].key) === String(key)) return list[i];
+        }
+        return null;
+      }
+
+      function setText(id, value){
+        var el = document.getElementById(id);
+        if(el) el.textContent = value || "";
+      }
+
+      function setHref(id, value){
+        var el = document.getElementById(id);
+        if(el) el.setAttribute("href", value);
+      }
+
+      function setImage(id, src, alt){
+        var el = document.getElementById(id);
+        if(!el) return;
+        el.src = src || "assets/images/logo-circle.png";
+        el.alt = alt || "Pixy Dust product";
+        el.onerror = function(){
+          this.onerror = null;
+          this.src = "assets/images/logo-circle.png";
+        };
+      }
+
+      document.addEventListener("DOMContentLoaded", function(){
+        var p = findProductByKey(PRODUCT_KEY);
+        if(!p) return;
+
+        var buyHref = "checkout.html?key=" + encodeURIComponent(p.key) + "&mode=buy";
+
+        setText("heroTitle", p.title || "Sugar-Free Universal AP");
+        setText("heroBlurb", p.blurb || "Everyday seasoning with clean savory range and sugar-free flexibility.");
+        setText("ctaTitle", "Keep " + (p.title || "this blend") + " ready for everyday cooking.");
+        setText("ctaText", (p.blurb || "Built for clean everyday cooking.") + " Move straight into a direct-response checkout flow when you're ready.");
+        setHref("buyNowTop", buyHref);
+        setHref("buyNowBottom", buyHref);
+        setImage("heroImage", p.image, p.title || "Sugar-Free Universal AP");
+        setImage("ctaImage", p.image, p.title || "Sugar-Free Universal AP");
+
+        document.title = (p.title || "Sugar-Free Universal AP") + " | Pixy Dust Seasoning";
+      });
+    })();
+  </script>
+</body>
+</html>

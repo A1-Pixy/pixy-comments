@@ -183,13 +183,7 @@
   <header class="site-header" role="banner">
     <div class="container header-inner">
       <a class="brand" href="index.html" aria-label="Pixy Dust Seasoning home">
-        <div class="brand-mark" aria-hidden="true">
-          <img src="assets/images/logo-circle.png" alt="" class="brand-logo" loading="eager" />
-        </div>
-        <div class="brand-type">
-          <div class="brand-name">Pixy Dust</div>
-          <div class="brand-sub">Seasoning</div>
-        </div>
+        <img src="assets/images/logo-circle.png" alt="Pixy Dust Seasoning" style="height:56px;width:auto;display:block;" />
       </a>
 
       <button class="nav-toggle" type="button" aria-label="Open menu" aria-controls="mainNav" aria-expanded="false">
@@ -360,59 +354,6 @@
         return encodeURIComponent(String(key || ""));
       }
 
-      function ensureEcwidReady(timeoutMs){
-        timeoutMs = typeof timeoutMs === "number" ? timeoutMs : 12000;
-        var STORE_ID = 62406545;
-
-        return new Promise(function(resolve, reject){
-          var start = Date.now();
-
-          function ready(){
-            return (window.Ecwid && window.Ecwid.Cart && typeof window.Ecwid.Cart.addProduct === "function");
-          }
-
-          if (ready()) { resolve(); return; }
-
-          try {
-            var existing = document.querySelector("script[src*='app.ecwid.com/script.js?" + STORE_ID + "']");
-            if (!existing) {
-              window.ec = window.ec || {};
-              window.ec.storefront = window.ec.storefront || {};
-              window.ec.storefront.enable_catalog = false;
-              window.ec.storefront.enable_product_browser = false;
-              window.ec.storefront.enable_search = false;
-              window.ec.storefront.enable_minicart = true;
-
-              var s = document.createElement("script");
-              s.charset = "utf-8";
-              s.src = "https://app.ecwid.com/script.js?" + STORE_ID + "&data_platform=code&data_date=2026-01-01";
-              s.onload = function(){ try { window.Ecwid && window.Ecwid.init && window.Ecwid.init(); } catch (e) {} };
-              document.head.appendChild(s);
-            }
-          } catch (e) {}
-
-          if (window.Ecwid && window.Ecwid.OnAPILoaded) {
-            window.Ecwid.OnAPILoaded.add(function(){ if (ready()) resolve(); });
-          }
-
-          var t = setInterval(function(){
-            if (ready()) { clearInterval(t); resolve(); return; }
-            if (Date.now() - start > timeoutMs) { clearInterval(t); reject(new Error("Ecwid not ready")); }
-          }, 120);
-        });
-      }
-
-      function addToCart(id){
-        var pid = Number(id);
-        if (!pid || !isFinite(pid)) return;
-        ensureEcwidReady().then(function(){
-          window.Ecwid.Cart.addProduct({ id: pid, quantity: 1 });
-          window.Ecwid.openPage("cart");
-        }).catch(function(){
-          alert("Cart is still loading. Try again in a second.");
-        });
-      }
-
       function buildCard(product){
         var art = document.createElement("article");
         art.className = "card product";
@@ -465,7 +406,7 @@
 
         if (product.ecwidProductId) {
           buy.textContent = "View & Order";
-          buy.addEventListener("click", function(e){ e.preventDefault(); addToCart(product.ecwidProductId); });
+          buy.setAttribute("data-add-to-cart", "true");
         } else {
           buy.textContent = "Coming soon";
           buy.disabled = true;

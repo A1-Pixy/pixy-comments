@@ -357,7 +357,7 @@
               <div class="price" id="productPrice"></div>
 
               <div class="actions">
-                <button class="btn btn-gold" id="addToCartBtn" data-wired="1" type="button">Add to Cart</button>
+                <button class="btn btn-gold" id="addToCartBtn" type="button">Add to Cart</button>
                 <button class="btn" id="openCartInlineBtn" type="button">Open Cart</button>
               </div>
             </div>
@@ -392,13 +392,6 @@
       });
     })();
   </script>
-
-  <script>
-    window.ec = window.ec || {};
-    window.ec.storefront = window.ec.storefront || {};
-    window.ec.storefront.enable_catalog = false;
-  </script>
-  <script src="https://app.ecwid.com/script.js?62406545&data_platform=code&data_date=2026-01-01" charset="utf-8"></script>
 
   <script src="assets/js/products.js"></script>
   <script src="assets/js/main.js"></script>
@@ -442,43 +435,6 @@
         if (category === "Bundles") return "Bundles";
         if (category === "Books") return "Books";
         return "Collection";
-      }
-
-      function waitForEcwidReady(timeoutMs) {
-        timeoutMs = typeof timeoutMs === "number" ? timeoutMs : 12000;
-
-        return new Promise(function (resolve, reject) {
-          var start = Date.now();
-
-          function readyNow() {
-            return (
-              window.Ecwid &&
-              window.Ecwid.Cart &&
-              typeof window.Ecwid.Cart.addProduct === "function" &&
-              typeof window.Ecwid.openPage === "function"
-            );
-          }
-
-          if (readyNow()) { resolve(); return; }
-
-          if (window.Ecwid && window.Ecwid.OnAPILoaded && typeof window.Ecwid.OnAPILoaded.add === "function") {
-            window.Ecwid.OnAPILoaded.add(function () {
-              if (readyNow()) resolve();
-            });
-          }
-
-          var timer = setInterval(function () {
-            if (readyNow()) {
-              clearInterval(timer);
-              resolve();
-              return;
-            }
-            if (Date.now() - start > timeoutMs) {
-              clearInterval(timer);
-              reject(new Error("Ecwid API not ready"));
-            }
-          }, 120);
-        });
       }
 
       function showError(msg) {
@@ -571,7 +527,13 @@
 
         var cat = String(product.category || "").trim();
         var backToShop = byId("backToShop");
-        var last = sessionStorage.getItem("pixy_last_listinging");
+        var last = null;
+        try {
+          last = sessionStorage.getItem("pixy_last_listing");
+        } catch (e) {
+          last = null;
+        }
+
         if (last) {
           backToShop.href = last;
           backToShop.textContent = "Back";
@@ -584,58 +546,6 @@
 
         var crumbRight = byId("crumbRight");
         if (crumbRight) crumbRight.textContent = collectionLabel(cat);
-
-        var openCartBtn = byId("openCartBtn");
-        if (openCartBtn) {
-          openCartBtn.addEventListener("click", function () {
-            waitForEcwidReady().then(function () {
-              window.Ecwid.openPage("cart");
-            });
-          });
-        }
-
-        var openCartInlineBtn = byId("openCartInlineBtn");
-        if (openCartInlineBtn) {
-          openCartInlineBtn.addEventListener("click", function () {
-            waitForEcwidReady().then(function () {
-              window.Ecwid.openPage("cart");
-            });
-          });
-        }
-
-        var addBtn = byId("addToCartBtn");
-        addBtn.addEventListener("click", function () {
-          var id = Number(product.ecwidProductId);
-          if (!id) {
-            alert("Missing Ecwid product ID for this item.");
-            return;
-          }
-
-          addBtn.disabled = true;
-
-          waitForEcwidReady()
-            .then(function () {
-              if (String(product.category || "").trim() === "Grills") {
-                window.Ecwid.openPage("product", { id: id });
-                addBtn.disabled = false;
-                return;
-              }
-
-              window.Ecwid.Cart.addProduct({
-                id: id,
-                quantity: 1,
-                callback: function (success, addedProduct, cart, error) {
-                  addBtn.disabled = false;
-                  if (success) window.Ecwid.openPage("cart");
-                  else alert(error || "Unable to add item to cart.");
-                }
-              });
-            })
-            .catch(function () {
-              addBtn.disabled = false;
-              alert("Cart is still loading. Try again in a second.");
-            });
-        });
       });
     })();
   </script>

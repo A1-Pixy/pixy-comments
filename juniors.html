@@ -126,26 +126,18 @@
   <script src="assets/js/cms.js" defer></script>
   <script src="assets/js/chatbot.js" defer></script>
   <script src="assets/js/main.js" defer></script>
-
-  <!-- Ecwid cart-only -->
-  <script>
-    window.ec = window.ec || {};
-    window.ec.storefront = window.ec.storefront || {};
-    window.ec.storefront.enable_catalog = false;
-  </script>
-  <script src="https://app.ecwid.com/script.js?62406545&data_platform=code&data_date=2026-01-01" charset="utf-8"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
   <div id="flash-sale-bar" class="flash-sale" hidden></div>
 
   <!-- HEADER: CLASSIC LOGO ONLY -->
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="index.html" aria-label="Pixy Dust Seasoning home">
-        <img src="assets/images/logo-pixy-classic.png" alt="Pixy Dust Seasoning" style="height:56px;width:auto;" />
-      </a>
-
+ <header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html" aria-label="Pixy Dust Seasoning home">
+      <img src="assets/images/logo-circle.png" alt="Pixy Dust Seasoning" style="height:56px;width:auto;" />
+    </a>
+    
       <button class="nav-toggle" type="button" aria-label="Open menu" aria-controls="mainNav" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
@@ -306,35 +298,6 @@
 
       function encodeKey(key){ return encodeURIComponent(String(key || "")); }
 
-      function ensureEcwidReady(timeoutMs){
-        timeoutMs = typeof timeoutMs === "number" ? timeoutMs : 12000;
-        return new Promise(function(resolve, reject){
-          var start = Date.now();
-          function ready(){
-            return (window.Ecwid && window.Ecwid.Cart && typeof window.Ecwid.Cart.addProduct === "function");
-          }
-          if (ready()) { resolve(); return; }
-          if (window.Ecwid && window.Ecwid.OnAPILoaded) {
-            window.Ecwid.OnAPILoaded.add(function(){ if (ready()) resolve(); });
-          }
-          var t = setInterval(function(){
-            if (ready()) { clearInterval(t); resolve(); return; }
-            if (Date.now() - start > timeoutMs) { clearInterval(t); reject(new Error("Ecwid not ready")); }
-          }, 120);
-        });
-      }
-
-      function addToCart(id){
-        var pid = Number(id);
-        if (!pid || !isFinite(pid)) return;
-        ensureEcwidReady().then(function(){
-          window.Ecwid.Cart.addProduct({ id: pid, quantity: 1 });
-          window.Ecwid.openPage("cart");
-        }).catch(function(){
-          alert("Cart is still loading. Try again in a second.");
-        });
-      }
-
       function wireCarousel(wrap){
         if (!wrap) return;
         var track = wrap.querySelector("[data-jr-track]");
@@ -398,7 +361,7 @@
           var dx = t.clientX - startX;
           var dy = t.clientY - startY;
           if (Math.abs(dy) > 90) return;
-          if (Masth.abs(dx) < threshold()) return;
+          if (Math.abs(dx) < threshold()) return;
           if (dx < 0) step(1);
           else step(-1);
         }, { passive:true });
@@ -488,10 +451,7 @@
 
         if (p.ecwidProductId) {
           buy.textContent = "View & Order";
-          buy.addEventListener("click", function(e){
-            e.preventDefault();
-            addToCart(p.ecwidProductId);
-          });
+          buy.setAttribute("data-add-to-cart", "true");
         } else {
           buy.textContent = "Coming soon";
           buy.disabled = true;

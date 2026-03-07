@@ -293,12 +293,12 @@ If key is missing, this page will list available keys from products.js.
               <button type="button" id="qtyPlus" aria-label="Increase quantity">+</button>
             </div>
 
-            <button class="btn" id="addBtn" type="button">Add to Cart</button>
-            <button class="btn primary" id="buyBtn" type="button">Buy Now</button>
+            <button class="btn" id="addBtn" type="button">Open Cart</button>
+            <button class="btn primary" id="buyBtn" type="button">Add to Cart</button>
           </div>
 
           <div class="fine">
-            Buy Now sends you to Ecwid checkout. Add to Cart opens your cart first.
+            Open Cart shows your cart. Add to Cart adds this item to your cart.
           </div>
 
           <div class="error" id="errorBox" style="display:none;"></div>
@@ -341,8 +341,8 @@ If key is missing, this page will list available keys from products.js.
         <div class="sticky-sub" id="stickySub">Direct checkout</div>
       </div>
       <div class="sticky-right">
-        <button class="btn" id="stickyAdd" type="button">Add</button>
-        <button class="btn primary" id="stickyBuy" type="button">Buy</button>
+        <button class="btn" id="stickyAdd" type="button">Cart</button>
+        <button class="btn primary" id="stickyBuy" type="button">Add to Cart</button>
       </div>
     </div>
   </div>
@@ -356,6 +356,8 @@ If key is missing, this page will list available keys from products.js.
 
       /* REQUIRED: your Ecwid store id */
       var ECWID_STORE_ID = 62406545;
+      var ECWID_SCRIPT_SRC = "https://app.ecwid.com/script.js?" + ECWID_STORE_ID + "&data_platform=singleproduct_v2";
+      var ecwidBootPromise = null;
 
       function $(id){ return document.getElementById(id); }
       function setText(id, v){ var el=$(id); if(el) el.textContent = v == null ? "" : String(v); }
@@ -404,13 +406,11 @@ If key is missing, this page will list available keys from products.js.
       }
 
       function normalizeProducts(raw){
-        // Accept array OR object map
         if(Array.isArray(raw)) return raw.slice();
         if(raw && typeof raw === "object"){
           var out = [];
           Object.keys(raw).forEach(function(k){
             if(raw[k] && typeof raw[k] === "object"){
-              // if key is missing inside object, infer from map key
               if(raw[k].key == null) raw[k].key = k;
               out.push(raw[k]);
             }
@@ -449,34 +449,156 @@ If key is missing, this page will list available keys from products.js.
         });
       }
 
-      /* Ecwid loading */
-      function ecwidReady(){
-        return !!(window.Ecwid && window.Ecwid.Cart && typeof window.Ecwid.Cart.addProduct === "function");
+      function ecwidCartOpenReadyNow(){
+        return !!(
+          (window.xProductBrowser && typeof window.xProductBrowser.showShoppingCart === "function") ||
+          (window.Ecwid && typeof window.Ecwid.openPage === "function")
+        );
       }
-      function injectEcwid(){
-        if(document.getElementById("ecwid-script")) return;
-        var s = document.createElement("script");
-        s.id = "ecwid-script";
-        s.async = true;
-        s.src = "https://app.ecwid.com/script.js?" + ECWID_STORE_ID + "&data_platform=singleproduct_v2";
-        document.head.appendChild(s);
+
+      function ecwidAddReadyNow(){
+        return !!(
+          window.Ecwid &&
+          window.Ecwid.Cart &&
+          typeof window.Ecwid.Cart.addProduct === "function"
+        );
       }
-      function ensureEcwid(){
-        injectEcwid();
+
+      function ensureEcwidLoaded(mode){
+        mode = mode || "cart";
+        var isReady = mode === "add" ? ecwidAddReadyNow : ecwidCartOpenReadyNow;
+
+        if (isReady()) return Promise.resolve(true);
+
+        if (ecwidBootPromise) {
+          return ecwidBootPromise.then(function () {
+            return waitForEcwidMode(mode);
+          });
+        }
+
+        ecwidBootPromise = new Promise(function(resolve, reject){
+          var existing = document.getElementById("ecwid-script") || document.querySelector('script[src*="app.ecwid.com/script.js?' + String(ECWID_STORE_ID) + '"]');
+          var done = false;
+
+          function finishOk(){
+            if (done) return;
+            done = true;
+            resolve(true);
+          }
+
+          function finishErr(err){
+            if (done) return;
+            done = true;
+            reject(err || new Error("Ecwid not ready"));
+          }
+
+          function afterScript(){
+            var tries = 0;
+            var max = 120;
+
+            try {
+              if (window.Ecwid && window.Ecwid.OnAPILoaded && typeof window.Ecwid.OnAPILoaded.add === "function") {
+                window.Ecwid.OnAPILoaded.add(function(){
+                  try {
+                    if (window.Ecwid && typeof window.Ecwid.init === "function") {
+                      window.Ecwid.init();
+                    }
+                  } catch(e) {}
+                  if (ecwidCartOpenReadyNow() || ecwidAddReadyNow()) {
+                    finishOk();
+                  }
+                });
+              }
+            } catch(e) {}
+
+            var t = setInterval(function(){
+              tries++;
+
+              try {
+                if (window.Ecwid && typeof window.Ecwid.init === "function") {
+                  window.Ecwid.init();
+                }
+              } catch(e) {}
+
+              if (ecwidCartOpenReadyNow() || ecwidAddReadyNow()) {
+                clearInterval(t);
+                finishOk();
+                return;
+              }
+
+              if (tries >= max) {
+                clearInterval(t);
+                finishErr(new Error("Ecwid not ready"));
+              }
+            }, 120);
+          }
+
+          if(!existing){
+            var s = document.createElement("script");
+            s.id = "ecwid-script";
+            s.async = true;
+            s.src = ECWID_SCRIPT_SRC;
+            s.onload = afterScript;
+            s.onerror = function(){ finishErr(new Error("Ecwid script failed to load")); };
+            document.head.appendChild(s);
+          } else {
+            afterScript();
+          }
+        });
+
+        return ecwidBootPromise.then(function(){
+          return waitForEcwidMode(mode);
+        });
+      }
+
+      function waitForEcwidMode(mode){
+        mode = mode || "cart";
+        var isReady = mode === "add" ? ecwidAddReadyNow : ecwidCartOpenReadyNow;
+
+        if (isReady()) return Promise.resolve(true);
+
         return new Promise(function(resolve, reject){
-          if(ecwidReady()) { resolve(true); return; }
           var start = Date.now();
           var t = setInterval(function(){
-            if(ecwidReady()){ clearInterval(t); resolve(true); return; }
-            if(Date.now() - start > 15000){ clearInterval(t); reject(new Error("Ecwid not ready")); }
+            try {
+              if (window.Ecwid && typeof window.Ecwid.init === "function") {
+                window.Ecwid.init();
+              }
+            } catch(e) {}
+
+            if (isReady()) {
+              clearInterval(t);
+              resolve(true);
+              return;
+            }
+
+            if (Date.now() - start > 15000) {
+              clearInterval(t);
+              reject(new Error("Ecwid mode not ready: " + mode));
+            }
           }, 120);
         });
       }
 
       function openCart(){
-        return ensureEcwid().then(function(){
-          window.Ecwid.openPage("cart");
-          return true;
+        return ensureEcwidLoaded("cart").then(function(){
+          try {
+            if (window.Ecwid && typeof window.Ecwid.init === "function") {
+              window.Ecwid.init();
+            }
+          } catch(e) {}
+
+          if (window.xProductBrowser && typeof window.xProductBrowser.showShoppingCart === "function") {
+            window.xProductBrowser.showShoppingCart();
+            return true;
+          }
+
+          if (window.Ecwid && typeof window.Ecwid.openPage === "function") {
+            window.Ecwid.openPage("cart");
+            return true;
+          }
+
+          return false;
         }).catch(function(){
           return false;
         });
@@ -487,9 +609,22 @@ If key is missing, this page will list available keys from products.js.
         qty = Number(qty || 1);
         if(!pid || !isFinite(pid)) return Promise.resolve(false);
 
-        return ensureEcwid().then(function(){
-          window.Ecwid.Cart.addProduct({ id: pid, quantity: qty });
-          return true;
+        return ensureEcwidLoaded("add").then(function(){
+          return new Promise(function(resolve){
+            try {
+              window.Ecwid.Cart.addProduct({
+                id: pid,
+                quantity: qty,
+                callback: function(){
+                  resolve(true);
+                }
+              });
+
+              setTimeout(function(){ resolve(true); }, 350);
+            } catch(e){
+              resolve(false);
+            }
+          });
         }).catch(function(){
           return false;
         });
@@ -500,10 +635,38 @@ If key is missing, this page will list available keys from products.js.
         qty = Number(qty || 1);
         if(!pid || !isFinite(pid)) return Promise.resolve(false);
 
-        return ensureEcwid().then(function(){
-          window.Ecwid.Cart.addProduct({ id: pid, quantity: qty });
-          window.Ecwid.openPage("checkout");
-          return true;
+        return ensureEcwidLoaded("add").then(function(){
+          return new Promise(function(resolve){
+            try {
+              window.Ecwid.Cart.addProduct({
+                id: pid,
+                quantity: qty,
+                callback: function(){
+                  try {
+                    if (window.Ecwid && typeof window.Ecwid.openPage === "function") {
+                      window.Ecwid.openPage("checkout");
+                      resolve(true);
+                      return;
+                    }
+                  } catch(e) {}
+                  resolve(false);
+                }
+              });
+
+              setTimeout(function(){
+                try {
+                  if (window.Ecwid && typeof window.Ecwid.openPage === "function") {
+                    window.Ecwid.openPage("checkout");
+                    resolve(true);
+                    return;
+                  }
+                } catch(e) {}
+                resolve(false);
+              }, 400);
+            } catch(e){
+              resolve(false);
+            }
+          });
         }).catch(function(){
           return false;
         });
@@ -569,7 +732,6 @@ If key is missing, this page will list available keys from products.js.
       function render(){
         clearError();
 
-        // Validate products.js is actually loaded
         var products = getProducts();
         if(!products.length){
           setText("productTitle", "Products not loaded");
@@ -604,7 +766,6 @@ If key is missing, this page will list available keys from products.js.
           return;
         }
 
-        // Render product
         setText("productTitle", p.title || p.key || "");
         setText("productBlurb", p.blurb || "");
         setImg("productImg", p.image || "", p.title || p.key || "Product image");
@@ -613,7 +774,6 @@ If key is missing, this page will list available keys from products.js.
         setText("sumItem", p.title || p.key || "");
         setQty(1);
 
-        // Require ecwidProductId for checkout
         if(p.ecwidProductId == null || !Number(p.ecwidProductId)){
           disableActions("This product key exists, but ecwidProductId is missing/invalid.\nFix products.js for key: " + p.key);
           return;
