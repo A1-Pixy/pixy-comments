@@ -1,0 +1,789 @@
+<!-- checkout.html
+Place this file in your SITE ROOT (same folder as index.html).
+
+Works with: assets/js/products.js that defines window.PIXY_PRODUCTS
+Expected shape per product:
+  {
+    key: "jerk",
+    title: "Jerk",
+    blurb: "Short description…",
+    image: "assets/images/pouches/jerk.png",
+    ecwidProductId: 808804349
+  }
+
+Open:
+  /checkout.html?key=jerk
+
+If key is missing, this page will list available keys from products.js.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Checkout | Pixy Dust Seasoning</title>
+
+  <!-- Keep your existing site CSS -->
+  <link rel="stylesheet" href="assets/css/site.css" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+
+  <style>
+    :root{
+      --bg:#07070a;
+      --panel:rgba(255,255,255,.06);
+      --line:rgba(255,255,255,.12);
+      --text:#f3f3f3;
+      --muted:rgba(243,243,243,.78);
+      --gold1:#d8b35a;
+      --gold2:#b69034;
+      --shadow: 0 10px 30px rgba(0,0,0,.45);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0;
+      background: radial-gradient(900px 600px at 15% 15%, rgba(216,179,90,.10), transparent 60%),
+                  radial-gradient(900px 600px at 85% 25%, rgba(216,179,90,.08), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+    .topbar{
+      position:sticky; top:0; z-index:50;
+      background: rgba(7,7,10,.72);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .wrap{
+      max-width:1120px; margin:0 auto; padding:14px 16px;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .brand{display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--text)}
+    .brand img{height:34px; width:auto; display:block}
+    .brand .name{font-family: ui-serif, Georgia, "Times New Roman", Times, serif; letter-spacing:.4px}
+    .brand .tag{font-size:12px; color:var(--muted)}
+    .btn{
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
+    }
+    .btn:disabled{opacity:.45; cursor:not-allowed}
+    .btn.primary{
+      background: linear-gradient(180deg,var(--gold1),var(--gold2));
+      border-color: rgba(0,0,0,.18);
+      color:#121212;
+      font-weight:800;
+    }
+    .btn.ghost{background: transparent}
+    main{max-width:1120px; margin:0 auto; padding:20px 16px 110px}
+    .grid{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap:18px;
+      align-items:start;
+    }
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr} }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card.pad{padding:18px}
+    .hero-img{
+      width:100%;
+      display:block;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.25);
+      min-height: 240px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .hero-img img{
+      width:100%;
+      height:auto;
+      display:block;
+      max-width: 560px;
+      padding: 18px;
+      box-sizing: border-box;
+    }
+    .hero-body{padding:18px}
+    .kicker{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:12px;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color: rgba(243,243,243,.70);
+    }
+    .kicker .dot{
+      width:6px; height:6px; border-radius:999px;
+      background: linear-gradient(180deg,var(--gold1),var(--gold2));
+      box-shadow: 0 0 14px rgba(216,179,90,.35);
+    }
+    h1{
+      margin:10px 0 10px;
+      font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+      font-size:42px;
+      line-height:1.04;
+    }
+    @media (max-width: 520px){ h1{font-size:34px} }
+    .sub{margin:0 0 14px; color:var(--muted); font-size:15px; line-height:1.45}
+    .bullets{margin:12px 0 0; padding-left:18px; color: rgba(243,243,243,.84)}
+    .bullets li{margin:8px 0}
+    .row{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+      margin-top:14px;
+    }
+    .qty{
+      display:inline-flex; align-items:center; gap:0;
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:12px;
+      overflow:hidden;
+      background: rgba(0,0,0,.22);
+    }
+    .qty button{
+      border:0; background: transparent; color:var(--text);
+      padding:10px 12px; cursor:pointer; font-size:16px;
+    }
+    .qty input{
+      width:48px; text-align:center;
+      border:0; outline:0; background: transparent;
+      color:var(--text);
+      padding:10px 6px;
+      font-weight:700;
+    }
+    .divider{height:1px; background: rgba(255,255,255,.10); margin:14px 0}
+    .summary-title{
+      font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+      font-size:22px;
+      margin:0 0 10px;
+    }
+    .summary-line{
+      display:flex; justify-content:space-between; gap:10px;
+      padding:10px 0;
+      border-bottom:1px dashed rgba(255,255,255,.12);
+      color: rgba(243,243,243,.86);
+      font-size:14px;
+    }
+    .summary-line:last-child{border-bottom:0}
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.22);
+      color: rgba(243,243,243,.86);
+      font-size:13px;
+    }
+    .trust{display:flex; flex-wrap:wrap; gap:10px; margin-top:12px}
+    .fine{
+      margin-top:10px;
+      font-size:12px;
+      color: rgba(243,243,243,.70);
+      line-height:1.45;
+    }
+    .sticky{
+      position:fixed; left:0; right:0; bottom:0; z-index:60;
+      background: rgba(7,7,10,.82);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(255,255,255,.10);
+      padding:12px 14px;
+    }
+    .sticky-inner{
+      max-width:1120px; margin:0 auto;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .sticky-left{min-width:0}
+    .sticky-name{font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+    .sticky-sub{font-size:12px; color: rgba(243,243,243,.72)}
+    .sticky-right{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end}
+    .loading{opacity:.65; pointer-events:none}
+    .error{
+      border:1px solid rgba(255,90,90,.35);
+      background: rgba(255,90,90,.08);
+      color: rgba(255,255,255,.92);
+      padding:12px 14px;
+      border-radius:14px;
+      margin-top:12px;
+      font-size:14px;
+      line-height:1.4;
+      white-space:pre-wrap;
+    }
+    .keys{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:14px;
+    }
+    .keylink{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.22);
+      color: rgba(243,243,243,.86);
+      text-decoration:none;
+      font-size:13px;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="index.html" aria-label="Pixy Dust home">
+        <img src="assets/images/logo-pixy-gold.png" alt="Pixy Dust Seasoning" />
+        <div>
+          <div class="name">Pixy Dust</div>
+          <div class="tag">Flavor with a purpose</div>
+        </div>
+      </a>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <button class="btn ghost" id="openCartBtn" type="button">Cart</button>
+        <a class="btn ghost" href="shop.html?view=Pouches" style="text-decoration:none; display:inline-flex; align-items:center;">Shop</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="grid">
+      <section class="card" id="checkoutCard">
+        <div class="hero-img">
+          <img id="productImg" src="" alt="" />
+        </div>
+
+        <div class="hero-body">
+          <div class="kicker"><span class="dot"></span><span>Direct checkout</span></div>
+          <h1 id="productTitle">Loading…</h1>
+          <p class="sub" id="productBlurb"></p>
+
+          <div id="missingKeyPanel" style="display:none;">
+            <div class="divider"></div>
+            <div class="sub" style="margin-bottom:8px;">
+              Missing product key. Use:
+              <span style="color:rgba(243,243,243,.92); font-weight:800;">/checkout.html?key=YOUR_KEY</span>
+            </div>
+            <div class="sub" style="margin:0;">
+              Available keys found in products.js:
+            </div>
+            <div class="keys" id="keysList"></div>
+          </div>
+
+          <ul class="bullets" id="productBullets">
+            <li>Fast flavor. Clean finish. Built for real cooking.</li>
+            <li>Use on proteins, vegetables, and sauces.</li>
+            <li>Add a little. Taste. Build.</li>
+          </ul>
+
+          <div class="divider"></div>
+
+          <div class="row">
+            <div class="qty" aria-label="Quantity selector">
+              <button type="button" id="qtyMinus" aria-label="Decrease quantity">−</button>
+              <input id="qtyInput" type="text" inputmode="numeric" value="1" aria-label="Quantity" />
+              <button type="button" id="qtyPlus" aria-label="Increase quantity">+</button>
+            </div>
+
+            <button class="btn" id="addBtn" type="button">Open Cart</button>
+            <button class="btn primary" id="buyBtn" type="button">Add to Cart</button>
+          </div>
+
+          <div class="fine">
+            Open Cart shows your cart. Add to Cart adds this item to your cart.
+          </div>
+
+          <div class="error" id="errorBox" style="display:none;"></div>
+        </div>
+      </section>
+
+      <aside class="card pad">
+        <div class="summary-title">Order Summary</div>
+
+        <div class="summary-line">
+          <div>Item</div>
+          <div id="sumItem">—</div>
+        </div>
+        <div class="summary-line">
+          <div>Quantity</div>
+          <div id="sumQty">1</div>
+        </div>
+        <div class="summary-line">
+          <div>Checkout</div>
+          <div>Ecwid secure checkout</div>
+        </div>
+
+        <div class="trust">
+          <div class="pill">Secure payment</div>
+          <div class="pill">Fast checkout</div>
+          <div class="pill">Direct response page</div>
+        </div>
+
+        <div class="fine">
+          Shipping, tax, and payment are handled inside Ecwid at checkout.
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <div class="sticky">
+    <div class="sticky-inner">
+      <div class="sticky-left">
+        <div class="sticky-name" id="stickyName">Loading…</div>
+        <div class="sticky-sub" id="stickySub">Direct checkout</div>
+      </div>
+      <div class="sticky-right">
+        <button class="btn" id="stickyAdd" type="button">Cart</button>
+        <button class="btn primary" id="stickyBuy" type="button">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Must exist and define window.PIXY_PRODUCTS -->
+  <script src="assets/js/products.js"></script>
+
+  <script>
+    (function () {
+      "use strict";
+
+      /* REQUIRED: your Ecwid store id */
+      var ECWID_STORE_ID = 62406545;
+      var ECWID_SCRIPT_SRC = "https://app.ecwid.com/script.js?" + ECWID_STORE_ID + "&data_platform=singleproduct_v2";
+      var ecwidBootPromise = null;
+
+      function $(id){ return document.getElementById(id); }
+      function setText(id, v){ var el=$(id); if(el) el.textContent = v == null ? "" : String(v); }
+      function setImg(id, src, alt){
+        var el=$(id); if(!el) return;
+        el.src = src || "";
+        el.alt = alt || "";
+      }
+      function getParam(name){
+        try { return new URL(location.href).searchParams.get(name); }
+        catch(e){ return null; }
+      }
+
+      function showError(msg){
+        var box = $("errorBox");
+        if(!box) return;
+        box.style.display = "block";
+        box.textContent = msg;
+      }
+      function clearError(){
+        var box = $("errorBox");
+        if(!box) return;
+        box.style.display = "none";
+        box.textContent = "";
+      }
+
+      function setLoading(isLoading){
+        var card = $("checkoutCard");
+        if(!card) return;
+        if(isLoading) card.classList.add("loading");
+        else card.classList.remove("loading");
+      }
+
+      function clampQty(n){
+        n = parseInt(String(n), 10);
+        if(!isFinite(n) || isNaN(n)) n = 1;
+        if(n < 1) n = 1;
+        if(n > 20) n = 20;
+        return n;
+      }
+      function setQty(n){
+        n = clampQty(n);
+        $("qtyInput").value = String(n);
+        setText("sumQty", String(n));
+        return n;
+      }
+
+      function normalizeProducts(raw){
+        if(Array.isArray(raw)) return raw.slice();
+        if(raw && typeof raw === "object"){
+          var out = [];
+          Object.keys(raw).forEach(function(k){
+            if(raw[k] && typeof raw[k] === "object"){
+              if(raw[k].key == null) raw[k].key = k;
+              out.push(raw[k]);
+            }
+          });
+          return out;
+        }
+        return [];
+      }
+
+      function getProducts(){
+        return normalizeProducts(window.PIXY_PRODUCTS);
+      }
+
+      function findByKey(key){
+        var list = getProducts();
+        for (var i=0;i<list.length;i++){
+          if(list[i] && String(list[i].key).toLowerCase() === String(key).toLowerCase()){
+            return list[i];
+          }
+        }
+        return null;
+      }
+
+      function renderKeyList(){
+        var list = getProducts();
+        var host = $("keysList");
+        if(!host) return;
+        host.innerHTML = "";
+        list.forEach(function(p){
+          if(!p || !p.key) return;
+          var a = document.createElement("a");
+          a.className = "keylink";
+          a.href = "checkout.html?key=" + encodeURIComponent(p.key);
+          a.textContent = p.key;
+          host.appendChild(a);
+        });
+      }
+
+      function ecwidCartOpenReadyNow(){
+        return !!(
+          (window.xProductBrowser && typeof window.xProductBrowser.showShoppingCart === "function") ||
+          (window.Ecwid && typeof window.Ecwid.openPage === "function")
+        );
+      }
+
+      function ecwidAddReadyNow(){
+        return !!(
+          window.Ecwid &&
+          window.Ecwid.Cart &&
+          typeof window.Ecwid.Cart.addProduct === "function"
+        );
+      }
+
+      function ensureEcwidLoaded(mode){
+        mode = mode || "cart";
+        var isReady = mode === "add" ? ecwidAddReadyNow : ecwidCartOpenReadyNow;
+
+        if (isReady()) return Promise.resolve(true);
+
+        if (ecwidBootPromise) {
+          return ecwidBootPromise.then(function () {
+            return waitForEcwidMode(mode);
+          });
+        }
+
+        ecwidBootPromise = new Promise(function(resolve, reject){
+          var existing = document.getElementById("ecwid-script") || document.querySelector('script[src*="app.ecwid.com/script.js?' + String(ECWID_STORE_ID) + '"]');
+          var done = false;
+
+          function finishOk(){
+            if (done) return;
+            done = true;
+            resolve(true);
+          }
+
+          function finishErr(err){
+            if (done) return;
+            done = true;
+            reject(err || new Error("Ecwid not ready"));
+          }
+
+          function afterScript(){
+            var tries = 0;
+            var max = 120;
+
+            try {
+              if (window.Ecwid && window.Ecwid.OnAPILoaded && typeof window.Ecwid.OnAPILoaded.add === "function") {
+                window.Ecwid.OnAPILoaded.add(function(){
+                  try {
+                    if (window.Ecwid && typeof window.Ecwid.init === "function") {
+                      window.Ecwid.init();
+                    }
+                  } catch(e) {}
+                  if (ecwidCartOpenReadyNow() || ecwidAddReadyNow()) {
+                    finishOk();
+                  }
+                });
+              }
+            } catch(e) {}
+
+            var t = setInterval(function(){
+              tries++;
+
+              try {
+                if (window.Ecwid && typeof window.Ecwid.init === "function") {
+                  window.Ecwid.init();
+                }
+              } catch(e) {}
+
+              if (ecwidCartOpenReadyNow() || ecwidAddReadyNow()) {
+                clearInterval(t);
+                finishOk();
+                return;
+              }
+
+              if (tries >= max) {
+                clearInterval(t);
+                finishErr(new Error("Ecwid not ready"));
+              }
+            }, 120);
+          }
+
+          if(!existing){
+            var s = document.createElement("script");
+            s.id = "ecwid-script";
+            s.async = true;
+            s.src = ECWID_SCRIPT_SRC;
+            s.onload = afterScript;
+            s.onerror = function(){ finishErr(new Error("Ecwid script failed to load")); };
+            document.head.appendChild(s);
+          } else {
+            afterScript();
+          }
+        });
+
+        return ecwidBootPromise.then(function(){
+          return waitForEcwidMode(mode);
+        });
+      }
+
+      function waitForEcwidMode(mode){
+        mode = mode || "cart";
+        var isReady = mode === "add" ? ecwidAddReadyNow : ecwidCartOpenReadyNow;
+
+        if (isReady()) return Promise.resolve(true);
+
+        return new Promise(function(resolve, reject){
+          var start = Date.now();
+          var t = setInterval(function(){
+            try {
+              if (window.Ecwid && typeof window.Ecwid.init === "function") {
+                window.Ecwid.init();
+              }
+            } catch(e) {}
+
+            if (isReady()) {
+              clearInterval(t);
+              resolve(true);
+              return;
+            }
+
+            if (Date.now() - start > 15000) {
+              clearInterval(t);
+              reject(new Error("Ecwid mode not ready: " + mode));
+            }
+          }, 120);
+        });
+      }
+
+      function openCart(){
+        return ensureEcwidLoaded("cart").then(function(){
+          try {
+            if (window.Ecwid && typeof window.Ecwid.init === "function") {
+              window.Ecwid.init();
+            }
+          } catch(e) {}
+
+          if (window.xProductBrowser && typeof window.xProductBrowser.showShoppingCart === "function") {
+            window.xProductBrowser.showShoppingCart();
+            return true;
+          }
+
+          if (window.Ecwid && typeof window.Ecwid.openPage === "function") {
+            window.Ecwid.openPage("cart");
+            return true;
+          }
+
+          return false;
+        }).catch(function(){
+          return false;
+        });
+      }
+
+      function addToCart(productId, qty){
+        var pid = Number(productId);
+        qty = Number(qty || 1);
+        if(!pid || !isFinite(pid)) return Promise.resolve(false);
+
+        return ensureEcwidLoaded("add").then(function(){
+          return new Promise(function(resolve){
+            try {
+              window.Ecwid.Cart.addProduct({
+                id: pid,
+                quantity: qty,
+                callback: function(){
+                  resolve(true);
+                }
+              });
+
+              setTimeout(function(){ resolve(true); }, 350);
+            } catch(e){
+              resolve(false);
+            }
+          });
+        }).catch(function(){
+          return false;
+        });
+      }
+
+      function buyNow(productId, qty){
+        var pid = Number(productId);
+        qty = Number(qty || 1);
+        if(!pid || !isFinite(pid)) return Promise.resolve(false);
+
+        return ensureEcwidLoaded("add").then(function(){
+          return new Promise(function(resolve){
+            try {
+              window.Ecwid.Cart.addProduct({
+                id: pid,
+                quantity: qty,
+                callback: function(){
+                  try {
+                    if (window.Ecwid && typeof window.Ecwid.openPage === "function") {
+                      window.Ecwid.openPage("checkout");
+                      resolve(true);
+                      return;
+                    }
+                  } catch(e) {}
+                  resolve(false);
+                }
+              });
+
+              setTimeout(function(){
+                try {
+                  if (window.Ecwid && typeof window.Ecwid.openPage === "function") {
+                    window.Ecwid.openPage("checkout");
+                    resolve(true);
+                    return;
+                  }
+                } catch(e) {}
+                resolve(false);
+              }, 400);
+            } catch(e){
+              resolve(false);
+            }
+          });
+        }).catch(function(){
+          return false;
+        });
+      }
+
+      function disableActions(reason){
+        $("addBtn").disabled = true;
+        $("buyBtn").disabled = true;
+        $("stickyAdd").disabled = true;
+        $("stickyBuy").disabled = true;
+        if(reason) showError(reason);
+      }
+
+      function wire(product){
+        $("openCartBtn").addEventListener("click", function(e){
+          e.preventDefault();
+          clearError();
+          openCart().then(function(ok){
+            if(!ok) showError("Cart is not ready yet. Reload and try again.");
+          });
+        });
+
+        $("qtyMinus").addEventListener("click", function(){ setQty(Number($("qtyInput").value) - 1); });
+        $("qtyPlus").addEventListener("click", function(){ setQty(Number($("qtyInput").value) + 1); });
+        $("qtyInput").addEventListener("input", function(){ setQty($("qtyInput").value); });
+
+        function doAdd(){
+          clearError();
+          var qty = clampQty($("qtyInput").value);
+
+          setLoading(true);
+          addToCart(product.ecwidProductId, qty).then(function(ok){
+            setLoading(false);
+            if(!ok){
+              showError("Unable to add to cart.\nCheck: Ecwid store id is correct.\nCheck: ecwidProductId is present for this key in products.js.");
+              return;
+            }
+            openCart();
+          });
+        }
+
+        function doBuy(){
+          clearError();
+          var qty = clampQty($("qtyInput").value);
+
+          setLoading(true);
+          buyNow(product.ecwidProductId, qty).then(function(ok){
+            setLoading(false);
+            if(!ok){
+              showError("Unable to start checkout.\nCheck: Ecwid store id is correct.\nCheck: ecwidProductId is present for this key in products.js.");
+              return;
+            }
+          });
+        }
+
+        $("addBtn").addEventListener("click", function(e){ e.preventDefault(); doAdd(); });
+        $("buyBtn").addEventListener("click", function(e){ e.preventDefault(); doBuy(); });
+
+        $("stickyAdd").addEventListener("click", function(e){ e.preventDefault(); doAdd(); });
+        $("stickyBuy").addEventListener("click", function(e){ e.preventDefault(); doBuy(); });
+      }
+
+      function render(){
+        clearError();
+
+        var products = getProducts();
+        if(!products.length){
+          setText("productTitle", "Products not loaded");
+          setText("productBlurb", "window.PIXY_PRODUCTS is missing or empty. Check: assets/js/products.js path and that it defines window.PIXY_PRODUCTS.");
+          setText("stickyName", "Products not loaded");
+          setText("sumItem", "—");
+          disableActions("Products not loaded.\nFix: ensure assets/js/products.js exists and sets window.PIXY_PRODUCTS.");
+          return;
+        }
+
+        var key = getParam("key");
+        if(!key){
+          setText("productTitle", "Missing product key");
+          setText("productBlurb", "Open this page with ?key=YOUR_PRODUCT_KEY");
+          setText("stickyName", "Missing product key");
+          setText("sumItem", "—");
+          $("missingKeyPanel").style.display = "block";
+          renderKeyList();
+          disableActions("Missing product key.\nExample: /checkout.html?key=jerk");
+          return;
+        }
+
+        var p = findByKey(key);
+        if(!p){
+          setText("productTitle", "Product not found");
+          setText("productBlurb", "No product matches key: " + key);
+          setText("stickyName", "Product not found");
+          setText("sumItem", "—");
+          $("missingKeyPanel").style.display = "block";
+          renderKeyList();
+          disableActions("No product matches key: " + key + "\nCheck keys in products.js.");
+          return;
+        }
+
+        setText("productTitle", p.title || p.key || "");
+        setText("productBlurb", p.blurb || "");
+        setImg("productImg", p.image || "", p.title || p.key || "Product image");
+
+        setText("stickyName", p.title || p.key || "");
+        setText("sumItem", p.title || p.key || "");
+        setQty(1);
+
+        if(p.ecwidProductId == null || !Number(p.ecwidProductId)){
+          disableActions("This product key exists, but ecwidProductId is missing/invalid.\nFix products.js for key: " + p.key);
+          return;
+        }
+
+        wire(p);
+      }
+
+      document.addEventListener("DOMContentLoaded", render);
+    })();
+  </script>
+</body>
+</html>

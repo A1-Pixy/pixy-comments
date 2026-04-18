@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -l \"carousel-wrap\\\\|data-category\\\\|enhanceShop\\\\|gift-media\\\\|juniors-hero\\\\|jr-carousel\" \"c:/Users/pixy/Desktop/pixy-build/\"*.html)",
+      "Bash(powershell -Command \"\\(Get-Item 'C:\\\\Users\\\\pixy\\\\Desktop\\\\pixy-build.zip'\\).Length / 1MB\")",
+      "Read(//c/Users/pixy/Desktop/**)",
+      "Bash(powershell -Command \"Compress-Archive -Path 'pixy-build' -DestinationPath 'pixy-build.zip' -Force\")",
+      "Bash(mv \"ChatGPT Image Jul 29, 2025, 04_47_26 PM.png\" \"signature-collection-badge.png\")",
+      "Bash(mv \"Books/ChatGPT Image Jul 3, 2025, 12_52_23 PM.png\" \"Books/book-coming-soon-cover.png\")",
+      "Bash(mv \"Books/2f4f6ddc-76f5-4dc4-87d8-13e4804bf1e1.png\" \"Books/book-classic-cover.png\")",
+      "Bash(mv \"Books/577f7438-9523-43f5-b825-852f53c4fb73.png\" \"Books/juniors-scene.png\")",
+      "Bash(ls /c/Users/pixy/Desktop/pixy-build/assets/images/*.png)"
+    ]
+  }
+}
