@@ -117,6 +117,7 @@ exports.handler = async function (event) {
   var requestBody = {
     contents: [
       {
+        role: "user",
         parts: [
           { text: buildPrompt(message, matchedProducts) }
         ]
