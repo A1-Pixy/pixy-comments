@@ -103,6 +103,19 @@
     h3.className = "card-title";
     h3.textContent = p.title || "";
 
+    var priceEl = null;
+    if (p.price != null) {
+      priceEl = document.createElement("p");
+      priceEl.className = "card-price";
+      priceEl.textContent = "$" + Number(p.price).toFixed(2);
+      if (p.freeShipping) {
+        var badge = document.createElement("span");
+        badge.className = "card-free-ship";
+        badge.textContent = " — Free Shipping";
+        priceEl.appendChild(badge);
+      }
+    }
+
     var blurb = document.createElement("p");
     blurb.className = "muted";
     blurb.textContent = p.blurb || p.story || "";
@@ -131,6 +144,7 @@
 
     card.appendChild(media);
     card.appendChild(h3);
+    if (priceEl) card.appendChild(priceEl);
     if (blurb.textContent) card.appendChild(blurb);
     card.appendChild(actions);
     return card;
@@ -281,15 +295,14 @@
         }
 
         var addBtn = el.querySelector("[data-add-to-cart]");
-        if (addBtn && p.ecwidProductId) {
+        if (addBtn) {
           addBtn.addEventListener("click", function (ev) {
             ev.preventDefault(); ev.stopPropagation();
-            ensureEcwidLoaded("add").then(function () {
-              window.Ecwid.Cart.addProduct({
-                id: Number(p.ecwidProductId), quantity: 1,
-                callback: function (success) { if (success) openEcwidCart(); }
-              });
-            });
+            if (window.PIXY_CART && typeof window.PIXY_CART.addByKey === "function") {
+              window.PIXY_CART.addByKey(p.key);
+            } else if (window.PIXY_CART && typeof window.PIXY_CART.add === "function") {
+              window.PIXY_CART.add(p, 1);
+            }
           });
         }
       })(nodes[i]);

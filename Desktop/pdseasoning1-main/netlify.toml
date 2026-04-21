@@ -17,13 +17,24 @@ NODE_VERSION = "18"
 #                        Required for /.netlify/functions/gemini (AI assistant)
 #                        Required for /.netlify/functions/chat (AI fallback)
 #
-#   SUPABASE_URL       — Supabase project URL
-#                        Required for /.netlify/functions/recipes-get
-#                        Required for /.netlify/functions/recipes-post
+#   SUPABASE_URL         — Supabase project URL
+#                          Required for /.netlify/functions/recipes-get
+#                          Required for /.netlify/functions/recipes-post
+#                          Required for /.netlify/functions/products-get
+#                          Required for /.netlify/functions/products-admin
 #
-#   SUPABASE_ANON_KEY  — Supabase anonymous (public) key
-#                        Required for /.netlify/functions/recipes-get
-#                        Required for /.netlify/functions/recipes-post
+#   SUPABASE_ANON_KEY    — Supabase anonymous (public) key
+#                          Required for /.netlify/functions/recipes-get
+#                          Required for /.netlify/functions/recipes-post
+#                          Required for /.netlify/functions/products-get
+#                          Required for /.netlify/functions/products-admin
+#
+#   SUPABASE_SERVICE_KEY — Supabase service_role key (bypasses RLS for admin writes)
+#                          Found in: Supabase Dashboard → Project Settings → API → service_role
+#                          Required for /.netlify/functions/products-admin
+#
+#   ADMIN_SECRET         — Any strong password you choose (protects /admin/products.html)
+#                          Required for /.netlify/functions/products-admin
 # ─────────────────────────────────────────────────────────────────────────────
 
 [[headers]]

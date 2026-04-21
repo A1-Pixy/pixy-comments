@@ -3,16 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Individual Spices. Pixy Dust Seasoning</title>
+  <title>Shipping — Pixy Dust Seasoning</title>
+  <meta name="description" content="Pixy Dust shipping info — standard 5–7 days, expedited 2–3 days. Free shipping on all gift sets and orders over $75." />
+  <meta property="og:title" content="Shipping — Pixy Dust Seasoning" />
+  <meta property="og:description" content="Everything you need to know about how your order gets to you." />
+  <meta property="og:image" content="assets/images/signature-collection-badge.png" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
   <link rel="stylesheet" href="assets/css/pixy.css" />
   <script src="assets/js/cms.js" defer></script>
   <script src="assets/js/chatbot.js" defer></script>
-  <script src="assets/js/products.js" defer></script>
   <script src="assets/js/main.js" defer></script>
-  <script src="assets/js/pixy-cart.js" defer></script>
   <script src="assets/js/cart.js" defer></script>
-  <script src="assets/js/agents.js" defer></script>
-  <script src="assets/js/shop.js" defer></script>
 </head>
 <body>
   <div class="flash-sale" role="banner" aria-label="Promotion">
@@ -30,55 +32,75 @@
       <a class="brand" href="index.html" aria-label="Pixy Dust Seasoning">
         <img src="assets/images/PD blk.png" alt="Pixy Dust Seasoning" width="120" height="40" decoding="async" />
       </a>
-
       <button class="nav-toggle" type="button" aria-label="Toggle navigation menu" aria-controls="mainNav" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
-
       <nav id="mainNav" class="nav main-nav" aria-label="Primary">
-        <a href="shop.html" data-active="true">Shop</a>
+        <a href="index.html">Home</a>
+        <a href="shop.html">Shop</a>
         <a href="gifting.html">Gifting</a>
+        <a href="juniors.html">Juniors</a>
+        <a href="recipes.html">Recipes</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="wholesale.html">Wholesale</a>
         <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
       </nav>
-
-      <div class="header-right">
-        <a class="nav-icon-btn" href="shop.html" aria-label="Search products">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-          </svg>
-        </a>
-        <button class="nav-icon-btn" id="openCartBtn" type="button" aria-label="Open cart">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
-          </svg>
-          <span class="cart-badge" data-cart-badge hidden></span>
-        </button>
-        <a class="btn btn-gold btn-sm" href="checkout.html">Buy Now</a>
-      </div>
+      <button class="cart-btn" id="openCartBtn" type="button" aria-label="Open cart">Cart</button>
     </div>
   </header>
 
   <main id="main" class="page">
-    <section class="section collection">
+    <section class="section">
       <div class="container">
         <div class="section-head">
-          <h1 class="page-title">Individual Spices</h1>
-          <p class="section-sub">Swipe to browse. Tap any item for full details.</p>
-          <p><a class="btn btn-secondary" href="shop.html?view=Individual%20Spices">Back to shop</a></p>
+          <h1 class="page-title">Shipping</h1>
+          <p class="section-sub">Everything you need to know about how your order gets to you.</p>
         </div>
 
-        <div class="card">
-          <div class="carousel-wrap" data-carousel="spices" data-category="Individual Spices">
-            <div class="carousel-controls">
-              <div class="left">
-                <button class="carousel-btn" type="button" aria-label="Previous" data-carousel-prev>‹</button>
-                <button class="carousel-btn" type="button" aria-label="Next" data-carousel-next>›</button>
-              </div>
-              <div class="right">
-                <button class="viewall-btn" type="button" data-carousel-viewall>View all</button>
-              </div>
-            </div>
-            <div class="carousel-track products" data-carousel-track aria-label="Spices carousel"></div>
+        <div class="grid two">
+          <div class="card">
+            <h2 class="section-title">Domestic Shipping</h2>
+            <ul class="list">
+              <li>Standard shipping: 5–7 business days</li>
+              <li>Expedited shipping: 2–3 business days</li>
+              <li>Overnight: 1 business day (where available)</li>
+              <li>Orders ship Monday–Friday, excluding holidays</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h2 class="section-title">Free Shipping</h2>
+            <ul class="list">
+              <li>All Gift Sets ship free — no minimum required</li>
+              <li>Orders over $75 qualify for free standard shipping</li>
+              <li>Free shipping applied automatically at checkout</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="grid two">
+          <div class="card">
+            <h2 class="section-title">Processing Time</h2>
+            <p class="muted">Most orders are processed within 1–2 business days. During peak seasons or promotions, processing may take up to 3 business days. You will receive a tracking confirmation email once your order has shipped.</p>
+          </div>
+
+          <div class="card">
+            <h2 class="section-title">Order Tracking</h2>
+            <p class="muted">A tracking number is emailed as soon as your order ships. If you did not receive a tracking email, check your spam folder or contact us at <a href="mailto:support@pixydustseasoning.com" style="color:var(--gold);">support@pixydustseasoning.com</a>.</p>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="callout" style="text-align:center;padding:32px 24px;">
+          <h2 class="section-title" style="margin-bottom:10px;">Questions about your order?</h2>
+          <p class="muted" style="margin-bottom:22px;">Our team is happy to help. Reach out and we'll get back to you within 1 business day.</p>
+          <div class="cta-row" style="justify-content:center;">
+            <a class="btn btn-primary" href="contact.html">Contact Us</a>
+            <a class="btn btn-secondary" href="shop.html">Continue Shopping</a>
           </div>
         </div>
       </div>
@@ -102,8 +124,8 @@
     </header>
     <div class="chat-body" data-chat-body aria-live="polite"></div>
     <form class="chat-input" data-chat-form>
-      <label class="sr-only" for="chatTextSpices">Message</label>
-      <input id="chatTextSpices" name="message" type="text" placeholder="Ask about flavors, ingredients, pairings" autocomplete="off" required />
+      <label class="sr-only" for="chatTextShip">Message</label>
+      <input id="chatTextShip" name="message" type="text" placeholder="Ask about flavors, ingredients, pairings" autocomplete="off" required />
       <button class="btn btn-primary" type="submit">Send</button>
     </form>
   </section>

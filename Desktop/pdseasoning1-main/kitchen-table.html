@@ -3,7 +3,6 @@ File name: kitchen-table.html
 Purpose:
 - Kitchen Table section landing page for dips, spreads, small-format servings
 - Informational only. No products rendered from products.js
-- Cart-only Ecwid (no storefront catalog)
 -->
 
 <!doctype html>
@@ -13,17 +12,23 @@ Purpose:
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Kitchen Table. Pixy Dust Seasoning Luxury</title>
   <link rel="stylesheet" href="assets/css/pixy.css" />
-  <!-- Ecwid: cart-only -->
-  <script>window.ec=window.ec||{};window.ec.storefront=window.ec.storefront||{};window.ec.storefront.enable_catalog=false;</script>
-  <script src="https://app.ecwid.com/script.js?62406545&data_platform=code&data_date=2026-01-01" async charset="utf-8"></script>
   <script src="assets/js/cms.js" defer></script>
   <script src="assets/js/chatbot.js" defer></script>
   <script src="assets/js/products.js" defer></script>
   <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/pixy-cart.js" defer></script>
   <script src="assets/js/cart.js" defer></script>
 </head>
 
 <body>
+  <div class="flash-sale" role="banner" aria-label="Promotion">
+    <div class="container">
+      <div class="flash-sale-inner">
+        <span><strong>Free Shipping</strong> on all Gift Sets — no minimum required</span>
+        <a class="btn btn-secondary" href="gifting.html" style="font-size:.75rem;padding:5px 14px;letter-spacing:.08em;">Shop Gift Sets</a>
+      </div>
+    </div>
+  </div>
   <a class="skip-link" href="#main">Skip to content</a>
 
   <header class="topbar topbar--solid">
@@ -35,17 +40,25 @@ Purpose:
         <span></span><span></span><span></span>
       </button>
       <nav id="mainNav" class="nav main-nav" aria-label="Primary">
-        <a href="index.html">Home</a>
         <a href="shop.html">Shop</a>
-        <a href="kitchen-table.html" data-active="true">Kitchen Table</a>
-        <a href="gallery.html">Gallery</a>
-        <a href="juniors.html">Juniors</a>
         <a href="gifting.html">Gifting</a>
-        <a href="wholesale.html">Wholesale</a>
         <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
       </nav>
-      <button class="cart-btn" id="openCartBtn" type="button" aria-label="Open cart">Cart</button>
+
+      <div class="header-right">
+        <a class="nav-icon-btn" href="shop.html" aria-label="Search products">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </a>
+        <button class="nav-icon-btn" id="openCartBtn" type="button" aria-label="Open cart">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+          <span class="cart-badge" data-cart-badge hidden></span>
+        </button>
+        <a class="btn btn-gold btn-sm" href="checkout.html">Buy Now</a>
+      </div>
     </div>
   </header>
 
@@ -121,7 +134,7 @@ Purpose:
         <span class="chat-spark" aria-hidden="true"></span>
         <div>
           <div class="chat-title">Pixy Assistant</div>
-          <div class="chat-sub">Food-focused answers. Non-medical.</div>
+          <div class="chat-sub">Flavors · Pairings · Cooking Tips</div>
         </div>
       </div>
       <button class="chat-close" type="button" aria-label="Close chat" data-chat-close>×</button>

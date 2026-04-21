@@ -75,3 +75,63 @@ export async function supabaseInsert(baseUrl, anonKey, userJwt, table, payload) 
   if (!res.ok) throw new Error("Supabase INSERT failed (" + res.status + "): " + text);
   return safeJson(text);
 }
+
+/**
+ * INSERT using a service role key (bypasses RLS).
+ * @param {string} baseUrl     - SUPABASE_URL
+ * @param {string} serviceKey  - service_role key
+ * @param {string} anonKey     - anon key (used as apikey header)
+ * @param {string} table       - table name
+ * @param {object} payload     - row data
+ */
+export async function supabaseServiceInsert(baseUrl, serviceKey, anonKey, table, payload) {
+  const url = supabaseUrl(baseUrl, table);
+  const res = await fetch(url, {
+    method:  "POST",
+    headers: supabaseHeaders(serviceKey, anonKey),
+    body:    JSON.stringify(payload)
+  });
+  const text = await res.text();
+  if (!res.ok) throw new Error("Supabase INSERT failed (" + res.status + "): " + text);
+  return safeJson(text);
+}
+
+/**
+ * PATCH (partial update) rows matching the given filter params.
+ * @param {string} baseUrl     - SUPABASE_URL
+ * @param {string} serviceKey  - service_role key
+ * @param {string} anonKey     - anon key (used as apikey header)
+ * @param {string} table       - table name
+ * @param {object} match       - filter params, e.g. { sku: "eq.my-sku" }
+ * @param {object} payload     - fields to update
+ */
+export async function supabasePatch(baseUrl, serviceKey, anonKey, table, match, payload) {
+  const url = supabaseUrl(baseUrl, table, match);
+  const res = await fetch(url, {
+    method:  "PATCH",
+    headers: supabaseHeaders(serviceKey, anonKey),
+    body:    JSON.stringify(payload)
+  });
+  const text = await res.text();
+  if (!res.ok) throw new Error("Supabase PATCH failed (" + res.status + "): " + text);
+  return safeJson(text);
+}
+
+/**
+ * DELETE rows matching the given filter params.
+ * @param {string} baseUrl     - SUPABASE_URL
+ * @param {string} serviceKey  - service_role key
+ * @param {string} anonKey     - anon key (used as apikey header)
+ * @param {string} table       - table name
+ * @param {object} match       - filter params, e.g. { sku: "eq.my-sku" }
+ */
+export async function supabaseDeleteRow(baseUrl, serviceKey, anonKey, table, match) {
+  const url = supabaseUrl(baseUrl, table, match);
+  const res = await fetch(url, {
+    method:  "DELETE",
+    headers: supabaseHeaders(serviceKey, anonKey)
+  });
+  const text = await res.text();
+  if (!res.ok) throw new Error("Supabase DELETE failed (" + res.status + "): " + text);
+  return safeJson(text);
+}

@@ -18,7 +18,6 @@
   "use strict";
 
   var GEMINI_ENDPOINT = "/.netlify/functions/gemini";
-  var CHAT_ENDPOINT   = "/.netlify/functions/chat";   // fallback
   var CATALOG_SRC     = "assets/data/product-catalog.js";
   var LS_KEY          = "pixy_chat_v3";
   var SS_KEY          = "pixy_chat_session_v3";

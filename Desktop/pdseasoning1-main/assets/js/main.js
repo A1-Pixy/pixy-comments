@@ -228,6 +228,15 @@
     var id = Number(ecwidProductId);
     if (!id || !isFinite(id)) return Promise.resolve(false);
 
+    // Prefer pixy-cart (localStorage) over Ecwid
+    if (window.PIXY_CART && typeof window.PIXY_CART.addByEcwidId === "function") {
+      var result = window.PIXY_CART.addByEcwidId(id, qty);
+      if (result !== null) {
+        if (typeof window.PIXY_CART.open === "function") window.PIXY_CART.open();
+        return Promise.resolve(true);
+      }
+    }
+
     return ensureEcwidLoaded("add").then(function () {
       return new Promise(function (resolve) {
         try {
@@ -238,7 +247,6 @@
               openEcwidCart().then(function () { resolve(true); }).catch(function () { resolve(true); });
             }
           });
-          // Safety timeout — open cart regardless
           setTimeout(function () {
             openEcwidCart().then(function () { resolve(true); }).catch(function () { resolve(true); });
           }, 350);
@@ -554,6 +562,21 @@
       var p = pouches[safeIdx(idx, len)];
       if (name) name.textContent = p && p.title ? p.title : "";
       if (cta && p && p.key) cta.setAttribute("href", "product.html?key=" + encodeURIComponent(p.key));
+
+      var priceEl = document.getElementById("heroPrice");
+      if (priceEl) priceEl.textContent = (p && p.price != null) ? "$" + Number(p.price).toFixed(2) : "";
+
+      var addCartBtn = document.getElementById("heroAddCart");
+      if (addCartBtn) {
+        if (p && p.ecwidProductId) {
+          addCartBtn.style.display = "";
+          (function (pid) {
+            addCartBtn.onclick = function () { addToCart(pid, 1); };
+          })(p.ecwidProductId);
+        } else {
+          addCartBtn.style.display = "none";
+        }
+      }
     }
 
     for (var j = 0; j < pouches.length; j++) {
@@ -817,7 +840,7 @@
           if (r.ok) {
             form.reset();
             if (note) {
-              note.textContent = "You\u2019re on the list. Watch your inbox.";
+              note.textContent = "You\u2019re on the list. Check your inbox for your 10% off code.";
               note.style.color = "var(--gold)";
               note.style.display = "";
             }

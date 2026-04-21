@@ -3,7 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Juniors. Pixy Dust</title>
+  <title>Juniors — Pixy Dust Seasoning</title>
+  <meta name="description" content="Pixy Dust Juniors — cooking kits, flavor education, and books for kids. Junior Chef Collection $50, Junior Chef Kit $20. Raise a chef." />
+  <meta property="og:title" content="Juniors — Pixy Dust Seasoning" />
+  <meta property="og:description" content="Playful, premium cooking kits and books for kids. Raise the next generation of chefs with Pixy Dust Juniors." />
+  <meta property="og:image" content="assets/images/signature-collection-badge.png" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
   <link rel="stylesheet" href="assets/css/pixy.css" />
   <style>
     .mini-media-img { width:100%; height:auto; display:block; }
@@ -19,15 +25,20 @@
   <script src="assets/js/cms.js" defer></script>
   <script src="assets/js/chatbot.js" defer></script>
   <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/pixy-cart.js" defer></script>
   <script src="assets/js/cart.js" defer></script>
   <script src="assets/js/agents.js" defer></script>
   <script src="assets/js/shop.js" defer></script>
-
-  <!-- Ecwid: cart-only -->
-  <script>window.ec=window.ec||{};window.ec.storefront=window.ec.storefront||{};window.ec.storefront.enable_catalog=false;</script>
-  <script src="https://app.ecwid.com/script.js?62406545&data_platform=code&data_date=2026-01-01" async charset="utf-8"></script>
 </head>
 <body>
+  <div class="flash-sale" role="banner" aria-label="Promotion">
+    <div class="container">
+      <div class="flash-sale-inner">
+        <span><strong>Free Shipping</strong> on all Gift Sets — no minimum required</span>
+        <a class="btn btn-secondary" href="gifting.html" style="font-size:.75rem;padding:5px 14px;letter-spacing:.08em;">Shop Gift Sets</a>
+      </div>
+    </div>
+  </div>
   <a class="skip-link" href="#main">Skip to content</a>
 
   <header class="topbar topbar--solid">
@@ -39,17 +50,25 @@
         <span></span><span></span><span></span>
       </button>
       <nav id="mainNav" class="nav main-nav" aria-label="Primary">
-        <a href="index.html">Home</a>
         <a href="shop.html">Shop</a>
-        <a href="kitchen-table.html">Kitchen Table</a>
-        <a href="gallery.html">Gallery</a>
-        <a href="juniors.html" data-active="true">Juniors</a>
         <a href="gifting.html">Gifting</a>
-        <a href="wholesale.html">Wholesale</a>
         <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
       </nav>
-      <button class="cart-btn" id="openCartBtn" type="button" aria-label="Open cart">Cart</button>
+
+      <div class="header-right">
+        <a class="nav-icon-btn" href="shop.html" aria-label="Search products">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </a>
+        <button class="nav-icon-btn" id="openCartBtn" type="button" aria-label="Open cart">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+          <span class="cart-badge" data-cart-badge hidden></span>
+        </button>
+        <a class="btn btn-gold btn-sm" href="checkout.html">Buy Now</a>
+      </div>
     </div>
   </header>
 
@@ -93,17 +112,17 @@
                 <article class="mini-card" data-product-key="bottle-all-purpose">
                   <div class="bottle-placeholder" data-media></div>
                   <div class="mini-title" data-title></div>
-                  <a class="mini-cta" data-cta href="#">View Details</a>
+                  <a class="mini-cta" data-cta href="product.html?key=bottle-all-purpose">View Details</a>
                 </article>
                 <article class="mini-card" data-product-key="bottle-jerk">
                   <div class="bottle-placeholder" data-media></div>
                   <div class="mini-title" data-title></div>
-                  <a class="mini-cta" data-cta href="#">View Details</a>
+                  <a class="mini-cta" data-cta href="product.html?key=bottle-jerk">View Details</a>
                 </article>
                 <article class="mini-card" data-product-key="bottle-sugar-free-all-purpose">
                   <div class="bottle-placeholder" data-media></div>
                   <div class="mini-title" data-title></div>
-                  <a class="mini-cta" data-cta href="#">View Details</a>
+                  <a class="mini-cta" data-cta href="product.html?key=bottle-sugar-free-all-purpose">View Details</a>
                 </article>
               </div>
             </div>
@@ -116,12 +135,21 @@
               <article class="mini-card" data-product-key="book-zen-pearl-market">
                 <div class="book-placeholder" data-media></div>
                 <div class="mini-title" data-title></div>
-                <a class="mini-cta" data-cta href="#">View Details</a>
+                <a class="mini-cta" data-cta href="product.html?key=book-zen-pearl-market">View Details</a>
               </article>
               <article class="mini-card" data-product-key="book-coming-soon">
                 <div class="book-placeholder" data-media></div>
                 <div class="mini-title" data-title></div>
-                <a class="mini-cta" data-coming-soon href="#">Notify Me</a>
+                <div id="notifyMeWrap">
+                  <form id="notifyMeForm" name="juniors-notify" method="post" data-netlify="true" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
+                    <input type="hidden" name="form-name" value="juniors-notify" />
+                    <input id="notifyEmail" name="email" type="email" inputmode="email" autocomplete="email"
+                      placeholder="Your email" required
+                      style="flex:1;min-width:0;padding:8px 12px;border-radius:8px;border:1px solid rgba(217,185,108,.3);background:rgba(0,0,0,.3);color:#fff;font-size:.9rem;" />
+                    <button type="submit" class="btn btn-secondary" style="white-space:nowrap;">Notify Me</button>
+                  </form>
+                  <p id="notifyNote" aria-live="polite" style="display:none;font-size:.85rem;margin-top:6px;color:#d9b96c;"></p>
+                </div>
               </article>
             </div>
           </div>
@@ -162,7 +190,7 @@
         <span class="chat-spark" aria-hidden="true"></span>
         <div>
           <div class="chat-title">Pixy Assistant</div>
-          <div class="chat-sub">Food-focused answers. Non-medical.</div>
+          <div class="chat-sub">Flavors · Pairings · Cooking Tips</div>
         </div>
       </div>
       <button class="chat-close" type="button" aria-label="Close chat" data-chat-close>×</button>
@@ -197,33 +225,13 @@
 
       function encodeKey(key){ return encodeURIComponent(String(key || "")); }
 
-      function ensureEcwidReady(timeoutMs){
-        timeoutMs = typeof timeoutMs === "number" ? timeoutMs : 12000;
-        return new Promise(function(resolve, reject){
-          var start = Date.now();
-          function ready(){
-            return (window.Ecwid && window.Ecwid.Cart && typeof window.Ecwid.Cart.addProduct === "function");
-          }
-          if (ready()) { resolve(); return; }
-          if (window.Ecwid && window.Ecwid.OnAPILoaded) {
-            window.Ecwid.OnAPILoaded.add(function(){ if (ready()) resolve(); });
-          }
-          var t = setInterval(function(){
-            if (ready()) { clearInterval(t); resolve(); return; }
-            if (Date.now() - start > timeoutMs) { clearInterval(t); reject(new Error("Ecwid not ready")); }
-          }, 120);
-        });
-      }
-
-      function addToCart(id){
-        var pid = Number(id);
-        if (!pid || !isFinite(pid)) return;
-        ensureEcwidReady().then(function(){
-          window.Ecwid.Cart.addProduct({ id: pid, quantity: 1 });
-          window.Ecwid.openPage("cart");
-        }).catch(function(){
-          alert("Cart is still loading. Try again in a second.");
-        });
+      function addToCartByKey(key){
+        if (!key) return;
+        if (window.PIXY_CART && typeof window.PIXY_CART.addByKey === "function") {
+          window.PIXY_CART.addByKey(key);
+        } else {
+          window.location.href = "product.html?key=" + encodeKey(key);
+        }
       }
 
       function wireCarousel(wrap){
@@ -376,11 +384,11 @@
         buy.className = "btn btn-primary";
         buy.type = "button";
 
-        if (p.ecwidProductId) {
-          buy.textContent = "View & Order";
+        if (p.key) {
+          buy.textContent = "Add to Cart";
           buy.addEventListener("click", function(e){
             e.preventDefault();
-            addToCart(p.ecwidProductId);
+            addToCartByKey(p.key);
           });
         } else {
           buy.textContent = "Coming soon";
@@ -419,11 +427,32 @@
         var miniWrap = document.querySelector('[data-jr-carousel][data-jr-type="mini"]');
         wireCarousel(miniWrap);
 
-        var soon = document.querySelector("[data-coming-soon]");
-        if (soon) {
-          soon.addEventListener("click", function(e){
+        var notifyForm = document.getElementById("notifyMeForm");
+        var notifyNote = document.getElementById("notifyNote");
+        if (notifyForm) {
+          notifyForm.addEventListener("submit", function(e) {
             e.preventDefault();
-            alert("Coming soon.");
+            var invalid = notifyForm.querySelector(":invalid");
+            if (invalid) { invalid.focus(); return; }
+            var btn = notifyForm.querySelector("button[type=submit]");
+            if (btn) { btn.disabled = true; btn.textContent = "Sending…"; }
+            fetch("/", {
+              method: "POST",
+              headers: { "Content-Type": "application/x-www-form-urlencoded" },
+              body: new URLSearchParams(new FormData(notifyForm)).toString()
+            }).then(function(r) {
+              notifyForm.style.display = "none";
+              notifyNote.textContent = r.ok
+                ? "You\u2019re on the list. We\u2019ll let you know when it drops."
+                : "Something went wrong. Email us at support@pixydustseasoning.com";
+              notifyNote.style.color = r.ok ? "#d9b96c" : "#e07070";
+              notifyNote.style.display = "";
+            }).catch(function() {
+              notifyNote.textContent = "Something went wrong. Email us at support@pixydustseasoning.com";
+              notifyNote.style.color = "#e07070";
+              notifyNote.style.display = "";
+              if (btn) { btn.disabled = false; btn.textContent = "Notify Me"; }
+            });
           });
         }
       });
@@ -439,6 +468,9 @@
       <div class="footer-mid">
         <a href="about.html">About Pixy Dust</a>
         <a href="recipes.html">Recipes</a>
+        <a href="faq.html">FAQ</a>
+        <a href="shipping.html">Shipping</a>
+        <a href="returns.html">Returns</a>
         <a href="contact.html">Contact</a>
       </div>
       <div class="footer-right">
