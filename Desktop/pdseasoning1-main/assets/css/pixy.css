@@ -1364,7 +1364,7 @@ input,textarea,select {
   border-radius:12px;
   color:var(--text);
   padding:12px 14px;
-  font-size:.9rem;
+  font-size:1rem; /* must be ≥16px — iOS Safari zooms the page on focus below this */
   outline:none;
   transition:border-color .2s;
   width:100%;
