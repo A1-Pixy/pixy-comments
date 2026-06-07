@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Scan to explore Pixy Dust Seasoning recipes. Choose your blend and unlock premium flavor ideas.">
+  <meta name="theme-color" content="#B8860B">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Pixy Dust — Recipe Guide</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-name">PIXY DUST</span>
+        <span class="brand-tagline">SEASONING</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Homepage view ─────────────────────────────────────────── -->
+  <div id="homepage-view">
+
+    <section class="hero">
+      <h1 class="hero-headline">Sprinkle a Little Magic</h1>
+      <p class="hero-sub">
+        <span class="hero-rule" aria-hidden="true"></span>
+        Choose Your Blend
+        <span class="hero-rule" aria-hidden="true"></span>
+      </p>
+    </section>
+
+    <section class="search-section" aria-label="Search blends">
+      <div class="search-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input
+          type="search"
+          id="search-input"
+          class="search-input"
+          placeholder="Search by ingredient or flavor…"
+          autocomplete="off"
+          autocorrect="off"
+          spellcheck="false"
+          aria-label="Search seasonings by ingredient or flavor"
+        >
+        <button type="button" class="search-clear" id="search-clear" aria-label="Clear search" tabindex="-1">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    </section>
+
+    <main class="main-content" id="main-content">
+      <div class="cards-grid" id="cards-grid" role="list" aria-label="Seasoning blends"></div>
+      <p class="no-results hidden" id="no-results" aria-live="polite">
+        No blends matched your search.<br>Try searching for an ingredient like "chicken" or "shrimp."
+      </p>
+    </main>
+
+  </div>
+
+  <!-- ── Blend detail view ──────────────────────────────────────── -->
+  <div id="blend-view" class="blend-view hidden">
+    <div class="blend-back-bar">
+      <button type="button" class="blend-back-btn" id="blend-back-btn" aria-label="Back to all blends">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true" width="18" height="18">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+        All Blends
+      </button>
+    </div>
+    <div id="blend-view-content"></div>
+  </div>
+
+  <!-- ── Admin stats view ───────────────────────────────────────── -->
+  <div id="admin-view" class="admin-view hidden">
+    <div class="admin-inner">
+      <h1 class="admin-title">Admin Stats</h1>
+      <p class="admin-note">Local test counts only. Netlify function logs show live QR hits.</p>
+      <div id="admin-stats-grid" class="admin-stats-grid"></div>
+      <button type="button" class="admin-clear-btn" id="admin-clear-btn">Clear Local Counts</button>
+      <a href="#" class="admin-back-link" id="admin-back-link">← Back to site</a>
+    </div>
+  </div>
+
+  <!-- ── Hidden Netlify form (build-time detection) ────────────── -->
+  <form name="pixy-vip-signup" netlify netlify-honeypot="bot-field" hidden>
+    <input type="text" name="name">
+    <input type="email" name="email">
+    <input type="hidden" name="blend">
+    <input type="hidden" name="source">
+    <input type="hidden" name="page_url">
+    <input type="hidden" name="timestamp">
+    <input type="text" name="bot-field">
+  </form>
+
+  <!-- ── Overlay (kept for compatibility) ──────────────────────── -->
+  <div
+    class="overlay"
+    id="overlay"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    aria-label="Recipe card"
+  >
+    <div class="overlay-backdrop" id="overlay-backdrop"></div>
+    <button type="button" class="overlay-close" id="overlay-close" aria-label="Close recipe">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+    <div class="overlay-sheet" id="overlay-sheet">
+      <div class="overlay-handle" aria-hidden="true"></div>
+      <div class="overlay-content" id="overlay-content"></div>
+    </div>
+  </div>
+
+  <script src="blends.js?v=2"></script>
+  <script src="script.js?v=2"></script>
+</body>
+</html>
