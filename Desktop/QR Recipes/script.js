@@ -5,8 +5,9 @@
      Constants
   ────────────────────────────────────────────── */
   var blends = window.PIXY_BLENDS || [];
+  console.log('Loaded blends:', blends.length, blends.map(function(b){return b.id;}));
   if (!blends.length) {
-    console.error('No blends loaded. Check blends.js and script order.');
+    console.error('No blends loaded. Check blends.js path, script order, and global variable name.');
   }
   var VALID_SLUGS = blends.map(function (b) { return b.id; });
   var scrollY = 0; // overlay scroll-lock (legacy)

@@ -1,4 +1,4 @@
-window.PIXY_BLENDS = [
+var blends = [
   {
     id: 'smoke-house',
     name: 'Smoke House',
@@ -225,3 +225,4 @@ window.PIXY_BLENDS = [
     tags: ['fried rice', 'noodles', 'chicken', 'shrimp', 'beef', 'vegetables', 'soups', 'stir fry', 'asian', 'chinese', 'wok', 'takeout', 'umami', 'soy', 'honey', 'ramen', 'egg', 'teriyaki']
   }
 ];
+window.PIXY_BLENDS = blends;
