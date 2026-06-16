@@ -3,8 +3,7 @@ publish = "."
 
 [functions]
 directory = "functions"
-# esbuild handles both CommonJS (gemini.js, chat.js) and ESM v2 functions
-# (chat.mjs, recipes-get.mjs, recipes-post.mjs) correctly.
+# esbuild handles both CommonJS (gemini.js, mailchimp-sync.js) and ESM (.mjs) functions correctly.
 node_bundler = "esbuild"
 
 [build.environment]
@@ -12,6 +11,22 @@ NODE_VERSION = "18"
 
 # ── Required environment variables ──────────────────────────────────────────
 # Set these in the Netlify dashboard → Site settings → Environment variables.
+#
+#   SQUARE_APP_ID        — Square Web Payments Application ID
+#                          Sandbox:    "sandbox-sq0idb-..."  (Square sandbox dashboard)
+#                          Production: "sq0idp-..."          (Square production dashboard)
+#                          Required for /.netlify/functions/square-config
+#
+#   SQUARE_LOCATION_ID   — Square Location ID (same for sandbox & production usually)
+#                          Required for /.netlify/functions/square-config
+#                          Required for /.netlify/functions/orders-create
+#
+#   SQUARE_ACCESS_TOKEN  — Square API access token (SECRET — never in frontend)
+#                          Required for /.netlify/functions/orders-create
+#
+#   SQUARE_ENVIRONMENT   — "sandbox" or "production"  (default "production")
+#                          Required for /.netlify/functions/square-config
+#                          Required for /.netlify/functions/orders-create
 #
 #   GEMINI_API_KEY     — Google Gemini API key (get free key at aistudio.google.com)
 #                        Required for /.netlify/functions/gemini (AI assistant)
@@ -29,16 +44,63 @@ NODE_VERSION = "18"
 #                          Required for /.netlify/functions/products-get
 #                          Required for /.netlify/functions/products-admin
 #
-#   SUPABASE_SERVICE_KEY — Supabase service_role key (bypasses RLS for admin writes)
-#                          Found in: Supabase Dashboard → Project Settings → API → service_role
-#                          Required for /.netlify/functions/products-admin
+#   SUPABASE_SERVICE_ROLE_KEY — Supabase service_role key (bypasses RLS for admin writes)
+#                               Found in: Supabase Dashboard → Project Settings → API → service_role
+#                               Required for /.netlify/functions/orders-create
+#                               Required for /.netlify/functions/products-admin
 #
 #   ADMIN_SECRET         — Any strong password you choose (protects /admin/products.html)
 #                          Required for /.netlify/functions/products-admin
+#
+# ── VIP / Mailchimp sync ────────────────────────────────────────────────────
+#
+#   MAILCHIMP_API_KEY        — Mailchimp API key
+#                              Found in: Mailchimp → Account → Extras → API keys
+#                              Required for /.netlify/functions/mailchimp-sync
+#
+#   MAILCHIMP_SERVER_PREFIX  — Mailchimp data center prefix (e.g. "us21")
+#                              Found at the end of your Mailchimp API endpoint URL
+#                              Required for /.netlify/functions/mailchimp-sync
+#
+#   MAILCHIMP_AUDIENCE_ID    — Mailchimp list/audience ID
+#                              Found in: Mailchimp → Audience → Settings → Audience name and defaults
+#                              Required for /.netlify/functions/mailchimp-sync
+#
+#   SUPABASE_SERVICE_ROLE_KEY — Also used by mailchimp-sync to insert leads
+#                               (same key as documented above)
 # ─────────────────────────────────────────────────────────────────────────────
 
+# ── HTML pages: never cache (content changes on each deploy) ────────────────
 [[headers]]
 for = "/*"
 [headers.values]
-cache-control = "max-age=0, no-cache, no-store, must-revalidate"
+Cache-Control = "max-age=0, no-cache, no-store, must-revalidate"
 X-Frame-Options = "DENY"
+
+# ── Static assets: cache 1 year, immutable (filenames don't change often) ───
+[[headers]]
+for = "/assets/*"
+[headers.values]
+Cache-Control = "public, max-age=31536000, immutable"
+
+# JS files: never cache during active development
+[[headers]]
+for = "/*.js"
+[headers.values]
+Cache-Control = "max-age=0, no-cache, no-store, must-revalidate"
+
+# JS under /assets/ — overrides the /assets/* block above for .js files
+[[headers]]
+for = "/assets/js/*.js"
+[headers.values]
+Cache-Control = "max-age=0, no-cache, no-store, must-revalidate"
+
+[[headers]]
+for = "/*.css"
+[headers.values]
+Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+for = "/*.{png,jpg,jpeg,webp,avif,svg}"
+[headers.values]
+Cache-Control = "public, max-age=31536000, immutable"
