@@ -576,6 +576,61 @@
 .action-btn.reject:hover  { background: rgba(255,94,94,0.18);  border-color: #ff5e5e; box-shadow: 0 0 14px rgba(255,94,94,0.25);  transform: translateY(-1px); }
 .action-btn.hold:hover    { background: rgba(216,166,48,0.18); border-color: #d8a630; box-shadow: 0 0 14px rgba(216,166,48,0.25); transform: translateY(-1px); }
 
+/* ---- SUPPORT CASE GENERATOR ---- */
+.pl-generate-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.pl-generated-badge {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #00e676;
+  background: rgba(0,230,118,0.10);
+  border: 1px solid rgba(0,230,118,0.28);
+  border-radius: 3px;
+  padding: 3px 10px;
+}
+.pl-generate-status-msg {
+  font-size: 10px;
+  border-radius: 3px;
+  padding: 7px 12px;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+.pl-generate-no-data {
+  color: #ffab00;
+  background: rgba(255,160,0,0.08);
+  border: 1px solid rgba(255,171,0,0.25);
+}
+.pl-generate-no-flags {
+  color: rgba(0,212,255,0.7);
+  background: rgba(0,212,255,0.05);
+  border: 1px solid rgba(0,212,255,0.15);
+}
+.pl-generate-success {
+  color: #00e676;
+  background: rgba(0,230,118,0.07);
+  border: 1px solid rgba(0,230,118,0.22);
+}
+.pl-source-badge {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: #00e676;
+  background: rgba(0,230,118,0.10);
+  border: 1px solid rgba(0,230,118,0.25);
+  border-radius: 2px;
+  padding: 1px 6px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
 /* ---- SUPPORT / CUSTOMER SERVICE TAB ---- */
 .pl-support-note {
   font-size: 10px;

@@ -84,6 +84,9 @@ const PL_SUPPORT_CASES = [
   },
 ];
 
+// Live orders loaded from Order Monitor — null until tab is opened
+var PL_LIVE_ORDERS = null;
+
 // ============================================================
 // HELPERS
 // ============================================================
@@ -581,6 +584,7 @@ function renderOrderMonitor(el) {
     var orders;
     if (!err && result && result.ok && Array.isArray(result.orders)) {
       orders = result.orders.map(normalizeLiveOrder);
+      PL_LIVE_ORDERS = orders;
       badge.className   = 'pl-data-source-badge pl-data-source-live';
       badge.innerHTML   = '&#9679; LIVE SUPABASE';
     } else {
@@ -653,15 +657,148 @@ function renderApprovalCard(item) {
 }
 
 // ============================================================
+// SUPPORT CASE GENERATOR — from live Order Monitor data
+// ============================================================
+var ISSUE_KEYWORDS = ['missing','issue','refund','late','cancel','wrong','problem','damage','broken','lost'];
+
+function generateCasesFromOrders(orders) {
+  if (!orders || !orders.length) return [];
+  var today = new Date().toISOString().slice(0, 10);
+  var newCases = [];
+
+  orders.forEach(function(o) {
+    var issueType = null;
+    var risk = (o.refundRisk || '').toLowerCase();
+
+    if (o.orderStatus === 'Issue') {
+      issueType = 'Order Issue';
+    } else if (o.lateFlag) {
+      issueType = 'Late Shipment';
+    } else if (!o.trackingNumber) {
+      issueType = 'Missing Tracking';
+    } else if (risk === 'high' || risk === 'medium') {
+      issueType = 'Refund Risk';
+    } else {
+      var notes = (o.supportNotes || '').toLowerCase();
+      if (ISSUE_KEYWORDS.some(function(kw) { return notes.indexOf(kw) !== -1; })) {
+        issueType = 'Support Note Flagged';
+      }
+    }
+
+    if (!issueType) return;
+
+    var orderId = String(o.id);
+    var alreadyExists = PL_SUPPORT_CASES.some(function(c) {
+      return c.orderId === orderId && c.issueType === issueType;
+    });
+    if (alreadyExists) return;
+
+    var riskLabel = risk === 'high' ? 'High' : risk === 'medium' ? 'Medium' : 'Low';
+    var caseId    = 'gen-' + orderId + '-' + issueType.replace(/\s+/g, '-').toLowerCase();
+
+    newCases.push({
+      caseId:          caseId,
+      customerName:    o.customerName || 'Customer',
+      orderId:         orderId,
+      issueType:       issueType,
+      productName:     o.productName  || '—',
+      orderStatus:     o.orderStatus  || '—',
+      riskLevel:       riskLabel,
+      customerMessage: generateCustomerMessage(issueType, o),
+      draftResponse:   generateDraftResponse(issueType, o),
+      approvalStatus:  'Pending',
+      sendStatus:      'Not Sent',
+      source:          'Live Order Generated',
+      createdAt:       today,
+    });
+  });
+
+  return newCases;
+}
+
+function generateCustomerMessage(issueType, o) {
+  var product = o.productName || 'my order';
+  switch (issueType) {
+    case 'Missing Tracking':
+      return 'Hi, I placed an order for ' + product + ' and have not received a tracking number or shipping confirmation yet. Can you let me know the status of my shipment?';
+    case 'Late Shipment':
+      return 'Hi, my order for ' + product + ' has not arrived yet and appears to be past the expected delivery date. Can you check on the status for me?';
+    case 'Order Issue':
+      return 'Hi, there seems to be an issue flagged on my order for ' + product + '. Can someone from your team look into this and let me know what is happening?';
+    case 'Refund Risk':
+      return 'Hi, I have a concern about my recent order for ' + product + ' and would like to understand my options. Please let me know how we can resolve this.';
+    case 'Support Note Flagged':
+      return 'Hi, I have a question about my order for ' + product + '. Can your support team follow up with me?';
+    default:
+      return 'Hi, I have a question about my order for ' + product + '.';
+  }
+}
+
+function generateDraftResponse(issueType, o) {
+  var firstName = (o.customerName || 'there').split(' ')[0];
+  switch (issueType) {
+    case 'Missing Tracking':
+      return 'Hi ' + firstName + ',\n\nThank you for reaching out. We have reviewed your order and are currently confirming the shipment details with our fulfillment team.\n\nA tracking number will be added to your order as soon as it is confirmed with the carrier. We will follow up with an update within 1 business day.\n\nWe appreciate your patience.\n\n— PD Seasoning Support';
+    case 'Late Shipment':
+      return 'Hi ' + firstName + ',\n\nWe sincerely apologize that your order has not arrived yet. We understand how frustrating that is and we want to help.\n\nOur team is actively checking the fulfillment status of your shipment. We are not able to guarantee a specific delivery date at this time, but we are treating your order as a priority.\n\nWe will provide a status update within 1 business day.\n\nThank you for your patience.\n\n— PD Seasoning Support';
+    case 'Order Issue':
+      return 'Hi ' + firstName + ',\n\nThank you for contacting us. Your order has been flagged for review by our support team.\n\nWe are looking into the details and will confirm the next step within 1 business day. No action is needed from you at this time.\n\nWe appreciate your patience.\n\n— PD Seasoning Support';
+    case 'Refund Risk':
+      return 'Hi ' + firstName + ',\n\nThank you for reaching out. We want to make sure your concern is handled correctly.\n\nYour order is currently under review. We will follow up with a resolution within 1–2 business days. No action is needed from you at this time.\n\nPlease do not return any items until you hear from us.\n\n— PD Seasoning Support';
+    case 'Support Note Flagged':
+      return 'Hi ' + firstName + ',\n\nThank you for reaching out. We have noted a concern with your order and our team is reviewing the details.\n\nWe will follow up with an update within 1 business day.\n\nWe appreciate your patience.\n\n— PD Seasoning Support';
+    default:
+      return 'Hi ' + firstName + ',\n\nThank you for contacting PD Seasoning support. We have received your message and will follow up within 1 business day.\n\n— PD Seasoning Support';
+  }
+}
+
+// ============================================================
 // TAB 8 — CUSTOMER SERVICE (SUPPORT)
 // ============================================================
 function renderSupportTab(el) {
+  var generatedCount = PL_SUPPORT_CASES.filter(function(c) { return c.source === 'Live Order Generated'; }).length;
+
   el.innerHTML =
     '<h3 class="pl-section-title">Customer Service</h3>' +
     '<div class="pl-support-note">All responses require approval before sending. No real emails are sent from this module.</div>' +
+    '<div class="pl-generate-row">' +
+      '<button type="button" class="pl-action-btn cyan-btn" id="pl-generate-cases-btn">&#9654; Generate Cases From Orders</button>' +
+      '<span class="pl-generated-badge" id="pl-generated-badge"' + (generatedCount ? '' : ' style="display:none"') + '>Generated from Live Orders: ' + generatedCount + '</span>' +
+    '</div>' +
+    '<div id="pl-generate-status"></div>' +
     '<div id="pl-support-cases">' +
     PL_SUPPORT_CASES.map(renderSupportCard).join('') +
     '</div>';
+
+  document.getElementById('pl-generate-cases-btn').addEventListener('click', function() {
+    var statusEl = document.getElementById('pl-generate-status');
+    var casesEl  = document.getElementById('pl-support-cases');
+    var badgeEl  = document.getElementById('pl-generated-badge');
+
+    if (!PL_LIVE_ORDERS || !PL_LIVE_ORDERS.length) {
+      statusEl.innerHTML = '<div class="pl-generate-status-msg pl-generate-no-data">No live order data available. Open the Order Monitor tab first to load live orders.</div>';
+      return;
+    }
+
+    var newCases = generateCasesFromOrders(PL_LIVE_ORDERS);
+
+    if (!newCases.length) {
+      statusEl.innerHTML = '<div class="pl-generate-status-msg pl-generate-no-flags">No flagged orders found. All current live orders look healthy.</div>';
+      return;
+    }
+
+    newCases.forEach(function(c) {
+      PL_SUPPORT_CASES.push(c);
+      casesEl.insertAdjacentHTML('beforeend', renderSupportCard(c));
+    });
+
+    var total = PL_SUPPORT_CASES.filter(function(c) { return c.source === 'Live Order Generated'; }).length;
+    if (badgeEl) {
+      badgeEl.textContent = 'Generated from Live Orders: ' + total;
+      badgeEl.style.display = '';
+    }
+    statusEl.innerHTML = '<div class="pl-generate-status-msg pl-generate-success">&#10003; ' + newCases.length + ' case' + (newCases.length !== 1 ? 's' : '') + ' generated from live orders.</div>';
+  });
 
   document.getElementById('pl-support-cases').addEventListener('click', function(e) {
     var btn = e.target.closest('[data-support-action]');
@@ -692,20 +829,23 @@ function renderSupportTab(el) {
 }
 
 function renderSupportCard(c) {
-  var riskBadge = c.riskLevel === 'High' ? 'pl-badge-red' : c.riskLevel === 'Medium' ? 'pl-badge-gold' : 'pl-badge-green';
-  var sendBadge = c.sendStatus === 'Sent (Mock)' ? 'pl-badge-green' : 'pl-badge-muted';
-  var approved  = c.approvalStatus === 'Approved';
-  var sent      = c.sendStatus === 'Sent (Mock)';
+  var riskBadge  = c.riskLevel === 'High' ? 'pl-badge-red' : c.riskLevel === 'Medium' ? 'pl-badge-gold' : 'pl-badge-green';
+  var sendBadge  = c.sendStatus === 'Sent (Mock)' ? 'pl-badge-green' : 'pl-badge-muted';
+  var approved   = c.approvalStatus === 'Approved';
+  var sent       = c.sendStatus === 'Sent (Mock)';
+  var sourceMark = c.source === 'Live Order Generated'
+    ? ' <span class="pl-source-badge">&#9679; Live Order</span>'
+    : '';
 
   return '<div class="pl-support-card" id="pl-support-card-' + c.caseId + '">' +
     '<div class="pl-support-header">' +
       '<div>' +
         '<div class="pl-support-customer">' + escHtml(c.customerName) + '</div>' +
-        '<div class="pl-support-meta">' + c.orderId + ' &nbsp;&middot;&nbsp; ' + escHtml(c.productName) + ' &nbsp;&middot;&nbsp; ' + c.createdAt + '</div>' +
+        '<div class="pl-support-meta">' + escHtml(c.orderId) + ' &nbsp;&middot;&nbsp; ' + escHtml(c.productName) + ' &nbsp;&middot;&nbsp; ' + escHtml(c.createdAt) + sourceMark + '</div>' +
       '</div>' +
       '<div class="pl-support-badges">' +
         '<span class="pl-badge pl-badge-cyan">' + escHtml(c.issueType) + '</span>' +
-        '<span class="pl-badge ' + riskBadge + '">' + c.riskLevel + ' Risk</span>' +
+        '<span class="pl-badge ' + riskBadge + '">' + escHtml(c.riskLevel) + ' Risk</span>' +
       '</div>' +
     '</div>' +
     '<div class="pl-support-label">CUSTOMER MESSAGE</div>' +
@@ -714,9 +854,9 @@ function renderSupportCard(c) {
     '<textarea class="pl-listing-textarea pl-support-textarea">' + escHtml(c.draftResponse) + '</textarea>' +
     '<div class="pl-support-status-row">' +
       '<span class="pl-support-status-label">APPROVAL</span>' +
-      '<span class="pl-badge ' + plBadgeClass(c.approvalStatus) + '">' + c.approvalStatus + '</span>' +
+      '<span class="pl-badge ' + plBadgeClass(c.approvalStatus) + '">' + escHtml(c.approvalStatus) + '</span>' +
       '<span class="pl-support-status-label">SEND</span>' +
-      '<span class="pl-badge ' + sendBadge + '">' + c.sendStatus + '</span>' +
+      '<span class="pl-badge ' + sendBadge + '">' + escHtml(c.sendStatus) + '</span>' +
     '</div>' +
     '<div class="pl-support-actions">' +
       '<button type="button" class="pl-action-btn green-btn" data-support-action="approve" data-case-id="' + c.caseId + '">Approve Response</button>' +
